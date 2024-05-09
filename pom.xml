@@ -7,14 +7,6 @@
   <name>Archetype - Balda</name>
   <url>http://maven.apache.org</url>
 
-  <dependencies>
-    <!-- https://mvnrepository.com/artifact/org.jetbrains/annotations -->
-    <dependency>
-      <groupId>org.jetbrains</groupId>
-      <artifactId>annotations</artifactId>
-      <version>24.1.0</version>
-    </dependency>
-  </dependencies>
   <build>
     <plugins>
       <plugin>
@@ -27,5 +19,28 @@
       </plugin>
     </plugins>
   </build>
+
+  <dependencies>
+    <!-- https://mvnrepository.com/artifact/org.jetbrains/annotations -->
+    <dependency>
+      <groupId>org.jetbrains</groupId>
+      <artifactId>annotations</artifactId>
+      <version>24.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.example</groupId>
+      <artifactId>Balda</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.10.0</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
 </project>
