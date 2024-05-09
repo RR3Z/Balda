@@ -86,7 +86,7 @@ public class MainWindow extends JFrame {
             JLabel fieldSizesLabel = new JLabel("Выберите размеры поля:");
 
             int MIN_VALUE = 2;
-            int MAX_VALUE = 20;
+            int MAX_VALUE = 15; // TODO: наверное стоит выделить тоже в отдельный файл эти значения (мин и макс)
             int STEP = 1;
             _widthSpinner = new JSpinner(new SpinnerNumberModel(MIN_VALUE, MIN_VALUE, MAX_VALUE, STEP));
             _heightSpinner = new JSpinner(new SpinnerNumberModel(MIN_VALUE, MIN_VALUE, MAX_VALUE, STEP));
