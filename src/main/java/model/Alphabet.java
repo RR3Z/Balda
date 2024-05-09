@@ -6,13 +6,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Alphabet {
     private List<Character> _availableLetters = new ArrayList<>();
 
     public Alphabet() {
-        // TEMP SOLUTION
+        // TODO: TEMP SOLUTION - REMOVE
         _availableLetters.add('а');
         _availableLetters.add('б');
         _availableLetters.add('в');
@@ -49,6 +50,7 @@ public class Alphabet {
     }
 
     public Alphabet(@NotNull List<Character> letters) {
+        // TODO: TEMP - DELETE - хотя можно и оставить, пускай будет
         // Translate characters to lower case
         List<Character> lowerCaseLetters = new ArrayList<>();
         for (Character letter : letters) {
@@ -62,6 +64,10 @@ public class Alphabet {
 
     public Alphabet(@NotNull String filePath) {
         readFromFile(filePath);
+    }
+
+    public List<Character> availableLetters() {
+        return Collections.unmodifiableList(_availableLetters);
     }
 
     public boolean isLetterAvailable(@NotNull Character letter) {
