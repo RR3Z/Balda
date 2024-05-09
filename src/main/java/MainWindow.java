@@ -1,6 +1,6 @@
 import model.GameModel;
-import ui.CellWidget;
 import ui.GameFieldWidget;
+import ui.KeyboardWidget;
 
 import javax.swing.*;
 import java.awt.*;
@@ -55,6 +55,8 @@ public class MainWindow extends JFrame {
 
         // Добавить игровое поле
         content.add(new GameFieldWidget(_gameModel.gameField()));
+        content.add(new KeyboardWidget(_gameModel.alphabet()));
+
         this.pack();
 
         // Расположить окно посередине экрана

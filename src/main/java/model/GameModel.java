@@ -141,6 +141,8 @@ public class GameModel {
 
     public GameField gameField() { return _field; }
 
+    public Alphabet alphabet() { return _alphabet; }
+
     public GameState state() {
         return _state;
     }
