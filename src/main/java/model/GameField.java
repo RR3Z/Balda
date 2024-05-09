@@ -1,7 +1,6 @@
 package model;
 
 import model.enums.Direction;
-import model.factories.CellFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -18,17 +17,16 @@ public class GameField {
 
         _width = width;
         _height = height;
-        setCells();
+        createCells();
     }
 
-    private void setCells() {
+    private void createCells() {
         _cells = new Cell[_width][_height];
-        CellFactory cellFactory = new CellFactory();
 
         // Create cells
         for (int i = 0; i < _height; i++) {
             for (int j = 0; j < _width; j++) {
-                _cells[j][i] = cellFactory.createCell(new Point(j, i));
+                _cells[j][i] = new Cell(new Point(j, i));
             }
         }
 
@@ -94,7 +92,7 @@ public class GameField {
     }
 
     public void placeWord(@NotNull String word, int rowIndex, @NotNull Direction direction) {
-        Cell[] row = getRow(direction, rowIndex);
+        Cell[] row = getLine(direction, rowIndex);
 
         // Index of letter in word
         int letterIndex = 0;
@@ -105,7 +103,6 @@ public class GameField {
         int step = 0;
 
         if (direction == Direction.RIGHT || direction == Direction.DOWN) {
-            start = 0;
             end = row.length;
             step = 1;
         }
@@ -127,11 +124,11 @@ public class GameField {
         }
     }
 
-    private Cell[] getRow(@NotNull Direction direction, int rowIndex) {
+    private Cell[] getLine(@NotNull Direction direction, int rowIndex) {
         if (rowIndex < 0 ||
                 (direction == Direction.RIGHT || direction == Direction.LEFT) && rowIndex >= _height ||
                 (direction == Direction.UP || direction == Direction.DOWN) && rowIndex >= _width) {
-            throw new IllegalArgumentException("GameField -> getRow(): wrong row index");
+            throw new IllegalArgumentException("GameField -> getLine(): wrong row index");
         }
 
         int length = (direction == Direction.RIGHT || direction == Direction.LEFT) ? _width : _height;

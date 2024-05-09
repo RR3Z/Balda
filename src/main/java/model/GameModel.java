@@ -7,7 +7,6 @@ import model.events.GameModelListener;
 import model.events.PlayerActionEvent;
 import model.events.PlayerActionListener;
 import org.jetbrains.annotations.NotNull;
-import ui.GameFieldWidget;
 
 import java.util.ArrayList;
 import java.util.EventListener;
@@ -104,7 +103,7 @@ public class GameModel {
         }
 
         String word = _wordsDB.randomWord(wordLength);
-        int centralRowIndex = _field.centralRowIndex(direction);
+        int centralRowIndex = _field.centralLineIndex(direction);
         _field.placeWord(word, centralRowIndex, direction);
         _wordsDB.addToUsedWords(word, null);
 
