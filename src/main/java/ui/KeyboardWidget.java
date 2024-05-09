@@ -1,7 +1,7 @@
 package ui;
 
 import model.Alphabet;
-import ui.customElements.KeyboardButton;
+import ui.buttons.KeyboardButton;
 import ui.utils.WidgetsViewCustomizations;
 
 import javax.swing.*;
@@ -18,12 +18,17 @@ public class KeyboardWidget extends JPanel {
         super();
         _alphabet = alphabet;
 
-        this.setLayout(new GridLayout(
-                WidgetsViewCustomizations.KEYBOARD_ROW_COUNT,
-                Math.ceilDiv(alphabet.availableLetters().size(), WidgetsViewCustomizations.KEYBOARD_ROW_COUNT))
-        );
+        int numberOfColumns = Math.ceilDiv(alphabet.availableLetters().size(), WidgetsViewCustomizations.KEYBOARD_ROW_COUNT);
+        int numberOfRows = WidgetsViewCustomizations.KEYBOARD_ROW_COUNT;
+        this.setLayout(new GridLayout(numberOfRows, numberOfColumns));
 
         fillWidget(alphabet.availableLetters());
+
+        this.setMaximumSize(new Dimension(
+                numberOfColumns * WidgetsViewCustomizations.KEYBOARD_BUTTON_SIZE,
+                numberOfRows * WidgetsViewCustomizations.KEYBOARD_BUTTON_SIZE
+                )
+        );
     }
 
     private void fillWidget(List<Character> letters) {
