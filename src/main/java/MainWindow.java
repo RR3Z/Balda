@@ -46,6 +46,7 @@ public class MainWindow extends JFrame {
     private void startNewGame(int width, int height) {
         _gameModel = new GameModel(width, height);
         //_gameModel.addGameModelListener();
+        _gameModel.startGame();
 
         // Очистить содержимое панели
         JPanel content = (JPanel) this.getContentPane();
@@ -54,7 +55,6 @@ public class MainWindow extends JFrame {
 
         // Добавить игровое поле
         content.add(new GameFieldWidget(_gameModel.gameField()));
-
         this.pack();
 
         // Расположить окно посередине экрана

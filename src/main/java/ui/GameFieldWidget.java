@@ -32,6 +32,10 @@ public class GameFieldWidget extends JPanel {
             Cell cell = _gameField.cell(new Point(i, rowIndex));
             CellWidget cellWidget = new CellWidget();
 
+            if(cell.letter() != null) {
+                cellWidget.setCharacter(cell.letter());
+            }
+
             _cells.put(cell, cellWidget);
 
             rowOfCellWidgets.add(cellWidget);
