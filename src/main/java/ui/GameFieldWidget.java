@@ -2,7 +2,8 @@ package ui;
 
 import model.Cell;
 import model.GameField;
-import ui.customElements.CellButton;
+import ui.buttons.CellButton;
+import ui.utils.WidgetsViewCustomizations;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,6 +21,12 @@ public class GameFieldWidget extends JPanel {
         this.setLayout(new GridLayout(gameField.height(), gameField.width()));
 
         fillWidget(gameField.height(), gameField.width());
+
+        this.setMaximumSize(new Dimension(
+                gameField.width() * WidgetsViewCustomizations.CELL_BUTTON_SIZE,
+                gameField.height() * WidgetsViewCustomizations.CELL_BUTTON_SIZE
+                )
+        );
     }
 
     private void fillWidget(int numberOfRows, int numberOfColumns) {
