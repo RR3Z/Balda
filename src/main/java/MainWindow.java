@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+import static javax.swing.GroupLayout.Alignment.BASELINE;
+
 public class MainWindow extends JFrame {
     private GameModel _gameModel;
 
@@ -50,12 +52,21 @@ public class MainWindow extends JFrame {
 
         // Очистить содержимое панели
         JPanel content = (JPanel) this.getContentPane();
-        content.setLayout(new FlowLayout());
         content.removeAll();
 
-        // Добавить игровое поле
-        content.add(new GameFieldWidget(_gameModel.gameField()));
-        content.add(new KeyboardWidget(_gameModel.alphabet()));
+        // Добавить виджеты
+        // Здесь таблица слева
+
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+        centerPanel.add(new GameFieldWidget(_gameModel.gameField()));
+        centerPanel.add(Box.createRigidArea(new Dimension(5, 5)));
+        //centerPanel.add(); // Здесь панель с кнопками
+        centerPanel.add(Box.createRigidArea(new Dimension(5, 5)));
+        centerPanel.add(new KeyboardWidget(_gameModel.alphabet()));
+        content.add(centerPanel);
+
+        // Здесь таблица справа
 
         this.pack();
 
