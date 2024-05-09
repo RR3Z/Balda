@@ -1,4 +1,4 @@
-package ui.customElements;
+package ui.buttons;
 
 import ui.utils.WidgetsViewCustomizations;
 import javax.swing.*;
@@ -17,7 +17,7 @@ public class CellButton extends JButton {
     private void setupCellButtonView(JButton button) {
         button.setPreferredSize(new Dimension(WidgetsViewCustomizations.CELL_BUTTON_SIZE, WidgetsViewCustomizations.CELL_BUTTON_SIZE));
 
-        button.setModel(new FixedStateButtonModel());
+        button.setModel(new WidgetsViewCustomizations.FixedStateButtonModel());
 
         button.setOpaque(false);
         button.setContentAreaFilled(false);
@@ -38,22 +38,6 @@ public class CellButton extends JButton {
 
     public void removeLetter() {
         this.setText("");
-    }
-
-    private static class FixedStateButtonModel extends DefaultButtonModel {
-        @Override
-        public boolean isPressed() {
-            return false;
-        }
-
-        @Override
-        public boolean isRollover() {
-            return false;
-        }
-
-        @Override
-        public void setRollover(boolean b) {
-        }
     }
 
     private class CellButtonMouseListener extends MouseAdapter {

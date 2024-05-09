@@ -1,4 +1,4 @@
-package ui.customElements;
+package ui.buttons;
 
 import org.jetbrains.annotations.NotNull;
 import ui.utils.WidgetsViewCustomizations;
@@ -20,7 +20,7 @@ public class KeyboardButton extends JButton {
     private void setupKeyboardButtonView(JButton button) {
         button.setPreferredSize(new Dimension(WidgetsViewCustomizations.KEYBOARD_BUTTON_SIZE, WidgetsViewCustomizations.KEYBOARD_BUTTON_SIZE));
 
-        button.setModel(new FixedStateButtonModel());
+        button.setModel(new WidgetsViewCustomizations.FixedStateButtonModel());
 
         button.setOpaque(false);
         button.setContentAreaFilled(false);
@@ -33,22 +33,6 @@ public class KeyboardButton extends JButton {
         button.setBorderPainted(true);
 
         button.setFocusable(false);
-    }
-
-    private static class FixedStateButtonModel extends DefaultButtonModel {
-        @Override
-        public boolean isPressed() {
-            return false;
-        }
-
-        @Override
-        public boolean isRollover() {
-            return false;
-        }
-
-        @Override
-        public void setRollover(boolean b) {
-        }
     }
 
     private class KeyboardButtonMouseListener extends MouseAdapter {
