@@ -79,15 +79,15 @@ public class GameField {
         return null;
     }
 
-    public int centralRowIndex(@NotNull Direction direction) {
+    public int centralLineIndex(@NotNull Direction direction) {
         int centralRowIndex = -1;
 
         if (direction == Direction.RIGHT || direction == Direction.LEFT) {
-            centralRowIndex = Math.ceilDiv(_height, 2);
+            centralRowIndex = Math.ceilDiv(_height, 2) - 1;
         }
 
         if (direction == Direction.UP || direction == Direction.DOWN) {
-            centralRowIndex = Math.ceilDiv(_width, 2);
+            centralRowIndex = Math.ceilDiv(_width, 2) - 1;
         }
 
         return centralRowIndex;
@@ -150,6 +150,7 @@ public class GameField {
     }
 
     public void printField(){
+        // TODO: REMOVE THIS
         for(int i = 0; i < _height; i++) {
             for (int j = 0; j < _width; j++){
                 System.out.print(_cells[j][i].letter() + " ");
