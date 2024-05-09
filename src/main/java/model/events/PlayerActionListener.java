@@ -1,0 +1,29 @@
+package model.events;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.EventListener;
+
+public interface PlayerActionListener extends EventListener {
+    public void skippedTurn(@NotNull PlayerActionEvent event);
+
+    public void addedNewWordToDictionary(@NotNull PlayerActionEvent event);
+
+    public void failedToAddNewWordToDictionary(@NotNull PlayerActionEvent event);
+
+    public void choseCell(@NotNull PlayerActionEvent event);
+
+    public void choseWrongCell(@NotNull PlayerActionEvent event);
+
+    public void placedLetter(@NotNull PlayerActionEvent event);
+
+    public void submittedWordWithoutChangeableCell(@NotNull PlayerActionEvent event);
+
+    public void submittedWord(@NotNull PlayerActionEvent event);
+
+    public void failedToSubmitWord(@NotNull PlayerActionEvent event);
+
+    public void finishedTurn(@NotNull PlayerActionEvent event);
+
+    public void canceledActionOnField(@NotNull PlayerActionEvent event);
+}
