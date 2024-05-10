@@ -10,32 +10,31 @@ import java.awt.event.MouseEvent;
 
 public class KeyboardButton extends JButton {
     public KeyboardButton(@NotNull Character letter) {
-        super();
-        setupKeyboardButtonView(this);
-        this.setText(String.valueOf(letter));
+        super(String.valueOf(letter));
+        setupButtonView();
 
-        this.addMouseListener(new KeyboardButtonMouseListener());
+        this.addMouseListener(new ButtonMouseListener());
     }
 
-    private void setupKeyboardButtonView(JButton button) {
-        button.setPreferredSize(new Dimension(WidgetsViewCustomizations.KEYBOARD_BUTTON_SIZE, WidgetsViewCustomizations.KEYBOARD_BUTTON_SIZE));
+    private void setupButtonView() {
+        this.setPreferredSize(new Dimension(WidgetsViewCustomizations.KEYBOARD_BUTTON_SIZE, WidgetsViewCustomizations.KEYBOARD_BUTTON_SIZE));
 
-        button.setModel(new WidgetsViewCustomizations.FixedStateButtonModel());
+        this.setModel(new WidgetsViewCustomizations.FixedStateButtonModel());
 
-        button.setOpaque(false);
-        button.setContentAreaFilled(false);
-        button.setBackground(WidgetsViewCustomizations.CLICKED_KEYBOARD_BUTTON_COLOR);
+        this.setOpaque(false);
+        this.setContentAreaFilled(false);
+        this.setBackground(WidgetsViewCustomizations.CLICKED_KEYBOARD_BUTTON_COLOR);
 
-        button.setBorder(BorderFactory.createLineBorder(
+        this.setBorder(BorderFactory.createLineBorder(
                 WidgetsViewCustomizations.STANDART_KEYBOARD_BUTTON_BORDER_COLOR,
                 WidgetsViewCustomizations.KEYBOARD_BUTTON_BORDER_THICKNESS)
         );
-        button.setBorderPainted(true);
+        this.setBorderPainted(true);
 
-        button.setFocusable(false);
+        this.setFocusable(false);
     }
 
-    private class KeyboardButtonMouseListener extends MouseAdapter {
+    private class ButtonMouseListener extends MouseAdapter {
         boolean isClicked = false;
 
         @Override
