@@ -1,14 +1,14 @@
 import model.GameModel;
-import ui.GameFieldWidget;
-import ui.KeyboardWidget;
-import ui.PlayerActionsWidget;
+import model.events.GameModelEvent;
+import model.events.GameModelListener;
+import ui.*;
+import ui.tables.PlayersScoreTable;
+import ui.tables.UsedWordsTable;
 import ui.utils.GameWidgetUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-
-import static javax.swing.GroupLayout.Alignment.BASELINE;
 
 public class MainWindow extends JFrame {
     private GameModel _gameModel;
@@ -49,7 +49,7 @@ public class MainWindow extends JFrame {
 
     private void startNewGame(int width, int height) {
         _gameModel = new GameModel(width, height);
-        //_gameModel.addGameModelListener();
+        _gameModel.addGameModelListener(new GameController());
         _gameModel.startGame();
 
         // Очистить содержимое панели
@@ -57,7 +57,7 @@ public class MainWindow extends JFrame {
         content.removeAll();
 
         // ----------- Добавить виджеты -----------
-        // Здесь таблица слева
+        content.add(new JScrollPane(new PlayersScoreTable(_gameModel)));
 
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
@@ -68,8 +68,7 @@ public class MainWindow extends JFrame {
         centerPanel.add(new KeyboardWidget(_gameModel.alphabet()));
         content.add(centerPanel);
 
-        // Здесь таблица справа
-
+        content.add(new JScrollPane(new UsedWordsTable(_gameModel)));
         // ----------------------------------------
 
         this.pack();
@@ -126,6 +125,69 @@ public class MainWindow extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             System.exit(0);
+        }
+    }
+
+    // TODO
+    private static class GameController implements GameModelListener {
+        @Override
+        public void gameIsFinished(GameModelEvent event) {
+
+        }
+
+        @Override
+        public void playerExchanged(GameModelEvent event) {
+
+        }
+
+        @Override
+        public void playerSkippedTurn(GameModelEvent event) {
+
+        }
+
+        @Override
+        public void playerChoseCell(GameModelEvent event) {
+
+        }
+
+        @Override
+        public void playerFailedToAddNewWordToDictionary(GameModelEvent event) {
+
+        }
+
+        @Override
+        public void playerAddedNewWordToDictionary(GameModelEvent event) {
+
+        }
+
+        @Override
+        public void playerChoseWrongCell(GameModelEvent event) {
+
+        }
+
+        @Override
+        public void playerPlacedLetter(GameModelEvent event) {
+
+        }
+
+        @Override
+        public void playerSubmittedWordWithoutChangeableCell(GameModelEvent event) {
+
+        }
+
+        @Override
+        public void playerCanceledActionOnField(GameModelEvent event) {
+
+        }
+
+        @Override
+        public void playerSubmittedWord(GameModelEvent event) {
+
+        }
+
+        @Override
+        public void playerFailedToSubmitWord(GameModelEvent event) {
+
         }
     }
 
