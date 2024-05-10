@@ -1,6 +1,5 @@
 package ui.buttons;
 
-import model.Cell;
 import ui.utils.WidgetsViewCustomizations;
 import javax.swing.*;
 import java.awt.*;
@@ -10,27 +9,27 @@ import java.awt.event.MouseEvent;
 public class CellButton extends JButton {
     public CellButton() {
         super();
-        setupCellButtonView(this);
+        setupButtonView();
 
-        this.addMouseListener(new CellButtonMouseListener());
+        this.addMouseListener(new ButtonMouseListener());
     }
 
-    private void setupCellButtonView(JButton button) {
-        button.setPreferredSize(new Dimension(WidgetsViewCustomizations.CELL_BUTTON_SIZE, WidgetsViewCustomizations.CELL_BUTTON_SIZE));
+    private void setupButtonView() {
+        this.setPreferredSize(new Dimension(WidgetsViewCustomizations.CELL_BUTTON_SIZE, WidgetsViewCustomizations.CELL_BUTTON_SIZE));
 
-        button.setModel(new WidgetsViewCustomizations.FixedStateButtonModel());
+        this.setModel(new WidgetsViewCustomizations.FixedStateButtonModel());
 
-        button.setOpaque(false);
-        button.setContentAreaFilled(false);
-        button.setBackground(WidgetsViewCustomizations.CLICKED_CELL_BUTTON_COLOR);
+        this.setOpaque(false);
+        this.setContentAreaFilled(false);
+        this.setBackground(WidgetsViewCustomizations.CLICKED_CELL_BUTTON_COLOR);
 
-        button.setBorder(BorderFactory.createLineBorder(
+        this.setBorder(BorderFactory.createLineBorder(
                 WidgetsViewCustomizations.STANDART_CELL_BUTTON_BORDER_COLOR,
                 WidgetsViewCustomizations.CELL_BUTTON_BORDER_THICKNESS)
         );
-        button.setBorderPainted(true);
+        this.setBorderPainted(true);
 
-        button.setFocusable(false);
+        this.setFocusable(false);
     }
 
     public void setLetter(Character letter) {
@@ -41,7 +40,7 @@ public class CellButton extends JButton {
         this.setText("");
     }
 
-    private class CellButtonMouseListener extends MouseAdapter {
+    private class ButtonMouseListener extends MouseAdapter {
         boolean isClicked = false;
 
         @Override
