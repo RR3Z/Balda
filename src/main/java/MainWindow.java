@@ -1,6 +1,8 @@
 import model.GameModel;
 import ui.GameFieldWidget;
 import ui.KeyboardWidget;
+import ui.PlayerActionsWidget;
+import ui.utils.GameWidgetUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,7 +32,7 @@ public class MainWindow extends JFrame {
         this.setBounds(screenSize.width/2 - windowSize.width/2, screenSize.height/2 - windowSize.height/2, windowSize.width, windowSize.height);
 
         // TODO: REMOVE IT
-        startNewGame(5,5);
+        startNewGame(14,14);
     }
 
     private JMenu createMainMenu() {
@@ -54,19 +56,21 @@ public class MainWindow extends JFrame {
         JPanel content = (JPanel) this.getContentPane();
         content.removeAll();
 
-        // Добавить виджеты
+        // ----------- Добавить виджеты -----------
         // Здесь таблица слева
 
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.add(new GameFieldWidget(_gameModel.gameField()));
         centerPanel.add(Box.createRigidArea(new Dimension(5, 5)));
-        //centerPanel.add(); // Здесь панель с кнопками
+        centerPanel.add(new PlayerActionsWidget(_gameModel));
         centerPanel.add(Box.createRigidArea(new Dimension(5, 5)));
         centerPanel.add(new KeyboardWidget(_gameModel.alphabet()));
         content.add(centerPanel);
 
         // Здесь таблица справа
+
+        // ----------------------------------------
 
         this.pack();
 
@@ -77,17 +81,11 @@ public class MainWindow extends JFrame {
     }
 
     private class StartNewGameAction extends AbstractAction {
-        /*
-        Не хочу, чтобы gameSettingsPanel создавалась внутри actionPerformed, но доступ к значениям спиннеров
-        надо получить внутри actionPerformed после вызова диалогового меню.
-
-        Решение: вынести спиннеры в качестве свойства.
-        */
         private JSpinner _widthSpinner;
         private JSpinner _heightSpinner;
 
         public StartNewGameAction() {
-            putValue(NAME, "Новая игра");
+            this.putValue(NAME, "Новая игра");
         }
 
         private JPanel createGameSettingsPanel() {
@@ -98,11 +96,8 @@ public class MainWindow extends JFrame {
 
             JLabel fieldSizesLabel = new JLabel("Выберите размеры поля:");
 
-            int MIN_VALUE = 2;
-            int MAX_VALUE = 15; // TODO: наверное стоит выделить тоже в отдельный файл эти значения (мин и макс)
-            int STEP = 1;
-            _widthSpinner = new JSpinner(new SpinnerNumberModel(MIN_VALUE, MIN_VALUE, MAX_VALUE, STEP));
-            _heightSpinner = new JSpinner(new SpinnerNumberModel(MIN_VALUE, MIN_VALUE, MAX_VALUE, STEP));
+            _widthSpinner = new JSpinner(new SpinnerNumberModel(5, GameWidgetUtils.MIN_FIELD_SIZE, GameWidgetUtils.MAX_FIELD_SIZE, 1));
+            _heightSpinner = new JSpinner(new SpinnerNumberModel(5, GameWidgetUtils.MIN_FIELD_SIZE, GameWidgetUtils.MAX_FIELD_SIZE, 1));
 
             fieldSizesPanel.add(fieldSizesLabel);
             fieldSizesPanel.add(_widthSpinner);
@@ -125,7 +120,7 @@ public class MainWindow extends JFrame {
 
     private static class ExitAction extends AbstractAction {
         public ExitAction() {
-            putValue(NAME, "Выход");
+            this.putValue(NAME, "Выход");
         }
 
         @Override
