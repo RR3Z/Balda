@@ -17,7 +17,7 @@ public class Player {
     private Word _word;
     private ScoreCounter _scoreCounter;
     private PlayerState _state;
-    private Cell _changeableCell;
+    private Cell _changedCell; // TODO: мб хранить это лучше в поле?
 
     public Player(@NotNull String name, @NotNull Alphabet alphabet, @NotNull WordsDB wordsDB, @NotNull GameField field) {
         _wordsDB = wordsDB;
@@ -50,9 +50,10 @@ public class Player {
             throw new IllegalArgumentException("Wrong \"startTurn\" function call (incorrect state) for player: " + this._name);
         }
 
-        _changeableCell = null;
+        _changedCell = null;
         _word.clear();
-        _state = PlayerState.SELECTING_CHANGEABLE_CELL;
+        _state = PlayerState.SELECTING_LETTER;
+        fireChangedState();
     }
 
     public void skipTurn() {
@@ -60,13 +61,25 @@ public class Player {
             throw new IllegalArgumentException("Wrong \"skipTurn\" function call (incorrect state) for player: " + this._name);
         }
 
-        if (_changeableCell != null) {
+        if (_changedCell != null) {
             // Removing the letter placed in the Cell
-            _changeableCell.removeLetter();
+            _changedCell.removeLetter();
         }
 
         _state = PlayerState.SKIPPED_TURN;
         fireSkippedTurn();
+    }
+
+    public void chooseLetter(@NotNull Character letter) {
+        if (_state != PlayerState.SELECTING_LETTER) {
+            throw new IllegalArgumentException("Wrong \"selectLetter\" function call (incorrect state) for player: " + this._name);
+        }
+
+        if(_alphabet.selectLetter(letter)) {
+            _state = PlayerState.PLACES_LETTER;
+            fireChangedState();
+            fireChoseLetter(letter);
+        }
     }
 
     public void placeLetter(@NotNull Character letter) {
@@ -74,17 +87,14 @@ public class Player {
             throw new IllegalArgumentException("Wrong \"placeLetter\" function call (incorrect state) for player: " + this._name);
         }
 
-        if (_changeableCell == null) {
+        if (_changedCell == null) {
             throw new IllegalArgumentException("Wrong \"placeLetter\" function call (changeableCell is null for some reason) for player: " + this._name);
         }
 
-        if (!_alphabet.isLetterAvailable(letter)) {
-            throw new IllegalArgumentException("Wrong \"placeLetter\" function call (unknown letter) for player: " + this._name);
-        }
-
-        _changeableCell.setLetter(letter);
+        _changedCell.setLetter(letter);
         _state = PlayerState.FORMS_WORD;
-        firePlacedLetter(letter, _changeableCell);
+        fireChangedState();
+        firePlacedLetter(_alphabet.selectedLetter(), _changedCell);
     }
 
     public void addNewWordToDictionary() {
@@ -97,50 +107,55 @@ public class Player {
     }
 
     public void cancelActionOnField() {
-        if (_state != PlayerState.FORMS_WORD && _state != PlayerState.PLACES_LETTER && _state != PlayerState.SELECTING_CHANGEABLE_CELL) {
+        if (_state != PlayerState.FORMS_WORD && _state != PlayerState.PLACES_LETTER && _state != PlayerState.SELECTING_LETTER) {
             throw new IllegalArgumentException("Wrong \"cancelActionOnField\" function call (incorrect state) for player: " + this._name);
         }
 
-        if (_state == PlayerState.SELECTING_CHANGEABLE_CELL) {
-            if(_changeableCell != null) {
-                _changeableCell = null;
-            }
-        }
-
         if (_state == PlayerState.PLACES_LETTER) {
-            if(_changeableCell != null) {
-                _changeableCell = null;
+            if(_alphabet.selectedLetter() != null) {
+                _alphabet.forgetSelectedLetter();
             }
-            _state = PlayerState.SELECTING_CHANGEABLE_CELL;
+
+            _state = PlayerState.SELECTING_LETTER;
+            fireChangedState();
         }
 
         if (_state == PlayerState.FORMS_WORD) {
             if (_word.length() == 0) {
-                _changeableCell.removeLetter();
-                _changeableCell = null;
-                _state = PlayerState.PLACES_LETTER;
+                _changedCell.removeLetter();
+                _changedCell = null;
             }
 
             if (_word.length() > 0) {
                 _word.clear();
             }
+
+            _state = PlayerState.PLACES_LETTER;
+            fireChangedState();
         }
 
         fireCanceledActionOnField();
     }
 
-    public void chooseCell(@NotNull Point position) {
-        if (_state != PlayerState.SELECTING_CHANGEABLE_CELL && _state != PlayerState.FORMS_WORD) {
+    public void chooseCell(@NotNull Cell selectedCell) {
+        if (_state != PlayerState.PLACES_LETTER && _state != PlayerState.FORMS_WORD) {
             throw new IllegalArgumentException("Wrong \"chooseCell\" function call (incorrect state) for player: " + this._name);
         }
 
-        Cell selectedCell = _field.cell(position);
-        if (selectedCell == null) {
-            throw new IllegalArgumentException("Wrong \"chooseCell\" function call (the cell is missing from the field) for player: " + this._name);
+        if(_state == PlayerState.FORMS_WORD) {
+            if (!_word.addLetter(selectedCell)) {
+                return;
+            }
+
+            fireChoseCell(selectedCell);
         }
 
-        if (_state == PlayerState.SELECTING_CHANGEABLE_CELL) {
-            if (_changeableCell != null) {
+        if (_state == PlayerState.PLACES_LETTER) {
+            if(_alphabet.selectedLetter() == null){
+                throw new IllegalArgumentException("Wrong \"chooseCell\" function call (alphabet selected letter is null for some reason) for player: " + this._name);
+            }
+
+            if (_changedCell != null) {
                 return;
             }
 
@@ -149,21 +164,14 @@ public class Player {
             }
 
             if (selectedCell.letter() != null) {
-                fireChoseWrongCell(selectedCell, false, false, false);
                 return;
             }
 
-            _changeableCell = selectedCell;
-            _state = PlayerState.PLACES_LETTER;
+            // Set _changedCell
+            _changedCell = selectedCell;
+            placeLetter(_alphabet.selectedLetter());
+            fireChangedState();
         }
-
-        if (_state == PlayerState.FORMS_WORD) {
-            if (!_word.addLetter(selectedCell)) {
-                return;
-            }
-        }
-
-        fireChoseCell(selectedCell);
     }
 
     public void submitWord() {
@@ -171,8 +179,8 @@ public class Player {
             throw new IllegalArgumentException("Wrong \"submitWord\" function call (incorrect state) for player: " + this._name);
         }
 
-        if (!_word.containCell(_changeableCell)) {
-            fireWordDoesNotContainChangeableCell(_changeableCell);
+        if (!_word.containCell(_changedCell)) {
+            fireWordDoesNotContainChangeableCell(_changedCell);
             return;
         }
 
@@ -198,7 +206,7 @@ public class Player {
     }
 
     /* ============================================================================================================== */
-    // WordsDB observe
+    // WordsDB observe TODO: как-будто нафиг не нужен
     private class WordsDBObserve implements WordsDBListener {
         @Override
         public void addedUsedWord(WordsDBEvent event) {
@@ -222,7 +230,7 @@ public class Player {
     }
 
     /* ============================================================================================================== */
-    // Word observe
+    // Word observe TODO: как-будто нафиг не нужен
     private class WordObserve implements WordListener {
         @Override
         public void failedToAddLetter(WordEvent event) {
@@ -238,12 +246,78 @@ public class Player {
         _playerListeners.add(listener);
     }
 
+    // TODO: нужен
+    private void fireChangedState() {
+        for (Object listener : _playerListeners) {
+            PlayerActionEvent event = new PlayerActionEvent(this);
+            event.setPlayer(this);
+
+            ((PlayerActionListener) listener).changedState(event);
+        }
+    }
+
+    // TODO: нужен
     private void fireSkippedTurn() {
         for (Object listener : _playerListeners) {
             PlayerActionEvent event = new PlayerActionEvent(this);
             event.setPlayer(this);
 
             ((PlayerActionListener) listener).skippedTurn(event);
+        }
+    }
+
+    // TODO: нужен
+    private void fireFinishedTurn() {
+        for (Object listener : _playerListeners) {
+            PlayerActionEvent event = new PlayerActionEvent(this);
+            event.setPlayer(this);
+
+            ((PlayerActionListener) listener).finishedTurn(event);
+        }
+    }
+
+    // TODO: нужен
+    private void firePlacedLetter(@NotNull Character letter, @NotNull Cell cell) {
+        for (Object listener : _playerListeners) {
+            PlayerActionEvent event = new PlayerActionEvent(this);
+            event.setPlayer(this);
+            event.setLetter(letter);
+            event.setCell(cell);
+
+            ((PlayerActionListener) listener).placedLetter(event);
+        }
+    }
+
+    // TODO: нужен
+    private void fireChoseLetter(@NotNull Character letter) {
+        for (Object listener : _playerListeners) {
+            PlayerActionEvent event = new PlayerActionEvent(this);
+            event.setPlayer(this);
+            event.setLetter(letter);
+
+            ((PlayerActionListener) listener).choseLetter(event);
+        }
+    }
+
+    // TODO: нужен
+    private void fireChoseCell(@NotNull Cell cell) {
+        for (Object listener : _playerListeners) {
+            PlayerActionEvent event = new PlayerActionEvent(this);
+            event.setPlayer(this);
+            event.setCell(cell);
+
+            ((PlayerActionListener) listener).choseCell(event);
+        }
+    }
+
+    // TODO: нужен
+    private void fireCanceledActionOnField() {
+        for (Object listener : _playerListeners) {
+            PlayerActionEvent event = new PlayerActionEvent(this);
+            event.setPlayer(this);
+            event.setCell(_changedCell);
+
+            ((PlayerActionListener) listener).canceledActionOnField(event);
         }
     }
 
@@ -267,16 +341,6 @@ public class Player {
         }
     }
 
-    private void fireChoseCell(@NotNull Cell cell) {
-        for (Object listener : _playerListeners) {
-            PlayerActionEvent event = new PlayerActionEvent(this);
-            event.setPlayer(this);
-            event.setCell(cell);
-
-            ((PlayerActionListener) listener).choseCell(event);
-        }
-    }
-
     private void fireChoseWrongCell(@NotNull Cell cell, boolean isNotNeighborOfLastCell, boolean isContainCellAlready, boolean isCellWithoutLetter) {
         for (Object listener : _playerListeners) {
             PlayerActionEvent event = new PlayerActionEvent(this);
@@ -287,17 +351,6 @@ public class Player {
             event.setIsNotNeighborOfLastCell(isNotNeighborOfLastCell);
 
             ((PlayerActionListener) listener).choseWrongCell(event);
-        }
-    }
-
-    private void firePlacedLetter(@NotNull Character letter, @NotNull Cell cell) {
-        for (Object listener : _playerListeners) {
-            PlayerActionEvent event = new PlayerActionEvent(this);
-            event.setPlayer(this);
-            event.setLetter(letter);
-            event.setCell(cell);
-
-            ((PlayerActionListener) listener).placedLetter(event);
         }
     }
 
@@ -331,24 +384,6 @@ public class Player {
 
 
             ((PlayerActionListener) listener).failedToSubmitWord(event);
-        }
-    }
-
-    private void fireFinishedTurn() {
-        for (Object listener : _playerListeners) {
-            PlayerActionEvent event = new PlayerActionEvent(this);
-            event.setPlayer(this);
-
-            ((PlayerActionListener) listener).finishedTurn(event);
-        }
-    }
-
-    private void fireCanceledActionOnField() {
-        for (Object listener : _playerListeners) {
-            PlayerActionEvent event = new PlayerActionEvent(this);
-            event.setPlayer(this);
-
-            ((PlayerActionListener) listener).canceledActionOnField(event);
         }
     }
 }

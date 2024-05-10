@@ -35,7 +35,6 @@ public class GameModelTests {
     private final List<EVENT> _expectedEvents = new ArrayList<>();
 
     private class GameListener implements GameModelListener {
-
         @Override
         public void gameIsFinished(GameModelEvent event) {
             _events.add(EVENT.GAME_IS_FINISHED);
@@ -44,61 +43,6 @@ public class GameModelTests {
         @Override
         public void playerExchanged(GameModelEvent event) {
             _events.add(EVENT.PLAYER_EXCHANGED);
-        }
-
-        @Override
-        public void definedStartWord(GameModelEvent event) {
-            _events.add(EVENT.DEFINED_START_WORD);
-        }
-
-        @Override
-        public void playerSkippedTurn(GameModelEvent event) {
-            _events.add(EVENT.SKIPPED_TURN);
-        }
-
-        @Override
-        public void playerChoseCell(GameModelEvent event) {
-            _events.add(EVENT.CHOSE_CELL);
-        }
-
-        @Override
-        public void playerFailedToAddNewWordToDictionary(GameModelEvent event) {
-            _events.add(EVENT.FAILED_TO_ADD_NEW_WORD_TO_DICTIONARY);
-        }
-
-        @Override
-        public void playerAddedNewWordToDictionary(GameModelEvent event) {
-            _events.add(EVENT.ADDED_NEW_WORD_TO_DICTIONARY);
-        }
-
-        @Override
-        public void playerChoseWrongCell(GameModelEvent event) {
-            _events.add(EVENT.CHOSE_WRONG_CELL);
-        }
-
-        @Override
-        public void playerPlacedLetter(GameModelEvent event) {
-            _events.add(EVENT.PLACED_LETTER);
-        }
-
-        @Override
-        public void playerSubmittedWordWithoutChangeableCell(GameModelEvent event) {
-            _events.add(EVENT.SUBMITTED_WORD_WITHOUT_CHANGEABLE_CELL);
-        }
-
-        @Override
-        public void playerCanceledActionOnField(GameModelEvent event) {
-            _events.add(EVENT.CANCELED_ACTION_ON_FIELD);
-        }
-
-        @Override
-        public void playerSubmittedWord(GameModelEvent event) {
-            _events.add(EVENT.SUBMITTED_WORD);
-        }
-
-        @Override
-        public void playerFailedToSubmitWord(GameModelEvent event) {
-            _events.add(EVENT.FAILED_TO_SUBMIT_WORD);
         }
     }
 

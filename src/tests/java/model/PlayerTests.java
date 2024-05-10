@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTests {
     private enum EVENT {
+        CHANGED_STATE,
         SKIPPED_TURN,
         ADDED_NEW_WORD_TO_DICTIONARY,
         FAILED_TO_ADD_NEW_WORD_TO_DICTIONARY,
@@ -34,6 +35,11 @@ public class PlayerTests {
     private final List<EVENT> _expectedEvents = new ArrayList<>();
 
     private class EventsListener implements PlayerActionListener {
+
+        @Override
+        public void changedState(@NotNull PlayerActionEvent event) {
+            _events.add(EVENT.CHANGED_STATE);
+        }
 
         @Override
         public void skippedTurn(@NotNull PlayerActionEvent event) {

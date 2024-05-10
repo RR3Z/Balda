@@ -1,4 +1,6 @@
+import model.GameField;
 import model.GameModel;
+import model.Player;
 import model.events.GameModelEvent;
 import model.events.GameModelListener;
 import ui.*;
@@ -9,6 +11,7 @@ import ui.utils.GameWidgetUtils;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 public class MainWindow extends JFrame {
     private GameModel _gameModel;
@@ -30,9 +33,6 @@ public class MainWindow extends JFrame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension windowSize = new Dimension(400, 200);
         this.setBounds(screenSize.width/2 - windowSize.width/2, screenSize.height/2 - windowSize.height/2, windowSize.width, windowSize.height);
-
-        // TODO: REMOVE IT
-        startNewGame(14,14);
     }
 
     private JMenu createMainMenu() {
@@ -57,18 +57,18 @@ public class MainWindow extends JFrame {
         content.removeAll();
 
         // ----------- Добавить виджеты -----------
-        content.add(new JScrollPane(new PlayersScoreTable(_gameModel)));
+        //content.add(new JScrollPane(new PlayersScoreTable(_gameModel)));
 
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-        centerPanel.add(new GameFieldWidget(_gameModel.gameField()));
+        centerPanel.add(new GameFieldWidget(_gameModel));
         centerPanel.add(Box.createRigidArea(new Dimension(5, 5)));
         centerPanel.add(new PlayerActionsWidget(_gameModel));
         centerPanel.add(Box.createRigidArea(new Dimension(5, 5)));
-        centerPanel.add(new KeyboardWidget(_gameModel.alphabet()));
+        centerPanel.add(new KeyboardWidget(_gameModel));
         content.add(centerPanel);
 
-        content.add(new JScrollPane(new UsedWordsTable(_gameModel)));
+        //content.add(new JScrollPane(new UsedWordsTable(_gameModel, _gameModel.wordsDB())));
         // ----------------------------------------
 
         this.pack();
@@ -77,6 +77,49 @@ public class MainWindow extends JFrame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension windowSize = this.getSize();
         this.setBounds(screenSize.width/2 - windowSize.width/2, screenSize.height/2 - windowSize.height/2, windowSize.width, windowSize.height);
+    }
+
+    private class GameController implements GameModelListener {
+        private JPanel createGameOverPanel(List<Player> winners) {
+            JPanel gameOverPanel = new JPanel();
+            gameOverPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+            JLabel label = new JLabel();
+            String message = "";
+            if(winners.size() == 1) {
+                message = "<html>" + "<div style='text-align: center;'>" + "Игра окончена.<br>Победитель: " +
+                        winners.get(winners.size() - 1) + "<br>Желаете начать новую игру?" + "</div></html>";
+
+                label.setText(message);
+            } else if (winners.size() > 1) {
+                message = "<html><div style='text-align: center;'>" + "Игра окончена.<br>Победители: ";
+                for(Player player: winners) {
+                    message += "<br>" + player.name();
+                }
+                message += "<br>Желаете начать новую игру?" + "</div></html>";
+
+                label.setText(message);
+            }
+
+            gameOverPanel.add(label);
+
+            return gameOverPanel;
+        }
+
+        @Override
+        public void gameIsFinished(GameModelEvent event) {
+            // TODO: Выводить окошко о победе, блокировать все виджеты, выводить кто победил
+            int result = JOptionPane.showConfirmDialog(MainWindow.this, createGameOverPanel(event.winners()), "Настройки игры", JOptionPane.YES_NO_OPTION);
+
+            if(result == JOptionPane.YES_OPTION) {
+                // restart game
+            }
+        }
+
+        @Override
+        public void playerExchanged(GameModelEvent event) {
+            // DON'T NEED IT HERE
+        }
     }
 
     private class StartNewGameAction extends AbstractAction {
@@ -117,7 +160,7 @@ public class MainWindow extends JFrame {
         }
     }
 
-    private static class ExitAction extends AbstractAction {
+    private class ExitAction extends AbstractAction {
         public ExitAction() {
             this.putValue(NAME, "Выход");
         }
@@ -125,69 +168,6 @@ public class MainWindow extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             System.exit(0);
-        }
-    }
-
-    // TODO
-    private static class GameController implements GameModelListener {
-        @Override
-        public void gameIsFinished(GameModelEvent event) {
-
-        }
-
-        @Override
-        public void playerExchanged(GameModelEvent event) {
-
-        }
-
-        @Override
-        public void playerSkippedTurn(GameModelEvent event) {
-
-        }
-
-        @Override
-        public void playerChoseCell(GameModelEvent event) {
-
-        }
-
-        @Override
-        public void playerFailedToAddNewWordToDictionary(GameModelEvent event) {
-
-        }
-
-        @Override
-        public void playerAddedNewWordToDictionary(GameModelEvent event) {
-
-        }
-
-        @Override
-        public void playerChoseWrongCell(GameModelEvent event) {
-
-        }
-
-        @Override
-        public void playerPlacedLetter(GameModelEvent event) {
-
-        }
-
-        @Override
-        public void playerSubmittedWordWithoutChangeableCell(GameModelEvent event) {
-
-        }
-
-        @Override
-        public void playerCanceledActionOnField(GameModelEvent event) {
-
-        }
-
-        @Override
-        public void playerSubmittedWord(GameModelEvent event) {
-
-        }
-
-        @Override
-        public void playerFailedToSubmitWord(GameModelEvent event) {
-
         }
     }
 

@@ -9,9 +9,7 @@ import model.events.PlayerActionListener;
 import model.utils.FilePaths;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.EventListener;
-import java.util.List;
+import java.util.*;
 
 public class GameModel {
     private GameField _field;
@@ -24,7 +22,7 @@ public class GameModel {
     public GameModel(int width, int height) {
         _field = new GameField(width, height);
         _wordsDB = new WordsDB(FilePaths.DICTIONARY_FILE_PATH);
-        _alphabet = new Alphabet(FilePaths.ALPHABET_FILE_PATH);
+        _alphabet = new Alphabet(this, FilePaths.ALPHABET_FILE_PATH);
 
         Player firstPlayer = new Player("Player 1", _alphabet, _wordsDB, _field);
         firstPlayer.addPlayerActionListener(new PlayerObserve());
@@ -107,8 +105,6 @@ public class GameModel {
         int centralRowIndex = _field.centralLineIndex(direction);
         _field.placeWord(word, centralRowIndex, direction);
         _wordsDB.addToUsedWords(word, null);
-
-        fireDefinedStartWord(word);
     }
 
     private int numberOfPlayersWhoSkippedTurn() {
@@ -143,6 +139,12 @@ public class GameModel {
 
     public Alphabet alphabet() { return _alphabet; }
 
+    public WordsDB wordsDB() { return _wordsDB; }
+
+    public List<Player> players() {
+        return Collections.unmodifiableList(_players);
+    }
+
     public GameState state() {
         return _state;
     }
@@ -172,67 +174,58 @@ public class GameModel {
         }
 
         @Override
+        public void changedState(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
         public void submittedWord(@NotNull PlayerActionEvent event) {
-            if (event.player() == _activePlayer) {
-                _activePlayer.scoreCounter().increaseScore(event.word().length());
-                firePlayerSubmittedWord(event.player(), event.word());
-            }
+
         }
 
         @Override
         public void addedNewWordToDictionary(@NotNull PlayerActionEvent event) {
-            if (event.player() == _activePlayer) {
-                firePlayerAddedNewWordToDictionary(event.player(), event.word());
-            }
+
         }
 
         @Override
         public void failedToAddNewWordToDictionary(@NotNull PlayerActionEvent event) {
-            if (event.player() == _activePlayer) {
-                firePlayerFailedToAddNewWordToDictionary(event.player());
-            }
+
         }
 
         @Override
         public void choseCell(@NotNull PlayerActionEvent event) {
-            if (event.player() == _activePlayer) {
-                firePlayerChoseCell(event.player(), event.cell());
-            }
+
         }
 
         @Override
         public void choseWrongCell(@NotNull PlayerActionEvent event) {
-            if (event.player() == _activePlayer) {
-                firePlayerChoseWrongCell(event.player(), event.cell());
-            }
+
         }
 
         @Override
         public void placedLetter(@NotNull PlayerActionEvent event) {
-            if (event.player() == _activePlayer) {
-                firePlayerPlacedLetter(event.player(), event.cell());
-            }
+
+        }
+
+        @Override
+        public void choseLetter(@NotNull PlayerActionEvent event) {
+
         }
 
         @Override
         public void submittedWordWithoutChangeableCell(@NotNull PlayerActionEvent event) {
-            if (event.player() == _activePlayer) {
-                firePlayerSubmittedWordWithoutChangeableCell(event.player(), event.cell());
-            }
+
         }
 
         @Override
         public void failedToSubmitWord(@NotNull PlayerActionEvent event) {
-            if (event.player() == _activePlayer) {
-                firePlayerFailedToSubmitWord(event.player(), event.word(), event.isKnown(), event.isUsedAlready());
-            }
+
         }
 
         @Override
         public void canceledActionOnField(@NotNull PlayerActionEvent event) {
-            if (event.player() == _activePlayer) {
-                firePlayerCanceledActionOnField(event.player());
-            }
+
         }
     }
 
@@ -244,6 +237,7 @@ public class GameModel {
         _gameModelListeners.add(listener);
     }
 
+    // TODO: нужен
     private void firePlayerExchanged(@NotNull Player player) {
         for (Object listener : _gameModelListeners) {
             GameModelEvent event = new GameModelEvent(this);
@@ -253,111 +247,13 @@ public class GameModel {
         }
     }
 
-    private void fireDefinedStartWord(@NotNull String word) {
-        for (Object listener : _gameModelListeners) {
-            GameModelEvent event = new GameModelEvent(this);
-            event.setWord(word);
-
-            ((GameModelListener) listener).definedStartWord(event);
-        }
-    }
-
+    // TODO: нужен
     private void fireGameIsFinished(@NotNull List<Player> winners) {
         for (Object listener : _gameModelListeners) {
             GameModelEvent event = new GameModelEvent(this);
             event.setWinners(winners);
 
             ((GameModelListener) listener).gameIsFinished(event);
-        }
-    }
-
-    private void firePlayerSubmittedWord(@NotNull Player player,@NotNull String word) {
-        for (Object listener : _gameModelListeners) {
-            GameModelEvent event = new GameModelEvent(this);
-            event.setPlayer(player);
-            event.setWord(word);
-
-            ((GameModelListener) listener).playerSubmittedWord(event);
-        }
-    }
-    
-    private void firePlayerAddedNewWordToDictionary(@NotNull Player player,@NotNull String word) {
-        for (Object listener : _gameModelListeners) {
-            GameModelEvent event = new GameModelEvent(this);
-            event.setPlayer(player);
-            event.setWord(word);
-
-            ((GameModelListener) listener).playerAddedNewWordToDictionary(event);
-        }
-    }
-
-    private void firePlayerFailedToAddNewWordToDictionary(@NotNull Player player) {
-        for (Object listener : _gameModelListeners) {
-            GameModelEvent event = new GameModelEvent(this);
-            event.setPlayer(player);
-
-            ((GameModelListener) listener).playerFailedToAddNewWordToDictionary(event);
-        }
-    }
-
-    private void firePlayerChoseCell(@NotNull Player player, @NotNull Cell cell) {
-        for (Object listener : _gameModelListeners) {
-            GameModelEvent event = new GameModelEvent(this);
-            event.setPlayer(player);
-            event.setCell(cell);
-
-            ((GameModelListener) listener).playerChoseCell(event);
-        }
-    }
-
-    private void firePlayerChoseWrongCell(@NotNull Player player, @NotNull Cell cell) {
-        for (Object listener : _gameModelListeners) {
-            GameModelEvent event = new GameModelEvent(this);
-            event.setPlayer(player);
-            event.setCell(cell);
-
-            ((GameModelListener) listener).playerChoseWrongCell(event);
-        }
-    }
-
-    private void firePlayerPlacedLetter(@NotNull Player player, @NotNull Cell cell) {
-        for (Object listener : _gameModelListeners) {
-            GameModelEvent event = new GameModelEvent(this);
-            event.setPlayer(player);
-            event.setCell(cell);
-
-            ((GameModelListener) listener).playerPlacedLetter(event);
-        }
-    }
-
-    private void firePlayerSubmittedWordWithoutChangeableCell(@NotNull Player player, @NotNull Cell cell) {
-        for (Object listener : _gameModelListeners) {
-            GameModelEvent event = new GameModelEvent(this);
-            event.setPlayer(player);
-            event.setCell(cell);
-
-            ((GameModelListener) listener).playerSubmittedWordWithoutChangeableCell(event);
-        }
-    }
-
-    private void firePlayerFailedToSubmitWord(@NotNull Player player, @NotNull String word, boolean isKnown, boolean isUsedAlready) {
-        for (Object listener : _gameModelListeners) {
-            GameModelEvent event = new GameModelEvent(this);
-            event.setPlayer(player);
-            event.setWord(word);
-            event.setIsKnown(isKnown);
-            event.setIsUsedAlready(isUsedAlready);
-
-            ((GameModelListener) listener).playerFailedToSubmitWord(event);
-        }
-    }
-
-    private void firePlayerCanceledActionOnField(@NotNull Player player) {
-        for (Object listener : _gameModelListeners) {
-            GameModelEvent event = new GameModelEvent(this);
-            event.setPlayer(player);
-
-            ((GameModelListener) listener).playerCanceledActionOnField(event);
         }
     }
 }

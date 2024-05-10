@@ -1,33 +1,46 @@
 package ui;
 
-import model.Alphabet;
-import ui.buttons.CellButton;
-import ui.buttons.KeyboardButton;
-import ui.enums.ActivityState;
+import model.GameModel;
+import model.Player;
+import model.enums.PlayerState;
+import model.events.AlphabetEvent;
+import model.events.AlphabetListener;
+import model.events.PlayerActionEvent;
+import model.events.PlayerActionListener;
+import org.jetbrains.annotations.NotNull;
 import ui.utils.WidgetsViewCustomizations;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class KeyboardWidget extends JPanel {
-    ActivityState _widgetState;
+    private GameModel _gameModel;
 
-    private Alphabet _alphabet; // TODO: Нужна ли постоянная ссылка?
-    private Map<Character, KeyboardButton> _letters = new HashMap<>();
+    private Map<Character, JButton> _letters = new HashMap<>();
 
-    public KeyboardWidget(Alphabet alphabet) {
+    public KeyboardWidget(GameModel gameModel) {
         super();
-        _widgetState = ActivityState.ENABLED;
-        _alphabet = alphabet;
+        this.setEnabled(true);
 
-        int numberOfColumns = Math.ceilDiv(alphabet.availableLetters().size(), WidgetsViewCustomizations.KEYBOARD_ROW_COUNT);
+        _gameModel = gameModel;
+
+        _gameModel.alphabet().addAlphabetListener(new AlphabetController());
+
+        for(Player player: gameModel.players()) { // TODO: подписываться не сразу на всех, а постепенно на каждого активного
+            player.addPlayerActionListener(new PlayerController());
+        }
+
+        int numberOfColumns = Math.ceilDiv(gameModel.alphabet().availableLetters().size(), WidgetsViewCustomizations.KEYBOARD_ROW_COUNT);
         int numberOfRows = WidgetsViewCustomizations.KEYBOARD_ROW_COUNT;
         this.setLayout(new GridLayout(numberOfRows, numberOfColumns));
 
-        fillWidget(alphabet.availableLetters());
+        fillWidget(gameModel.alphabet().availableLetters());
 
         this.setMaximumSize(new Dimension(
                 numberOfColumns * WidgetsViewCustomizations.KEYBOARD_BUTTON_SIZE,
@@ -36,9 +49,13 @@ public class KeyboardWidget extends JPanel {
         );
     }
 
-    private void fillWidget(List<Character> letters) {
+    private void fillWidget(@NotNull List<Character> letters) {
         for(Character letter: letters) {
-            KeyboardButton keyboardButton = new KeyboardButton(letter);
+            JButton keyboardButton = new JButton();
+
+            setupButtonView(keyboardButton);
+            keyboardButton.setText(String.valueOf(letter));
+            keyboardButton.addMouseListener(new KeyboardButtonMouseListener(keyboardButton));
 
             _letters.put(letter, keyboardButton);
 
@@ -46,20 +63,137 @@ public class KeyboardWidget extends JPanel {
         }
     }
 
-    private void changeActivity() {
-        if(_widgetState == ActivityState.ENABLED) {
-            for (KeyboardButton button : _letters.values()) {
-                button.setEnabled(false);
-            }
+    private void setupButtonView(@NotNull JButton button) {
+        button.setPreferredSize(new Dimension(WidgetsViewCustomizations.KEYBOARD_BUTTON_SIZE, WidgetsViewCustomizations.KEYBOARD_BUTTON_SIZE));
 
-            _widgetState = ActivityState.DISABLED;
+        button.setModel(new WidgetsViewCustomizations.FixedStateButtonModel());
+
+        button.setOpaque(false);
+        button.setContentAreaFilled(false);
+        button.setBackground(WidgetsViewCustomizations.CLICKED_KEYBOARD_BUTTON_COLOR);
+
+        button.setBorder(BorderFactory.createLineBorder(
+                WidgetsViewCustomizations.STANDART_KEYBOARD_BUTTON_BORDER_COLOR,
+                WidgetsViewCustomizations.KEYBOARD_BUTTON_BORDER_THICKNESS)
+        );
+        button.setBorderPainted(true);
+
+        button.setFocusable(false);
+    }
+
+    private class KeyboardButtonMouseListener extends MouseAdapter {
+        private JButton _button;
+
+        public KeyboardButtonMouseListener(@NotNull JButton button) {
+            _button = button;
         }
-        else {
-            for (KeyboardButton button : _letters.values()) {
-                button.setEnabled(true);
-            }
 
-            _widgetState = ActivityState.ENABLED;
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if(KeyboardWidget.this.isEnabled()) {
+                // Logic
+                _gameModel.activePlayer().chooseLetter(_button.getText().charAt(0));
+            }
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            if(KeyboardWidget.this.isEnabled()) {
+                _button.setBorder(BorderFactory.createLineBorder(
+                        WidgetsViewCustomizations.HOVERED_KEYBOARD_BUTTON_BORDER_COLOR,
+                        WidgetsViewCustomizations.KEYBOARD_BUTTON_BORDER_THICKNESS)
+                );
+            }
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+            _button.setBorder(BorderFactory.createLineBorder(
+                    WidgetsViewCustomizations.STANDART_KEYBOARD_BUTTON_BORDER_COLOR,
+                    WidgetsViewCustomizations.KEYBOARD_BUTTON_BORDER_THICKNESS)
+            );
+        }
+    }
+
+    private class PlayerController implements PlayerActionListener {
+        @Override
+        public void changedState(@NotNull PlayerActionEvent event) {
+            KeyboardWidget.this.setEnabled(event.player().state() == PlayerState.SELECTING_LETTER);
+        }
+
+        @Override
+        public void choseLetter(@NotNull PlayerActionEvent event) {
+            JButton selectedLetter = _letters.get(event.letter());
+            selectedLetter.setOpaque(true);
+            selectedLetter.setOpaque(true);
+        }
+
+        @Override
+        public void finishedTurn(@NotNull PlayerActionEvent event) {
+            for(JButton button: _letters.values()) {
+                button.setOpaque(false);
+                button.setContentAreaFilled(false);
+            }
+        }
+
+        @Override
+        public void canceledActionOnField(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
+        public void skippedTurn(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
+        public void addedNewWordToDictionary(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
+        public void failedToAddNewWordToDictionary(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
+        public void choseCell(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
+        public void choseWrongCell(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
+        public void placedLetter(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+
+        @Override
+        public void submittedWordWithoutChangeableCell(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
+        public void submittedWord(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
+        public void failedToSubmitWord(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+    }
+
+    private class AlphabetController implements AlphabetListener {
+        @Override
+        public void forgetSelectedLetter(AlphabetEvent event) {
+            JButton selectedLetter = _letters.get(event.letter());
+            selectedLetter.setOpaque(false);
+            selectedLetter.setContentAreaFilled(false);
         }
     }
 }
