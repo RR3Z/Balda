@@ -5,8 +5,7 @@ import model.GameField;
 import model.GameModel;
 import model.Player;
 import model.enums.PlayerState;
-import model.events.PlayerActionEvent;
-import model.events.PlayerActionListener;
+import model.events.*;
 import org.jetbrains.annotations.NotNull;
 import ui.utils.GameWidgetUtils;
 import ui.utils.WidgetsViewCustomizations;
@@ -28,15 +27,15 @@ public class GameFieldWidget extends JPanel {
 
         _gameModel = gameModel;
         GameField gameField = _gameModel.gameField();
+        gameField.addGameFieldListener(new GameFieldController());
 
         for(Player player: _gameModel.players()) {
-            player.addPlayerActionListener(new PlayerController());
+            player.addPlayerActionListener(new PlayerController()); // TODO: подписываться по мере активновсти игроков
         }
-
-        this.setLayout(new GridLayout(gameField.height(), gameField.width()));
 
         fillWidget(gameField.height(), gameField.width());
 
+        this.setLayout(new GridLayout(gameField.height(), gameField.width()));
         this.setMaximumSize(new Dimension(
                 gameField.width() * WidgetsViewCustomizations.CELL_BUTTON_SIZE,
                 gameField.height() * WidgetsViewCustomizations.CELL_BUTTON_SIZE
@@ -156,29 +155,17 @@ public class GameFieldWidget extends JPanel {
 
         @Override
         public void canceledActionOnField(@NotNull PlayerActionEvent event) {
-            if(event.player().state() == PlayerState.SELECTING_LETTER) {
-                // TODO: ЭТО НЕ РАБОТАЕТ!!!! Ячейка очищается раньше, чем отправляется ивент
-                JButton selectedCell = _cells.get(event.cell());
-                if(selectedCell != null) {
-                    selectedCell.setOpaque(false);
-                    selectedCell.setContentAreaFilled(false);
-                    selectedCell.setText(String.valueOf(event.cell().letter()));
-                }
+            for(JButton button: _cells.values()) {
+                button.setOpaque(false);
+                button.setContentAreaFilled(false);
             }
 
-            if(event.player().state() == PlayerState.PLACES_LETTER) {
-                for(JButton button: _cells.values()) {
-                    button.setOpaque(false);
-                    button.setContentAreaFilled(false);
-                }
-
-                JButton selectedCell = _cells.get(event.cell());
-                if(selectedCell != null) {
-                    selectedCell.setOpaque(true);
-                    selectedCell.setContentAreaFilled(true);
-                    selectedCell.setBackground(Color.RED);
-                    selectedCell.setText(String.valueOf(event.cell().letter()));
-                }
+            JButton selectedCell = _cells.get(event.cell());
+            if(selectedCell != null) {
+                selectedCell.setOpaque(true);
+                selectedCell.setContentAreaFilled(true);
+                selectedCell.setBackground(Color.RED);
+                selectedCell.setText(String.valueOf(event.cell().letter()));
             }
         }
 
@@ -220,6 +207,14 @@ public class GameFieldWidget extends JPanel {
         @Override
         public void failedToSubmitWord(@NotNull PlayerActionEvent event) {
             // DON'T NEED IT HERE
+        }
+    }
+
+    private class GameFieldController implements GameFieldListener {
+        @Override
+        public void forgetChangedCell(GameFieldEvent event) {
+            JButton changedCell = _cells.get(event.cell());
+            changedCell.setText("");
         }
     }
 }

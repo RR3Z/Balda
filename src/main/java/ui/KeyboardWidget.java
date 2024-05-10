@@ -1,5 +1,6 @@
 package ui;
 
+import model.Alphabet;
 import model.GameModel;
 import model.Player;
 import model.enums.PlayerState;
@@ -29,18 +30,19 @@ public class KeyboardWidget extends JPanel {
         this.setEnabled(true);
 
         _gameModel = gameModel;
+        Alphabet alphabet = _gameModel.alphabet();
 
-        _gameModel.alphabet().addAlphabetListener(new AlphabetController());
+        alphabet.addAlphabetListener(new AlphabetController());
 
         for(Player player: gameModel.players()) { // TODO: подписываться не сразу на всех, а постепенно на каждого активного
             player.addPlayerActionListener(new PlayerController());
         }
 
-        int numberOfColumns = Math.ceilDiv(gameModel.alphabet().availableLetters().size(), WidgetsViewCustomizations.KEYBOARD_ROW_COUNT);
+        int numberOfColumns = Math.ceilDiv(alphabet.availableLetters().size(), WidgetsViewCustomizations.KEYBOARD_ROW_COUNT);
         int numberOfRows = WidgetsViewCustomizations.KEYBOARD_ROW_COUNT;
         this.setLayout(new GridLayout(numberOfRows, numberOfColumns));
 
-        fillWidget(gameModel.alphabet().availableLetters());
+        fillWidget(alphabet.availableLetters());
 
         this.setMaximumSize(new Dimension(
                 numberOfColumns * WidgetsViewCustomizations.KEYBOARD_BUTTON_SIZE,
