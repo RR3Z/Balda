@@ -127,7 +127,7 @@ public class PlayerTests {
     public void test_startTurn_CanStartTurn() {
         _player.startTurn();
 
-        assertEquals(PlayerState.PLACES_LETTER, _player.state());
+        assertEquals(PlayerState.SELECTING_CHANGEABLE_CELL, _player.state());
         assertTrue(_events.isEmpty());
     }
 
@@ -136,7 +136,7 @@ public class PlayerTests {
         _player.startTurn();
 
         assertThrows(IllegalArgumentException.class, () -> _player.startTurn());
-        assertEquals(PlayerState.PLACES_LETTER, _player.state());
+        assertEquals(PlayerState.SELECTING_CHANGEABLE_CELL, _player.state());
         assertTrue(_events.isEmpty());
     }
 
@@ -182,7 +182,7 @@ public class PlayerTests {
         _player.startTurn();
 
         assertThrows(IllegalArgumentException.class, () -> _player.chooseCell(new Point(100,1000)));
-        assertEquals(PlayerState.PLACES_LETTER, _player.state());
+        assertEquals(PlayerState.SELECTING_CHANGEABLE_CELL, _player.state());
         assertTrue(_events.isEmpty());
     }
 
@@ -198,14 +198,14 @@ public class PlayerTests {
     }
 
     @Test
-    public void test_chooseCell_PlacesLetter_ChoseCellWithLetter() {
+    public void test_chooseCell_SelectingChangeableCell_ChoseCellWithLetter() {
         _player.startTurn();
         _field.cell(new Point(0,2)).setLetter('а');
         _player.chooseCell(new Point(0,2));
 
         _expectedEvents.add(EVENT.CHOSE_WRONG_CELL);
 
-        assertEquals(PlayerState.PLACES_LETTER, _player.state());
+        assertEquals(PlayerState.SELECTING_CHANGEABLE_CELL, _player.state());
         assertEquals(_expectedEvents, _events);
     }
 
@@ -213,23 +213,23 @@ public class PlayerTests {
     public void test_chooseCell_PlacesLetter_ChoseCellTwice() {
         _player.startTurn();
         _player.chooseCell(new Point(0,2));
-        _player.chooseCell(new Point(0,2));
 
         _expectedEvents.add(EVENT.CHOSE_CELL);
 
+        assertThrows(IllegalArgumentException.class, () -> _player.chooseCell(new Point(0,2)));
         assertEquals(PlayerState.PLACES_LETTER, _player.state());
         assertEquals(_expectedEvents, _events);
     }
 
     @Test
-    public void test_chooseCell_PlacesLetter_ChoseCellWithLetterWhenNeedToPlaceLetter() {
+    public void test_chooseCell_SelectingChangeableCell_ChoseCellWithLetterWhenNeedToPlaceLetter() {
         _player.startTurn();
         _player.chooseCell(new Point(0,2));
         _field.cell(new Point(1,1)).setLetter('а');
-        _player.chooseCell(new Point(1,1));
 
         _expectedEvents.add(EVENT.CHOSE_CELL);
 
+        assertThrows(IllegalArgumentException.class, () -> _player.chooseCell(new Point(1,1)));
         assertEquals(PlayerState.PLACES_LETTER, _player.state());
         assertEquals(_expectedEvents, _events);
     }
@@ -259,7 +259,7 @@ public class PlayerTests {
         _player.startTurn();
 
         assertThrows(IllegalArgumentException.class, () -> _player.placeLetter('а'));
-        assertEquals(PlayerState.PLACES_LETTER, _player.state());
+        assertEquals(PlayerState.SELECTING_CHANGEABLE_CELL, _player.state());
         assertTrue(_events.isEmpty());
     }
 
@@ -270,7 +270,7 @@ public class PlayerTests {
 
         _expectedEvents.add(EVENT.CHOSE_CELL);
 
-        assertThrows(IllegalArgumentException.class, () -> _player.placeLetter('ж'));
+        assertThrows(IllegalArgumentException.class, () -> _player.placeLetter('ё'));
         assertEquals(PlayerState.PLACES_LETTER, _player.state());
         assertEquals(_expectedEvents, _events);
     }
@@ -312,7 +312,7 @@ public class PlayerTests {
         _player.startTurn();
 
         assertThrows(IllegalArgumentException.class, () -> _player.submitWord());
-        assertEquals(PlayerState.PLACES_LETTER, _player.state());
+        assertEquals(PlayerState.SELECTING_CHANGEABLE_CELL, _player.state());
         assertTrue(_events.isEmpty());
     }
 
@@ -412,7 +412,7 @@ public class PlayerTests {
         _player.startTurn();
 
         assertThrows(IllegalArgumentException.class, () -> _player.addNewWordToDictionary());
-        assertEquals(PlayerState.PLACES_LETTER, _player.state());
+        assertEquals(PlayerState.SELECTING_CHANGEABLE_CELL, _player.state());
         assertEquals(_expectedEvents, _events);
     }
 
@@ -441,18 +441,18 @@ public class PlayerTests {
     }
 
     @Test
-    public void test_cancelActionOnField_PlacesLetter_ForgetAboutNothing() {
+    public void test_cancelActionOnField_SelectingChangeableCell_ForgetAboutNothing() {
         _player.startTurn();
         _player.cancelActionOnField();
 
         _expectedEvents.add(EVENT.CANCELED_ACTION_ON_FIELD);
 
-        assertEquals(PlayerState.PLACES_LETTER, _player.state());
+        assertEquals(PlayerState.SELECTING_CHANGEABLE_CELL, _player.state());
         assertEquals(_expectedEvents, _events);
     }
 
     @Test
-    public void test_cancelActionOnField_PlacesLetter_ForgetAboutChoseCell() {
+    public void test_cancelActionOnField_SelectingChangeableCell_ForgetAboutChoseCell() {
         _player.startTurn();
         _player.chooseCell(new Point(0,2));
         _player.cancelActionOnField();
@@ -460,7 +460,7 @@ public class PlayerTests {
         _expectedEvents.add(EVENT.CHOSE_CELL);
         _expectedEvents.add(EVENT.CANCELED_ACTION_ON_FIELD);
 
-        assertEquals(PlayerState.PLACES_LETTER, _player.state());
+        assertEquals(PlayerState.SELECTING_CHANGEABLE_CELL, _player.state());
         assertEquals(_expectedEvents, _events);
     }
 

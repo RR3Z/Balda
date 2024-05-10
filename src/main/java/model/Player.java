@@ -39,6 +39,12 @@ public class Player {
         return _scoreCounter;
     }
 
+    public PlayerState state() {
+        return _state;
+    }
+
+    public String name() { return _name; }
+
     public void startTurn() {
         if (_state != PlayerState.WAITING_TURN && _state != PlayerState.SKIPPED_TURN) {
             throw new IllegalArgumentException("Wrong \"startTurn\" function call (incorrect state) for player: " + this._name);
@@ -46,11 +52,11 @@ public class Player {
 
         _changeableCell = null;
         _word.clear();
-        _state = PlayerState.PLACES_LETTER;
+        _state = PlayerState.SELECTING_CHANGEABLE_CELL;
     }
 
     public void skipTurn() {
-        if (_state != PlayerState.PLACES_LETTER && _state != PlayerState.FORMS_WORD) {
+        if (_state == PlayerState.WAITING_TURN || _state == PlayerState.SKIPPED_TURN) {
             throw new IllegalArgumentException("Wrong \"skipTurn\" function call (incorrect state) for player: " + this._name);
         }
 
@@ -91,12 +97,21 @@ public class Player {
     }
 
     public void cancelActionOnField() {
-        if (_state != PlayerState.FORMS_WORD && _state != PlayerState.PLACES_LETTER) {
+        if (_state != PlayerState.FORMS_WORD && _state != PlayerState.PLACES_LETTER && _state != PlayerState.SELECTING_CHANGEABLE_CELL) {
             throw new IllegalArgumentException("Wrong \"cancelActionOnField\" function call (incorrect state) for player: " + this._name);
         }
 
+        if (_state == PlayerState.SELECTING_CHANGEABLE_CELL) {
+            if(_changeableCell != null) {
+                _changeableCell = null;
+            }
+        }
+
         if (_state == PlayerState.PLACES_LETTER) {
-            _changeableCell = null;
+            if(_changeableCell != null) {
+                _changeableCell = null;
+            }
+            _state = PlayerState.SELECTING_CHANGEABLE_CELL;
         }
 
         if (_state == PlayerState.FORMS_WORD) {
@@ -115,7 +130,7 @@ public class Player {
     }
 
     public void chooseCell(@NotNull Point position) {
-        if (_state != PlayerState.PLACES_LETTER && _state != PlayerState.FORMS_WORD) {
+        if (_state != PlayerState.SELECTING_CHANGEABLE_CELL && _state != PlayerState.FORMS_WORD) {
             throw new IllegalArgumentException("Wrong \"chooseCell\" function call (incorrect state) for player: " + this._name);
         }
 
@@ -124,7 +139,7 @@ public class Player {
             throw new IllegalArgumentException("Wrong \"chooseCell\" function call (the cell is missing from the field) for player: " + this._name);
         }
 
-        if (_state == PlayerState.PLACES_LETTER) {
+        if (_state == PlayerState.SELECTING_CHANGEABLE_CELL) {
             if (_changeableCell != null) {
                 return;
             }
@@ -139,6 +154,7 @@ public class Player {
             }
 
             _changeableCell = selectedCell;
+            _state = PlayerState.PLACES_LETTER;
         }
 
         if (_state == PlayerState.FORMS_WORD) {
@@ -180,12 +196,6 @@ public class Player {
     public boolean isSkippedTurn() {
         return _state == PlayerState.SKIPPED_TURN;
     }
-
-    public PlayerState state() {
-        return _state;
-    }
-
-    public String name() { return _name; }
 
     /* ============================================================================================================== */
     // WordsDB observe
