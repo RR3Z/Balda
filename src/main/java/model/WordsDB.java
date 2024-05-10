@@ -13,17 +13,6 @@ public class WordsDB {
     private List<String> _dictionary = new ArrayList<>();
     private Map<Player, String> _usedWords = new HashMap<>();
 
-    public WordsDB() {
-        // TEMP SOLUTION
-        _dictionary.add("привет");
-        _dictionary.add("здоровый");
-        _dictionary.add("банан");
-        _dictionary.add("луна");
-        _dictionary.add("ночь");
-        _dictionary.add("яд");
-        _dictionary.add("а");
-    }
-
     public WordsDB(@NotNull List<String> dictionary) {
         // Translate words to lower case
         List<String> lowerCaseWords = new ArrayList<>();
@@ -118,7 +107,8 @@ public class WordsDB {
         }
     }
 
-    /* ============================================================================================================== */
+
+
     // Listeners
     private List<EventListener> _wordsDBListeners = new ArrayList<>();
 
