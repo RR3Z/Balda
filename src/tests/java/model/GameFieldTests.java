@@ -315,7 +315,7 @@ public class GameFieldTests {
         _field = new GameField(3, 7);
         int expectedResult = 2;
 
-        assertThrows(IllegalArgumentException.class, () -> _field.centralRowIndex(null));
+        assertThrows(IllegalArgumentException.class, () -> _field.centralLineIndex(null));
     }
 
     @Test
@@ -323,8 +323,8 @@ public class GameFieldTests {
         _field = new GameField(3, 7);
         int expectedResult = 2;
 
-        assertEquals(expectedResult, _field.centralRowIndex(Direction.UP));
-        assertEquals(expectedResult, _field.centralRowIndex(Direction.DOWN));
+        assertEquals(expectedResult, _field.centralLineIndex(Direction.UP));
+        assertEquals(expectedResult, _field.centralLineIndex(Direction.DOWN));
     }
 
     @Test
@@ -332,8 +332,8 @@ public class GameFieldTests {
         _field = new GameField(6, 7);
         int expectedResult = 3;
 
-        assertEquals(expectedResult, _field.centralRowIndex(Direction.UP));
-        assertEquals(expectedResult, _field.centralRowIndex(Direction.DOWN));
+        assertEquals(expectedResult, _field.centralLineIndex(Direction.UP));
+        assertEquals(expectedResult, _field.centralLineIndex(Direction.DOWN));
     }
 
     @Test
@@ -341,8 +341,8 @@ public class GameFieldTests {
         _field = new GameField(7, 3);
         int expectedResult = 2;
 
-        assertEquals(expectedResult, _field.centralRowIndex(Direction.LEFT));
-        assertEquals(expectedResult, _field.centralRowIndex(Direction.RIGHT));
+        assertEquals(expectedResult, _field.centralLineIndex(Direction.LEFT));
+        assertEquals(expectedResult, _field.centralLineIndex(Direction.RIGHT));
     }
 
     @Test
@@ -350,8 +350,8 @@ public class GameFieldTests {
         _field = new GameField(8, 7);
         int expectedResult = 4;
 
-        assertEquals(expectedResult, _field.centralRowIndex(Direction.LEFT));
-        assertEquals(expectedResult, _field.centralRowIndex(Direction.RIGHT));
+        assertEquals(expectedResult, _field.centralLineIndex(Direction.LEFT));
+        assertEquals(expectedResult, _field.centralLineIndex(Direction.RIGHT));
     }
 
     @Test
