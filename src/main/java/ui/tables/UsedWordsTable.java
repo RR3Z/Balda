@@ -1,6 +1,11 @@
 package ui.tables;
 
 import model.GameModel;
+import model.WordsDB;
+import model.events.GameModelEvent;
+import model.events.GameModelListener;
+import model.events.WordsDBEvent;
+import model.events.WordsDBListener;
 import ui.utils.WidgetsViewCustomizations;
 
 import javax.swing.*;
@@ -8,24 +13,21 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class UsedWordsTable extends JTable {
-    private GameModel _gameModel;
-
     private DefaultTableModel _usedWordsTableModel;
 
-    public UsedWordsTable(GameModel gameModel) {
+    public UsedWordsTable(GameModel gameModel, WordsDB wordsDB) {
         super();
-        _gameModel = gameModel;
+        //TODO
+        //gameModel.addGameModelListener(new GameController());
+        //wordsDB.addWordsDBListener(new WordsDBController());
 
-        setupTableData();
+        setupTableComponents();
         setupTableView();
     }
 
-    private void setupTableData() {
+    private void setupTableComponents() {
         _usedWordsTableModel = new DefaultTableModel();
         _usedWordsTableModel.setColumnIdentifiers(WidgetsViewCustomizations.USED_WORDS_TABLE_HEADERS);
-
-        // Заполнить таблицу данными и отметить текущего активного игрока
-
         this.setModel(_usedWordsTableModel);
     }
 
@@ -42,8 +44,8 @@ public class UsedWordsTable extends JTable {
         this.setFocusable(false);
     }
 
-    private void add() {
-
+    private void add(String playerName, String word) {
+        _usedWordsTableModel.addRow(new Object[]{word, playerName});
     }
 
     @Override
