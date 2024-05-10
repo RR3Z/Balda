@@ -40,36 +40,42 @@ public class KeyboardButton extends JButton {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            isClicked = !isClicked;
+            if(KeyboardButton.this.isEnabled()) {
+                isClicked = !isClicked;
 
-            if(isClicked) {
-                KeyboardButton.this.setOpaque(true);
-                KeyboardButton.this.setContentAreaFilled(true);
+                if(isClicked) {
+                    KeyboardButton.this.setOpaque(true);
+                    KeyboardButton.this.setContentAreaFilled(true);
 
-                // TODO SMTH
-            }
-            else {
-                KeyboardButton.this.setOpaque(false);
-                KeyboardButton.this.setContentAreaFilled(false);
+                    // TODO SMTH
+                }
+                else {
+                    KeyboardButton.this.setOpaque(false);
+                    KeyboardButton.this.setContentAreaFilled(false);
 
-                // TODO SMTH
+                    // TODO SMTH
+                }
             }
         }
 
         @Override
         public void mouseEntered(MouseEvent e) {
-            KeyboardButton.this.setBorder(BorderFactory.createLineBorder(
-                    WidgetsViewCustomizations.HOVERED_KEYBOARD_BUTTON_BORDER_COLOR,
-                    WidgetsViewCustomizations.KEYBOARD_BUTTON_BORDER_THICKNESS)
-            );
+            if(KeyboardButton.this.isEnabled()) {
+                KeyboardButton.this.setBorder(BorderFactory.createLineBorder(
+                        WidgetsViewCustomizations.HOVERED_KEYBOARD_BUTTON_BORDER_COLOR,
+                        WidgetsViewCustomizations.KEYBOARD_BUTTON_BORDER_THICKNESS)
+                );
+            }
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            KeyboardButton.this.setBorder(BorderFactory.createLineBorder(
-                    WidgetsViewCustomizations.STANDART_KEYBOARD_BUTTON_BORDER_COLOR,
-                    WidgetsViewCustomizations.KEYBOARD_BUTTON_BORDER_THICKNESS)
-            );
+            if(KeyboardButton.this.isEnabled()) {
+                KeyboardButton.this.setBorder(BorderFactory.createLineBorder(
+                        WidgetsViewCustomizations.STANDART_KEYBOARD_BUTTON_BORDER_COLOR,
+                        WidgetsViewCustomizations.KEYBOARD_BUTTON_BORDER_THICKNESS)
+                );
+            }
         }
     }
 }
