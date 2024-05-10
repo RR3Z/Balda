@@ -46,9 +46,9 @@ public class CellButton extends JButton {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            isClicked = !isClicked;
-
             if(CellButton.this.isEnabled()) {
+                isClicked = !isClicked;
+
                 if(isClicked) {
                     CellButton.this.setOpaque(true);
                     CellButton.this.setContentAreaFilled(true);
