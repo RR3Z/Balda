@@ -4,6 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 
 public class WidgetsViewCustomizations {
+    // General
+    public static final Color TRANSPARENT_COLOR = new Color(0, 0, 0, 0);
+
+
+
     // CellButton view customizations
     public static final int CELL_BUTTON_SIZE = 45;
     public static final int CELL_BUTTON_BORDER_THICKNESS = 1;
@@ -53,4 +58,12 @@ public class WidgetsViewCustomizations {
 
     // SubmitWordButton view customizations
     public static final Color SUBMIT_WORD_BUTTON_COLOR = new Color(167, 201, 87);
+
+
+
+    // PlayersScoreTable customizations
+    public static final Object[] PLAYERS_SCORE_TABLE_HEADERS = new Object[] {"Игрок", "Очки"};
+
+    // UsedWordsTable customizations
+    public static final Object[] USED_WORDS_TABLE_HEADERS = new Object[] {"Слово", "Игрок"};
 }
