@@ -60,7 +60,7 @@ public class KeyboardButton extends JButton {
         public void mouseEntered(MouseEvent e) {
             KeyboardButton.this.setBorder(BorderFactory.createLineBorder(
                     WidgetsViewCustomizations.HOVERED_KEYBOARD_BUTTON_BORDER_COLOR,
-                    WidgetsViewCustomizations.KEYBOARD_BUTTON_BORDER_THICKNESS + 1)
+                    WidgetsViewCustomizations.KEYBOARD_BUTTON_BORDER_THICKNESS)
             );
         }
 
