@@ -2,6 +2,7 @@ package model;
 
 import model.events.WordsDBEvent;
 import model.events.WordsDBListener;
+import model.utils.FilePaths;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -103,7 +104,7 @@ public class WordsDBTests {
     @Test
     public void test_containsInUsedWord_WordInLowerCaseContain() {
         String word = "привет";
-        Player player = new Player("Player 1", new Alphabet(), _wordsDB, new GameField(5, 5));
+        Player player = new Player("Player 1", new Alphabet(FilePaths.ALPHABET_FILE_PATH), _wordsDB, new GameField(5, 5));
         _wordsDB.addToUsedWords(word, player);
 
         _expectedEvents.add(EVENT.ADDED_USED_WORD);
@@ -115,7 +116,7 @@ public class WordsDBTests {
     @Test
     public void test_containsInUsedWord_WordInUpperCaseContain() {
         String word = "ПРИВЕТ";
-        Player player = new Player("Player 1", new Alphabet(), _wordsDB, new GameField(5, 5));
+        Player player = new Player("Player 1", new Alphabet(FilePaths.ALPHABET_FILE_PATH), _wordsDB, new GameField(5, 5));
         _wordsDB.addToUsedWords(word, player);
 
         _expectedEvents.add(EVENT.ADDED_USED_WORD);
@@ -127,7 +128,7 @@ public class WordsDBTests {
     @Test
     public void test_containsInUsedWords_WordInDifferentCasesContain() {
         String word = "ПриВЕТ";
-        Player player = new Player("Player 1", new Alphabet(), _wordsDB, new GameField(5, 5));
+        Player player = new Player("Player 1", new Alphabet(FilePaths.ALPHABET_FILE_PATH), _wordsDB, new GameField(5, 5));
         _wordsDB.addToUsedWords(word, player);
 
         _expectedEvents.add(EVENT.ADDED_USED_WORD);
@@ -220,7 +221,7 @@ public class WordsDBTests {
     @Test
     public void test_addToUsedWords_KnownAndNotUsedWord() {
         String word = "привет";
-        Player player = new Player("Player 1", new Alphabet(), _wordsDB, new GameField(5, 5));
+        Player player = new Player("Player 1", new Alphabet(FilePaths.ALPHABET_FILE_PATH), _wordsDB, new GameField(5, 5));
 
         _expectedEvents.add(EVENT.ADDED_USED_WORD);
 
@@ -232,7 +233,7 @@ public class WordsDBTests {
     @Test
     public void test_addToUsedWords_KnownAndUsedWord() {
         String word = "привет";
-        Player player = new Player("Player 1", new Alphabet(), _wordsDB, new GameField(5, 5));
+        Player player = new Player("Player 1", new Alphabet(FilePaths.ALPHABET_FILE_PATH), _wordsDB, new GameField(5, 5));
         _wordsDB.addToUsedWords(word, player);
 
         _expectedEvents.add(EVENT.ADDED_USED_WORD);
@@ -246,7 +247,7 @@ public class WordsDBTests {
     @Test
     public void test_addToUsedWords_UnknownWord() {
         String word = "банан";
-        Player player = new Player("Player 1", new Alphabet(), _wordsDB, new GameField(5, 5));
+        Player player = new Player("Player 1", new Alphabet(FilePaths.ALPHABET_FILE_PATH), _wordsDB, new GameField(5, 5));
 
         _expectedEvents.add(EVENT.FAILED_TO_ADD_USED_WORD);
 
@@ -257,7 +258,7 @@ public class WordsDBTests {
 
     @Test
     public void test_addToUsedWords_NullWord() {
-        Player player = new Player("Player 1", new Alphabet(), _wordsDB, new GameField(5, 5));
+        Player player = new Player("Player 1", new Alphabet(FilePaths.ALPHABET_FILE_PATH), _wordsDB, new GameField(5, 5));
 
         assertThrows(IllegalArgumentException.class, () -> _wordsDB.addToUsedWords(null, player));
     }

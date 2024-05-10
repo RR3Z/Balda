@@ -4,6 +4,7 @@ import model.enums.Direction;
 import model.enums.PlayerState;
 import model.events.PlayerActionEvent;
 import model.events.PlayerActionListener;
+import model.utils.FilePaths;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -102,23 +103,7 @@ public class PlayerTests {
         _expectedEvents.clear();
 
         // Setup alphabet
-        List<Character> letters = new ArrayList<>();
-        letters.add('с');
-        letters.add('у');
-        letters.add('п');
-        letters.add('к');
-        letters.add('р');
-        letters.add('а');
-        letters.add('б');
-        letters.add('н');
-        letters.add('т');
-        letters.add('у');
-        letters.add('ч');
-        letters.add('а');
-        letters.add('и');
-        letters.add('в');
-        letters.add('е');
-        _alphabet = new Alphabet(letters);
+        _alphabet = new Alphabet(FilePaths.ALPHABET_FILE_PATH);
 
         // Setup wordsDB
         List<String> words = new ArrayList<>();

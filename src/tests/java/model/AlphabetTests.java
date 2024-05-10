@@ -1,5 +1,6 @@
 package model;
 
+import model.utils.FilePaths;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,13 +17,7 @@ public class AlphabetTests {
 
     @BeforeEach
     public void testSetup() {
-        List<Character> letters = new ArrayList<>();
-        letters.add('А');
-        letters.add('б');
-        letters.add('х');
-        letters.add('Э');
-
-        _alphabet = new Alphabet(letters);
+        _alphabet = new Alphabet(FilePaths.ALPHABET_FILE_PATH);
     }
 
     @Test
