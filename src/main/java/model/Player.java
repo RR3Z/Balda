@@ -185,6 +185,8 @@ public class Player {
         return _state;
     }
 
+    public String name() { return _name; }
+
     /* ============================================================================================================== */
     // WordsDB observe
     private class WordsDBObserve implements WordsDBListener {
