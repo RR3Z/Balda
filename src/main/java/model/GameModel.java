@@ -20,7 +20,7 @@ public class GameModel {
     private GameState _state;
 
     public GameModel(int width, int height) {
-        _field = new GameField(width, height);
+        _field = new GameField(this, width, height);
         _wordsDB = new WordsDB(FilePaths.DICTIONARY_FILE_PATH);
         _alphabet = new Alphabet(this, FilePaths.ALPHABET_FILE_PATH);
 
@@ -143,7 +143,7 @@ public class GameModel {
 
     public List<Player> players() {
         return Collections.unmodifiableList(_players);
-    }
+    } // TODO: убрать и где используется подписываться к активным игрокам потихоньку
 
     public GameState state() {
         return _state;

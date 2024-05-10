@@ -17,7 +17,6 @@ public class Player {
     private Word _word;
     private ScoreCounter _scoreCounter;
     private PlayerState _state;
-    private Cell _changedCell; // TODO: мб хранить это лучше в поле?
 
     public Player(@NotNull String name, @NotNull Alphabet alphabet, @NotNull WordsDB wordsDB, @NotNull GameField field) {
         _wordsDB = wordsDB;
@@ -50,7 +49,6 @@ public class Player {
             throw new IllegalArgumentException("Wrong \"startTurn\" function call (incorrect state) for player: " + this._name);
         }
 
-        _changedCell = null;
         _word.clear();
         _state = PlayerState.SELECTING_LETTER;
         fireChangedState();
@@ -61,9 +59,8 @@ public class Player {
             throw new IllegalArgumentException("Wrong \"skipTurn\" function call (incorrect state) for player: " + this._name);
         }
 
-        if (_changedCell != null) {
-            // Removing the letter placed in the Cell
-            _changedCell.removeLetter();
+        if (_field.changedCell() != null) {
+            _field.forgetChangedCell();
         }
 
         _state = PlayerState.SKIPPED_TURN;
@@ -87,14 +84,15 @@ public class Player {
             throw new IllegalArgumentException("Wrong \"placeLetter\" function call (incorrect state) for player: " + this._name);
         }
 
-        if (_changedCell == null) {
-            throw new IllegalArgumentException("Wrong \"placeLetter\" function call (changeableCell is null for some reason) for player: " + this._name);
+        Cell changedCell = _field.changedCell();
+        if (changedCell == null) {
+            throw new IllegalArgumentException("Wrong \"placeLetter\" function call (changedCell is null for some reason) for player: " + this._name);
         }
 
-        _changedCell.setLetter(letter);
+        changedCell.setLetter(letter);
         _state = PlayerState.FORMS_WORD;
         fireChangedState();
-        firePlacedLetter(_alphabet.selectedLetter(), _changedCell);
+        firePlacedLetter(_alphabet.selectedLetter(), changedCell);
     }
 
     public void addNewWordToDictionary() {
@@ -122,8 +120,7 @@ public class Player {
 
         if (_state == PlayerState.FORMS_WORD) {
             if (_word.length() == 0) {
-                _changedCell.removeLetter();
-                _changedCell = null;
+                _field.forgetChangedCell();
             }
 
             if (_word.length() > 0) {
@@ -155,7 +152,7 @@ public class Player {
                 throw new IllegalArgumentException("Wrong \"chooseCell\" function call (alphabet selected letter is null for some reason) for player: " + this._name);
             }
 
-            if (_changedCell != null) {
+            if (_field.changedCell() != null) {
                 return;
             }
 
@@ -168,7 +165,7 @@ public class Player {
             }
 
             // Set _changedCell
-            _changedCell = selectedCell;
+            _field.setChangedCell(selectedCell);
             placeLetter(_alphabet.selectedLetter());
             fireChangedState();
         }
@@ -179,8 +176,9 @@ public class Player {
             throw new IllegalArgumentException("Wrong \"submitWord\" function call (incorrect state) for player: " + this._name);
         }
 
-        if (!_word.containCell(_changedCell)) {
-            fireWordDoesNotContainChangeableCell(_changedCell);
+        Cell changedCell = _field.changedCell();
+        if (!_word.containCell(changedCell)) {
+            fireWordDoesNotContainChangeableCell(changedCell);
             return;
         }
 
@@ -310,12 +308,12 @@ public class Player {
         }
     }
 
-    // TODO: нужен
+    // TODO: ???
     private void fireCanceledActionOnField() {
         for (Object listener : _playerListeners) {
             PlayerActionEvent event = new PlayerActionEvent(this);
             event.setPlayer(this);
-            event.setCell(_changedCell);
+            event.setCell(_field.changedCell());
 
             ((PlayerActionListener) listener).canceledActionOnField(event);
         }

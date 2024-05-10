@@ -1,16 +1,21 @@
 package model;
 
 import model.enums.Direction;
+import model.events.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.EventListener;
+import java.util.List;
 
 public class GameField {
     private final int _width;
     private final int _height;
     private Cell[][] _cells;
+    private Cell _changedCell;
 
-    public GameField(int width, int height) {
+    public GameField(@NotNull GameModel gameModel, int width, int height) {
         if (width < 1 || height < 1) {
             throw new IllegalArgumentException("GameField -> constructor: wrong field sizes");
         }
@@ -18,6 +23,82 @@ public class GameField {
         _width = width;
         _height = height;
         createCells();
+        _changedCell = null;
+
+        gameModel.addGameModelListener(new GameModelObserve());
+    }
+
+    public int width() {
+        return _width;
+    }
+
+    public int height() {
+        return _height;
+    }
+
+    public Cell changedCell() { return _changedCell; }
+
+    public Cell cell(@NotNull Point position) {
+        for (int i = 0; i < _height; i++) {
+            for (int j = 0; j < _width; j++) {
+                Point cellPosition = _cells[j][i].position();
+                if (cellPosition.getX() == position.getX() && cellPosition.getY() == position.getY()) {
+                    return _cells[j][i];
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public int centralLineIndex(@NotNull Direction direction) {
+        int centralRowIndex = -1;
+
+        if (direction == Direction.RIGHT || direction == Direction.LEFT) {
+            centralRowIndex = Math.ceilDiv(_height, 2) - 1;
+        }
+
+        if (direction == Direction.UP || direction == Direction.DOWN) {
+            centralRowIndex = Math.ceilDiv(_width, 2) - 1;
+        }
+
+        return centralRowIndex;
+    }
+
+    private Cell[] line(@NotNull Direction direction, int rowIndex) {
+        if (rowIndex < 0 ||
+                (direction == Direction.RIGHT || direction == Direction.LEFT) && rowIndex >= _height ||
+                (direction == Direction.UP || direction == Direction.DOWN) && rowIndex >= _width) {
+            throw new IllegalArgumentException("GameField -> getLine(): wrong row index");
+        }
+
+        int length = (direction == Direction.RIGHT || direction == Direction.LEFT) ? _width : _height;
+        Cell[] row = new Cell[length];
+
+        for (int i = 0; i < length; i++) {
+            if (direction == Direction.RIGHT || direction == Direction.LEFT) {
+                row[i] = _cells[i][rowIndex];
+            }
+            if (direction == Direction.UP || direction == Direction.DOWN) {
+                row[i] = _cells[rowIndex][i];
+            }
+        }
+
+        return row;
+    }
+
+    public int cellsCountWithoutLetter() {
+        int counter = 0;
+
+        for (int i = 0; i < _height; i++) {
+            for (int j = 0; j < _width; j++) {
+                if (_cells[j][i].letter() == null) {
+                    counter++;
+                }
+            }
+        }
+
+        return counter;
     }
 
     private void createCells() {
@@ -56,43 +137,8 @@ public class GameField {
         }
     }
 
-    public int width() {
-        return _width;
-    }
-
-    public int height() {
-        return _height;
-    }
-
-    public Cell cell(@NotNull Point position) {
-        for (int i = 0; i < _height; i++) {
-            for (int j = 0; j < _width; j++) {
-                Point cellPosition = _cells[j][i].position();
-                if (cellPosition.getX() == position.getX() && cellPosition.getY() == position.getY()) {
-                    return _cells[j][i];
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public int centralLineIndex(@NotNull Direction direction) {
-        int centralRowIndex = -1;
-
-        if (direction == Direction.RIGHT || direction == Direction.LEFT) {
-            centralRowIndex = Math.ceilDiv(_height, 2) - 1;
-        }
-
-        if (direction == Direction.UP || direction == Direction.DOWN) {
-            centralRowIndex = Math.ceilDiv(_width, 2) - 1;
-        }
-
-        return centralRowIndex;
-    }
-
     public void placeWord(@NotNull String word, int rowIndex, @NotNull Direction direction) {
-        Cell[] row = getLine(direction, rowIndex);
+        Cell[] row = line(direction, rowIndex);
 
         // Index of letter in word
         int letterIndex = 0;
@@ -124,49 +170,52 @@ public class GameField {
         }
     }
 
-    private Cell[] getLine(@NotNull Direction direction, int rowIndex) {
-        if (rowIndex < 0 ||
-                (direction == Direction.RIGHT || direction == Direction.LEFT) && rowIndex >= _height ||
-                (direction == Direction.UP || direction == Direction.DOWN) && rowIndex >= _width) {
-            throw new IllegalArgumentException("GameField -> getLine(): wrong row index");
-        }
-
-        int length = (direction == Direction.RIGHT || direction == Direction.LEFT) ? _width : _height;
-        Cell[] row = new Cell[length];
-
-        for (int i = 0; i < length; i++) {
-            if (direction == Direction.RIGHT || direction == Direction.LEFT) {
-                row[i] = _cells[i][rowIndex];
-            }
-            if (direction == Direction.UP || direction == Direction.DOWN) {
-                row[i] = _cells[rowIndex][i];
-            }
-        }
-
-        return row;
+    public void forgetChangedCell() {
+        fireForgetChangedCell(_changedCell);
+        _changedCell.removeLetter();
+        _changedCell = null;
     }
 
-    public void printField(){
-        // TODO: REMOVE THIS
-        for(int i = 0; i < _height; i++) {
-            for (int j = 0; j < _width; j++){
-                System.out.print(_cells[j][i].letter() + " ");
-            }
-            System.out.println();
+    public boolean setChangedCell(@NotNull Cell changedCell) {
+        if(_changedCell != null) {
+            throw new IllegalArgumentException("GameField -> selectChangedCell: trying to select a changed cell when it has already been selected");
+        }
+
+        if(cell(changedCell.position()) != null) {
+            _changedCell = changedCell;
+            return true;
+        }
+
+        return false;
+    }
+
+    private class GameModelObserve implements GameModelListener {
+        @Override
+        public void playerExchanged(GameModelEvent event) {
+            forgetChangedCell();
+        }
+
+        @Override
+        public void gameIsFinished(GameModelEvent event) {
+            // DON'T NEED IT HERE
         }
     }
 
-    public int cellsCountWithoutLetter() {
-        int counter = 0;
 
-        for (int i = 0; i < _height; i++) {
-            for (int j = 0; j < _width; j++) {
-                if (_cells[j][i].letter() == null) {
-                    counter++;
-                }
-            }
+
+    // Listeners
+    private List<EventListener> _gameFieldListeners = new ArrayList<>();
+
+    public void addGameFieldListener(@NotNull GameFieldListener listener) {
+        _gameFieldListeners.add(listener);
+    }
+
+    private void fireForgetChangedCell(Cell cell) {
+        for (Object listener : _gameFieldListeners) {
+            GameFieldEvent event = new GameFieldEvent(this);
+            event.setCell(cell);
+
+            ((GameFieldListener) listener).forgetChangedCell(event);
         }
-
-        return counter;
     }
 }
