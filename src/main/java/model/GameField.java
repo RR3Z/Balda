@@ -192,7 +192,9 @@ public class GameField {
     private class GameModelObserve implements GameModelListener {
         @Override
         public void playerExchanged(GameModelEvent event) {
-            forgetChangedCell();
+            if(_changedCell != null) {
+                forgetChangedCell();
+            }
         }
 
         @Override
@@ -200,8 +202,6 @@ public class GameField {
             // DON'T NEED IT HERE
         }
     }
-
-
 
     // Listeners
     private List<EventListener> _gameFieldListeners = new ArrayList<>();
