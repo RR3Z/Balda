@@ -37,7 +37,7 @@ public class WidgetsViewCustomizations {
     }
 
 
-    
+
     // PlayerActionButton view customizations
     public static final int PLAYER_ACTION_BUTTON_WIDTH = 130;
     public static final int PLAYER_ACTION_BUTTON_HEIGHT = 40;
@@ -49,7 +49,7 @@ public class WidgetsViewCustomizations {
     public static final Color CANCEL_ACTION_BUTTON_COLOR = new Color(167, 201, 87);
 
     // SkipTurnButton view customizations
-    public static final Color SKIP_TURN_BUTTON_COLOR = new Color(167, 201, 87);
+    public static final Color SKIP_TURN_BUTTON_COLOR = new Color(235, 93, 95);
 
     // SubmitWordButton view customizations
     public static final Color SUBMIT_WORD_BUTTON_COLOR = new Color(167, 201, 87);
