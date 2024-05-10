@@ -121,14 +121,14 @@ public class Player {
         if (_state == PlayerState.FORMS_WORD) {
             if (_word.length() == 0) {
                 _field.forgetChangedCell();
+
+                _state = PlayerState.PLACES_LETTER;
+                fireChangedState();
             }
 
             if (_word.length() > 0) {
                 _word.clear();
             }
-
-            _state = PlayerState.PLACES_LETTER;
-            fireChangedState();
         }
 
         fireCanceledActionOnField();
@@ -308,7 +308,7 @@ public class Player {
         }
     }
 
-    // TODO: ???
+    // TODO: нужен
     private void fireCanceledActionOnField() {
         for (Object listener : _playerListeners) {
             PlayerActionEvent event = new PlayerActionEvent(this);
