@@ -3,6 +3,7 @@ package ui;
 import model.Cell;
 import model.GameField;
 import ui.buttons.CellButton;
+import ui.enums.ActivityState;
 import ui.utils.WidgetsViewCustomizations;
 
 import javax.swing.*;
@@ -11,11 +12,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GameFieldWidget extends JPanel {
+    ActivityState _widgetState;
+
     private GameField _gameField; // TODO: Нужна ли постоянная ссылка?
     private Map<Cell, CellButton> _cells = new HashMap<>();
 
     public GameFieldWidget(GameField gameField) {
         super();
+        _widgetState = ActivityState.DISABLED;
         _gameField = gameField;
 
         this.setLayout(new GridLayout(gameField.height(), gameField.width()));
@@ -44,5 +48,23 @@ public class GameFieldWidget extends JPanel {
                 this.add(cellButton);
             }
         }
+    }
+
+    private void changeActivity() {
+        if(_widgetState == ActivityState.ENABLED) {
+            for (CellButton button : _cells.values()) {
+                button.setEnabled(false);
+            }
+
+            _widgetState = ActivityState.DISABLED;
+        }
+        else {
+            for (CellButton button : _cells.values()) {
+                button.setEnabled(true);
+            }
+
+            _widgetState = ActivityState.ENABLED;
+        }
+
     }
 }

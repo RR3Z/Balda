@@ -1,5 +1,6 @@
 package ui.buttons;
 
+import model.Cell;
 import ui.utils.WidgetsViewCustomizations;
 import javax.swing.*;
 import java.awt.*;
@@ -47,34 +48,40 @@ public class CellButton extends JButton {
         public void mouseClicked(MouseEvent e) {
             isClicked = !isClicked;
 
-            if(isClicked) {
-                CellButton.this.setOpaque(true);
-                CellButton.this.setContentAreaFilled(true);
+            if(CellButton.this.isEnabled()) {
+                if(isClicked) {
+                    CellButton.this.setOpaque(true);
+                    CellButton.this.setContentAreaFilled(true);
 
-                // TODO SMTH
-            }
-            else {
-                CellButton.this.setOpaque(false);
-                CellButton.this.setContentAreaFilled(false);
+                    // TODO SMTH
+                }
+                else {
+                    CellButton.this.setOpaque(false);
+                    CellButton.this.setContentAreaFilled(false);
 
-                // TODO SMTH
+                    // TODO SMTH
+                }
             }
         }
 
         @Override
         public void mouseEntered(MouseEvent e) {
-            CellButton.this.setBorder(BorderFactory.createLineBorder(
-                    WidgetsViewCustomizations.HOVERED_CELL_BUTTON_BORDER_COLOR,
-                    WidgetsViewCustomizations.CELL_BUTTON_BORDER_THICKNESS + 1)
-            );
+            if(CellButton.this.isEnabled()) {
+                CellButton.this.setBorder(BorderFactory.createLineBorder(
+                        WidgetsViewCustomizations.HOVERED_CELL_BUTTON_BORDER_COLOR,
+                        WidgetsViewCustomizations.CELL_BUTTON_BORDER_THICKNESS)
+                );
+            }
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            CellButton.this.setBorder(BorderFactory.createLineBorder(
-                    WidgetsViewCustomizations.STANDART_CELL_BUTTON_BORDER_COLOR,
-                    WidgetsViewCustomizations.CELL_BUTTON_BORDER_THICKNESS)
-            );
+            if(CellButton.this.isEnabled()) {
+                CellButton.this.setBorder(BorderFactory.createLineBorder(
+                        WidgetsViewCustomizations.STANDART_CELL_BUTTON_BORDER_COLOR,
+                        WidgetsViewCustomizations.CELL_BUTTON_BORDER_THICKNESS)
+                );
+            }
         }
     }
 }
