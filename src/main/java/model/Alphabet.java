@@ -68,7 +68,7 @@ public class Alphabet {
     private class GameModelObserve implements GameModelListener {
         @Override
         public void playerExchanged(GameModelEvent event) {
-            forgetSelectedLetter();
+            _selectedLetter = null;
         }
 
         @Override

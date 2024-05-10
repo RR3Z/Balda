@@ -193,7 +193,7 @@ public class GameField {
         @Override
         public void playerExchanged(GameModelEvent event) {
             if(_changedCell != null) {
-                forgetChangedCell();
+                _changedCell = null;
             }
         }
 
