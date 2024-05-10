@@ -57,7 +57,7 @@ public class MainWindow extends JFrame {
         content.removeAll();
 
         // ----------- Добавить виджеты -----------
-        //content.add(new JScrollPane(new PlayersScoreTable(_gameModel)));
+        content.add(new JScrollPane(new PlayersScoreTable(_gameModel)));
 
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
@@ -68,7 +68,7 @@ public class MainWindow extends JFrame {
         centerPanel.add(new KeyboardWidget(_gameModel));
         content.add(centerPanel);
 
-        //content.add(new JScrollPane(new UsedWordsTable(_gameModel, _gameModel.wordsDB())));
+        content.add(new JScrollPane(new UsedWordsTable(_gameModel, _gameModel.wordsDB())));
         // ----------------------------------------
 
         this.pack();
@@ -88,7 +88,7 @@ public class MainWindow extends JFrame {
             String message = "";
             if(winners.size() == 1) {
                 message = "<html>" + "<div style='text-align: center;'>" + "Игра окончена.<br>Победитель: " +
-                        winners.get(winners.size() - 1) + "<br>Желаете начать новую игру?" + "</div></html>";
+                        winners.get(winners.size() - 1).name() + "<br>Желаете начать новую игру?" + "</div></html>";
 
                 label.setText(message);
             } else if (winners.size() > 1) {

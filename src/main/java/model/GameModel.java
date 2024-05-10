@@ -24,11 +24,11 @@ public class GameModel {
         _wordsDB = new WordsDB(FilePaths.DICTIONARY_FILE_PATH);
         _alphabet = new Alphabet(this, FilePaths.ALPHABET_FILE_PATH);
 
-        Player firstPlayer = new Player("Player 1", _alphabet, _wordsDB, _field);
+        Player firstPlayer = new Player("Игрок 1", _alphabet, _wordsDB, _field);
         firstPlayer.addPlayerActionListener(new PlayerObserve());
         _players.add(firstPlayer);
 
-        Player secondPlayer = new Player("Player 2", _alphabet, _wordsDB, _field);
+        Player secondPlayer = new Player("Игрок 2", _alphabet, _wordsDB, _field);
         secondPlayer.addPlayerActionListener(new PlayerObserve());
         _players.add(secondPlayer);
 
@@ -174,58 +174,60 @@ public class GameModel {
         }
 
         @Override
+        public void submittedWord(@NotNull PlayerActionEvent event) {
+            if(event.player() == _activePlayer) {
+                _activePlayer.scoreCounter().increaseScore(event.word().length());
+            }
+        }
+
+        @Override
         public void changedState(@NotNull PlayerActionEvent event) {
             // DON'T NEED IT HERE
         }
 
         @Override
-        public void submittedWord(@NotNull PlayerActionEvent event) {
-
-        }
-
-        @Override
         public void addedNewWordToDictionary(@NotNull PlayerActionEvent event) {
-
+            // DON'T NEED IT HERE
         }
 
         @Override
         public void failedToAddNewWordToDictionary(@NotNull PlayerActionEvent event) {
-
+            // DON'T NEED IT HERE
         }
 
         @Override
         public void choseCell(@NotNull PlayerActionEvent event) {
-
+            // DON'T NEED IT HERE
         }
 
         @Override
         public void choseWrongCell(@NotNull PlayerActionEvent event) {
-
+            // DON'T NEED IT HERE
         }
 
         @Override
         public void placedLetter(@NotNull PlayerActionEvent event) {
-
+            // DON'T NEED IT HERE
         }
 
         @Override
         public void choseLetter(@NotNull PlayerActionEvent event) {
-
+            // DON'T NEED IT HERE
         }
 
         @Override
         public void submittedWordWithoutChangeableCell(@NotNull PlayerActionEvent event) {
-
+            // DON'T NEED IT HERE
         }
 
         @Override
         public void failedToSubmitWord(@NotNull PlayerActionEvent event) {
-
+            // DON'T NEED IT HERE
         }
 
         @Override
         public void canceledActionOnField(@NotNull PlayerActionEvent event) {
-
+            // DON'T NEED IT HERE
         }
     }
 
