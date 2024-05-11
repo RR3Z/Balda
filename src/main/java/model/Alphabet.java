@@ -47,7 +47,7 @@ public class Alphabet {
     }
 
     public boolean isLetterAvailable(@NotNull Character letter) {
-        return _availableLetters.contains(Character.toLowerCase(letter));
+        return _availableLetters.contains(letter);
     }
 
     private void readFromFile(@NotNull String filePath) {
