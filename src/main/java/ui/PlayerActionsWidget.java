@@ -8,6 +8,7 @@ import model.events.PlayerActionListener;
 import org.jetbrains.annotations.NotNull;
 import ui.buttons.PlayerActionButton;
 import ui.enums.ColorType;
+import ui.panels.GameOverPanel;
 import ui.utils.GameWidgetUtils;
 
 import javax.swing.*;
@@ -158,17 +159,37 @@ public class PlayerActionsWidget extends JPanel {
         }
         @Override
         public void failedToSubmitWord(@NotNull PlayerActionEvent event) {
+            if(event.player().state() == PlayerState.FORMS_WORD) {
+                if(event.isUsedAlready() && event.isKnown()) {
+                    String message = "<html><div style='text-align: center;'>" + "Слово уже было сыграно (см. таблицу справа)." + "</div></html>";
+                    JOptionPane.showMessageDialog(PlayerActionsWidget.this, message, "Ошибка", JOptionPane.WARNING_MESSAGE);
+                }
 
-        }
-
-        @Override
-        public void addedNewWordToDictionary(@NotNull PlayerActionEvent event) {
-
+                if(!event.isUsedAlready() && !event.isKnown()) {
+                    String message = "<html><div style='text-align: center;'>" + "Было разыграно неизвестное слово.<br>Добавить в словарь?" + "</div></html>";
+                    int result = JOptionPane.showConfirmDialog(PlayerActionsWidget.this, message, "Неизвестное слово", JOptionPane.OK_CANCEL_OPTION);
+                    if(result == JOptionPane.OK_OPTION) {
+                        _gameModel.activePlayer().addNewWordToDictionary();
+                    }
+                }
+            }
         }
 
         @Override
         public void submittedWordWithoutChangeableCell(@NotNull PlayerActionEvent event) {
+            if(event.player() == _gameModel.activePlayer()) {
+                String message = "<html><div style='text-align: center;'>" + "В составленном слове отсутствует измененная ячейка" + "</div></html>";
+                JOptionPane.showMessageDialog(PlayerActionsWidget.this, message, "Ошибка", JOptionPane.WARNING_MESSAGE);
+            }
+        }
 
+        @Override
+        public void addedNewWordToDictionary(@NotNull PlayerActionEvent event) {
+            if(event.player().state() == PlayerState.FORMS_WORD) {
+                String message = "<html><div style='text-align: center;'>" + "Слово \"" + event.word() + "\" успешно добавлено" + "</div></html>";
+                JOptionPane.showMessageDialog(PlayerActionsWidget.this, message, "Новое слово", JOptionPane.PLAIN_MESSAGE);
+                _gameModel.activePlayer().submitWord();
+            }
         }
 
         @Override
