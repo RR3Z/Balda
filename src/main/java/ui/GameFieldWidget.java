@@ -141,6 +141,8 @@ public class GameFieldWidget extends JPanel {
                 selectedCell.setBackground(GameWidgetUtils.getColor(ColorType.CHANGED_CELL));
                 selectedCell.setText(String.valueOf(event.cell().letter()));
             }
+
+            GameFieldWidget.this.paintImmediately(getVisibleRect());
         }
 
         @Override
