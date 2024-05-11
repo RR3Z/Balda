@@ -1,20 +1,20 @@
 package ui.tables;
 
-import model.GameModel;
 import model.WordsDB;
-import model.events.GameModelEvent;
-import model.events.GameModelListener;
 import model.events.WordsDBEvent;
 import model.events.WordsDBListener;
-import ui.utils.WidgetsViewCustomizations;
+import ui.enums.ColorType;
+import ui.utils.GameWidgetUtils;
+import ui.utils.TableUtils;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 
 public class UsedWordsTable extends JTable {
+    private final Object[] HEADERS = new Object[] {"Слово", "Игрок"};
+
     private DefaultTableModel _usedWordsTableModel;
 
     public UsedWordsTable(WordsDB wordsDB) {
@@ -24,7 +24,7 @@ public class UsedWordsTable extends JTable {
         setupTableView();
 
         _usedWordsTableModel = new DefaultTableModel();
-        _usedWordsTableModel.setColumnIdentifiers(WidgetsViewCustomizations.USED_WORDS_TABLE_HEADERS);
+        _usedWordsTableModel.setColumnIdentifiers(HEADERS);
 
         this.setModel(_usedWordsTableModel);
     }
@@ -32,24 +32,13 @@ public class UsedWordsTable extends JTable {
     private void setupTableView() {
         JTableHeader header = this.getTableHeader();
         header.setOpaque(false);
-        header.setBackground(WidgetsViewCustomizations.TRANSPARENT_COLOR);
+        header.setBackground(GameWidgetUtils.getColor(ColorType.TRANSPARENT));
 
         this.setOpaque(false);
-        this.setBackground(WidgetsViewCustomizations.TRANSPARENT_COLOR);
+        this.setBackground(GameWidgetUtils.getColor(ColorType.TRANSPARENT));
 
-        DefaultTableCellRenderer tableCellRenderer = new DefaultTableCellRenderer() {
-            @Override
-            public void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.setColor(Color.BLACK); // Цвет линий
-                g.fillRect(0, 0, 1, getHeight()); // Левая вертикальная линия
-                g.fillRect(0, 0, getWidth(), 1); // Верхняя горизонтальная линия
-                g.fillRect(getWidth() - 1, 0, 1, getHeight()); // Правая вертикальная линия
-                g.fillRect(0, getHeight() - 1, getWidth(), 1); // Нижняя горизонтальная линия
-            }
-        };
-        this.setDefaultRenderer(Object.class, tableCellRenderer);
-        header.setDefaultRenderer(tableCellRenderer);
+        this.setDefaultRenderer(Object.class, TableUtils.CUSTOM_TABLE_CELL_RENDERER);
+        header.setDefaultRenderer(TableUtils.CUSTOM_TABLE_CELL_RENDERER);
         this.setIntercellSpacing(new Dimension(0, 0));
 
         header.setReorderingAllowed(false);
@@ -65,7 +54,11 @@ public class UsedWordsTable extends JTable {
     private class WordsDBController implements WordsDBListener {
         @Override
         public void addedUsedWord(WordsDBEvent event) {
-            UsedWordsTable.this.add(event.player().name(), event.word());
+            if(event.player() != null) {
+                UsedWordsTable.this.add(event.player().name(), event.word());
+            } else {
+                UsedWordsTable.this.add("-", event.word());
+            }
         }
 
         @Override

@@ -4,19 +4,21 @@ import model.GameModel;
 import model.Player;
 import model.events.GameModelEvent;
 import model.events.GameModelListener;
-import ui.utils.WidgetsViewCustomizations;
+import ui.enums.ColorType;
+import ui.utils.GameWidgetUtils;
+import ui.utils.TableUtils;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class PlayersScoreTable extends JTable {
+    private final Object[] HEADERS = new Object[] {"Игрок", "Очки"};
+
     private DefaultTableModel _playersScoreTableModel;
     private Map<Integer, Player> _rowIndexToPlayer = new HashMap<>();
 
@@ -29,12 +31,12 @@ public class PlayersScoreTable extends JTable {
 
         // Заполняю таблицу данными
         _playersScoreTableModel = new DefaultTableModel();
-        _playersScoreTableModel.setColumnIdentifiers(WidgetsViewCustomizations.PLAYERS_SCORE_TABLE_HEADERS);
+        _playersScoreTableModel.setColumnIdentifiers(HEADERS);
 
         List<Player> players = gameModel.players();
         for(int i = 0; i < players.size(); i++) {
             Player player = players.get(i);
-            _playersScoreTableModel.addRow(new Object[]{player.name(), player.scoreCounter().score()});
+            _playersScoreTableModel.addRow(new Object[]{ player.name(), player.scoreCounter().score() });
             _rowIndexToPlayer.put(i, player);
         }
 
@@ -44,24 +46,13 @@ public class PlayersScoreTable extends JTable {
     private void setupTableView() {
         JTableHeader header = this.getTableHeader();
         header.setOpaque(false);
-        header.setBackground(WidgetsViewCustomizations.TRANSPARENT_COLOR);
+        header.setBackground(GameWidgetUtils.getColor(ColorType.TRANSPARENT));
 
         this.setOpaque(false);
-        this.setBackground(WidgetsViewCustomizations.TRANSPARENT_COLOR);
+        this.setBackground(GameWidgetUtils.getColor(ColorType.TRANSPARENT));
 
-        DefaultTableCellRenderer tableCellRenderer = new DefaultTableCellRenderer() {
-            @Override
-            public void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.setColor(Color.BLACK); // Цвет линий
-                g.fillRect(0, 0, 1, getHeight()); // Левая вертикальная линия
-                g.fillRect(0, 0, getWidth(), 1); // Верхняя горизонтальная линия
-                g.fillRect(getWidth() - 1, 0, 1, getHeight()); // Правая вертикальная линия
-                g.fillRect(0, getHeight() - 1, getWidth(), 1); // Нижняя горизонтальная линия
-            }
-        };
-        this.setDefaultRenderer(Object.class, tableCellRenderer);
-        header.setDefaultRenderer(tableCellRenderer);
+        this.setDefaultRenderer(Object.class, TableUtils.CUSTOM_TABLE_CELL_RENDERER);
+        header.setDefaultRenderer(TableUtils.CUSTOM_TABLE_CELL_RENDERER);
         this.setIntercellSpacing(new Dimension(0, 0));
 
         header.setReorderingAllowed(false);
@@ -74,7 +65,7 @@ public class PlayersScoreTable extends JTable {
         for (int i = 0; i < _playersScoreTableModel.getRowCount(); i++) {
             Player player = _rowIndexToPlayer.get(i);
 
-            _playersScoreTableModel.setValueAt(player.scoreCounter().score(), i, getColumn(WidgetsViewCustomizations.PLAYERS_SCORE_TABLE_HEADERS[1]).getModelIndex());
+            _playersScoreTableModel.setValueAt(player.scoreCounter().score(), i, getColumn(HEADERS[1]).getModelIndex());
         }
     }
 
@@ -82,6 +73,11 @@ public class PlayersScoreTable extends JTable {
         @Override
         public void playerExchanged(GameModelEvent event) {
             PlayersScoreTable.this.update();
+        }
+
+        @Override
+        public void definedStartWord(GameModelEvent event) {
+            // DON'T NEED IT HERE
         }
 
         @Override
