@@ -9,8 +9,6 @@ public class GameSettingsPanel extends JPanel {
     private JSpinner _heightSpinner;
 
     public GameSettingsPanel() {
-        JPanel gameSettingsPanel = new JPanel();
-
         // --------- Панель с размерами поля ---------
         JPanel fieldSizesPanel = new JPanel();
 
@@ -24,7 +22,7 @@ public class GameSettingsPanel extends JPanel {
         fieldSizesPanel.add(_heightSpinner);
         // -----------------------------------------
 
-        gameSettingsPanel.add(fieldSizesPanel);
+        this.add(fieldSizesPanel);
     }
 
     public int getWidthSpinnerValue() {
