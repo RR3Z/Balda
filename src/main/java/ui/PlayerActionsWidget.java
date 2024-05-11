@@ -6,7 +6,7 @@ import model.enums.PlayerState;
 import model.events.PlayerActionEvent;
 import model.events.PlayerActionListener;
 import org.jetbrains.annotations.NotNull;
-import ui.utils.WidgetsViewCustomizations;
+import ui.utils.GameWidgetUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,8 +14,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class PlayerActionsWidget extends JPanel {
-    private GameModel _gameModel;
+    public static final int BUTTON_WIDTH = 130;
+    public static final int BUTTON_HEIGHT = 40;
 
+    private GameModel _gameModel;
     private JButton _cancelActionButton;
     private JButton _skipTurnButton;
     private JButton _submitWordButton;
@@ -54,19 +56,16 @@ public class PlayerActionsWidget extends JPanel {
 
     private void setupButtonView(JButton button) {
         if(button == _cancelActionButton) {
-            button.setBackground(WidgetsViewCustomizations.CANCEL_ACTION_BUTTON_COLOR);
+            button.setBackground(GameWidgetUtils.getColor(ColorType.CANCEL_ACTION_BUTTON));
         } else if (button == _submitWordButton) {
-            button.setBackground(WidgetsViewCustomizations.SUBMIT_WORD_BUTTON_COLOR);
+            button.setBackground(GameWidgetUtils.getColor(ColorType.SUBMIT_WORD_BUTTON));
         } else {
-            button.setBackground(WidgetsViewCustomizations.SKIP_TURN_BUTTON_COLOR);
+            button.setBackground(GameWidgetUtils.getColor(ColorType.SKIP_TURN_BUTTON));
         }
 
-        button.setPreferredSize(new Dimension(WidgetsViewCustomizations.PLAYER_ACTION_BUTTON_WIDTH, WidgetsViewCustomizations.PLAYER_ACTION_BUTTON_HEIGHT));
+        button.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
 
-        button.setBorder(BorderFactory.createLineBorder(
-                WidgetsViewCustomizations.STANDART_PLAYER_ACTION_BUTTON_BORDER_COLOR,
-                WidgetsViewCustomizations.PLAYER_ACTION_BUTTON_BORDER_THICKNESS)
-        );
+        button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER)));
         button.setBorderPainted(true);
 
         button.setFocusable(false);
@@ -90,19 +89,13 @@ public class PlayerActionsWidget extends JPanel {
         @Override
         public void mouseEntered(MouseEvent e) {
             if(_button.isEnabled()) {
-                _button.setBorder(BorderFactory.createLineBorder(
-                        WidgetsViewCustomizations.HOVERED_PLAYER_ACTION_BUTTON_BORDER_COLOR,
-                        WidgetsViewCustomizations.PLAYER_ACTION_BUTTON_BORDER_THICKNESS)
-                );
+                _button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.HOVERED_BORDER)));
             }
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            _button.setBorder(BorderFactory.createLineBorder(
-                    WidgetsViewCustomizations.STANDART_PLAYER_ACTION_BUTTON_BORDER_COLOR,
-                    WidgetsViewCustomizations.PLAYER_ACTION_BUTTON_BORDER_THICKNESS)
-            );
+            _button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER)));
         }
     }
 
@@ -124,19 +117,13 @@ public class PlayerActionsWidget extends JPanel {
         @Override
         public void mouseEntered(MouseEvent e) {
             if(_button.isEnabled()) {
-                _button.setBorder(BorderFactory.createLineBorder(
-                        WidgetsViewCustomizations.HOVERED_PLAYER_ACTION_BUTTON_BORDER_COLOR,
-                        WidgetsViewCustomizations.PLAYER_ACTION_BUTTON_BORDER_THICKNESS)
-                );
+                _button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.HOVERED_BORDER)));
             }
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            _button.setBorder(BorderFactory.createLineBorder(
-                    WidgetsViewCustomizations.STANDART_PLAYER_ACTION_BUTTON_BORDER_COLOR,
-                    WidgetsViewCustomizations.PLAYER_ACTION_BUTTON_BORDER_THICKNESS)
-            );
+            _button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER)));
         }
     }
 
@@ -158,19 +145,13 @@ public class PlayerActionsWidget extends JPanel {
         @Override
         public void mouseEntered(MouseEvent e) {
             if(_button.isEnabled()) {
-                _button.setBorder(BorderFactory.createLineBorder(
-                        WidgetsViewCustomizations.HOVERED_PLAYER_ACTION_BUTTON_BORDER_COLOR,
-                        WidgetsViewCustomizations.PLAYER_ACTION_BUTTON_BORDER_THICKNESS)
-                );
+                _button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.HOVERED_BORDER)));
             }
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            _button.setBorder(BorderFactory.createLineBorder(
-                    WidgetsViewCustomizations.STANDART_PLAYER_ACTION_BUTTON_BORDER_COLOR,
-                    WidgetsViewCustomizations.PLAYER_ACTION_BUTTON_BORDER_THICKNESS)
-            );
+            _button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER)));
         }
     }
 

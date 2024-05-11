@@ -9,18 +9,21 @@ import model.events.AlphabetListener;
 import model.events.PlayerActionEvent;
 import model.events.PlayerActionListener;
 import org.jetbrains.annotations.NotNull;
-import ui.utils.WidgetsViewCustomizations;
+import ui.utils.GameWidgetUtils;
+import ui.utils.ButtonUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class KeyboardWidget extends JPanel {
+    private final int KEYBOARD_ROWS_COUNT = 3;
+    private final int BUTTON_SIZE = 50;
+
     private GameModel _gameModel;
 
     private Map<Character, JButton> _letters = new HashMap<>();
@@ -34,21 +37,19 @@ public class KeyboardWidget extends JPanel {
 
         alphabet.addAlphabetListener(new AlphabetController());
 
-        for(Player player: gameModel.players()) { // TODO: подписываться не сразу на всех, а постепенно на каждого активного
+        for(Player player: gameModel.players()) {
             player.addPlayerActionListener(new PlayerController());
         }
 
-        int numberOfColumns = Math.ceilDiv(alphabet.availableLetters().size(), WidgetsViewCustomizations.KEYBOARD_ROW_COUNT);
-        int numberOfRows = WidgetsViewCustomizations.KEYBOARD_ROW_COUNT;
-        this.setLayout(new GridLayout(numberOfRows, numberOfColumns));
+        int numberOfColumns = Math.ceilDiv(alphabet.availableLetters().size(), KEYBOARD_ROWS_COUNT);
+        this.setLayout(new GridLayout(KEYBOARD_ROWS_COUNT, numberOfColumns));
 
         fillWidget(alphabet.availableLetters());
 
         this.setMaximumSize(new Dimension(
-                numberOfColumns * WidgetsViewCustomizations.KEYBOARD_BUTTON_SIZE,
-                numberOfRows * WidgetsViewCustomizations.KEYBOARD_BUTTON_SIZE
-                )
-        );
+                numberOfColumns * BUTTON_SIZE,
+                KEYBOARD_ROWS_COUNT * BUTTON_SIZE
+        ));
     }
 
     private void fillWidget(@NotNull List<Character> letters) {
@@ -66,18 +67,15 @@ public class KeyboardWidget extends JPanel {
     }
 
     private void setupButtonView(@NotNull JButton button) {
-        button.setPreferredSize(new Dimension(WidgetsViewCustomizations.KEYBOARD_BUTTON_SIZE, WidgetsViewCustomizations.KEYBOARD_BUTTON_SIZE));
+        button.setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));
 
-        button.setModel(new WidgetsViewCustomizations.FixedStateButtonModel());
+        button.setModel(new ButtonUtils.FixedStateButtonModel());
 
         button.setOpaque(false);
         button.setContentAreaFilled(false);
-        button.setBackground(WidgetsViewCustomizations.CLICKED_KEYBOARD_BUTTON_COLOR);
+        button.setBackground(GameWidgetUtils.getColor(ColorType.ACTIVE_KEYBOARD_BUTTON));
 
-        button.setBorder(BorderFactory.createLineBorder(
-                WidgetsViewCustomizations.STANDART_KEYBOARD_BUTTON_BORDER_COLOR,
-                WidgetsViewCustomizations.KEYBOARD_BUTTON_BORDER_THICKNESS)
-        );
+        button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER)));
         button.setBorderPainted(true);
 
         button.setFocusable(false);
@@ -101,19 +99,13 @@ public class KeyboardWidget extends JPanel {
         @Override
         public void mouseEntered(MouseEvent e) {
             if(KeyboardWidget.this.isEnabled()) {
-                _button.setBorder(BorderFactory.createLineBorder(
-                        WidgetsViewCustomizations.HOVERED_KEYBOARD_BUTTON_BORDER_COLOR,
-                        WidgetsViewCustomizations.KEYBOARD_BUTTON_BORDER_THICKNESS)
-                );
+                _button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.HOVERED_BORDER)));
             }
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            _button.setBorder(BorderFactory.createLineBorder(
-                    WidgetsViewCustomizations.STANDART_KEYBOARD_BUTTON_BORDER_COLOR,
-                    WidgetsViewCustomizations.KEYBOARD_BUTTON_BORDER_THICKNESS)
-            );
+            _button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER)));
         }
     }
 

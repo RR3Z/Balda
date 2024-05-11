@@ -8,7 +8,7 @@ import model.enums.PlayerState;
 import model.events.*;
 import org.jetbrains.annotations.NotNull;
 import ui.utils.GameWidgetUtils;
-import ui.utils.WidgetsViewCustomizations;
+import ui.utils.ButtonUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GameFieldWidget extends JPanel {
+    private final int CELL_SIZE = 50;
+
     private GameModel _gameModel;
     private Map<Cell, JButton> _cells = new HashMap<>();
 
@@ -37,8 +39,8 @@ public class GameFieldWidget extends JPanel {
 
         this.setLayout(new GridLayout(gameField.height(), gameField.width()));
         this.setMaximumSize(new Dimension(
-                gameField.width() * WidgetsViewCustomizations.CELL_BUTTON_SIZE,
-                gameField.height() * WidgetsViewCustomizations.CELL_BUTTON_SIZE
+                gameField.width() * CELL_SIZE,
+                gameField.height() * CELL_SIZE
                 )
         );
     }
@@ -66,18 +68,15 @@ public class GameFieldWidget extends JPanel {
     }
 
     private void setupButtonView(JButton button) {
-        button.setPreferredSize(new Dimension(WidgetsViewCustomizations.CELL_BUTTON_SIZE, WidgetsViewCustomizations.CELL_BUTTON_SIZE));
+        button.setPreferredSize(new Dimension(CELL_SIZE, CELL_SIZE));
 
-        button.setModel(new WidgetsViewCustomizations.FixedStateButtonModel());
+        button.setModel(new ButtonUtils.FixedStateButtonModel());
 
         button.setOpaque(false);
         button.setContentAreaFilled(false);
-        button.setBackground(WidgetsViewCustomizations.CLICKED_CELL_BUTTON_COLOR);
+        button.setBackground(GameWidgetUtils.getColor(ColorType.INACTIVE_CELL));
 
-        button.setBorder(BorderFactory.createLineBorder(
-                WidgetsViewCustomizations.STANDART_CELL_BUTTON_BORDER_COLOR,
-                WidgetsViewCustomizations.CELL_BUTTON_BORDER_THICKNESS)
-        );
+        button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER)));
         button.setBorderPainted(true);
 
         button.setFocusable(false);
@@ -93,7 +92,6 @@ public class GameFieldWidget extends JPanel {
         @Override
         public void mouseClicked(MouseEvent e) {
             if(GameFieldWidget.this.isEnabled()) {
-                // Logic
                 _gameModel.activePlayer().chooseCell(GameWidgetUtils.getKeyByValue(_cells, _button));
             }
         }
@@ -101,19 +99,13 @@ public class GameFieldWidget extends JPanel {
         @Override
         public void mouseEntered(MouseEvent e) {
             if(GameFieldWidget.this.isEnabled()) {
-                _button.setBorder(BorderFactory.createLineBorder(
-                        WidgetsViewCustomizations.HOVERED_CELL_BUTTON_BORDER_COLOR,
-                        WidgetsViewCustomizations.CELL_BUTTON_BORDER_THICKNESS)
-                );
+                _button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.HOVERED_BORDER)));
             }
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            _button.setBorder(BorderFactory.createLineBorder(
-                    WidgetsViewCustomizations.STANDART_CELL_BUTTON_BORDER_COLOR,
-                    WidgetsViewCustomizations.CELL_BUTTON_BORDER_THICKNESS)
-            );
+            _button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER)));
         }
     }
 
@@ -140,17 +132,15 @@ public class GameFieldWidget extends JPanel {
             _cells.get(changedCell).setText(String.valueOf(changedCell.letter()));
             _cells.get(changedCell).setOpaque(true);
             _cells.get(changedCell).setContentAreaFilled(true);
-            _cells.get(changedCell).setBackground(Color.RED);// TODO: CHANGE COLOR
+            _cells.get(changedCell).setBackground(GameWidgetUtils.getColor(ColorType.CHANGED_CELL));
         }
 
         @Override
         public void choseCell(@NotNull PlayerActionEvent event) {
-            if(event.player() == _gameModel.activePlayer()) {
-                Cell selectedCell = event.cell();
-                _cells.get(selectedCell).setOpaque(true);
-                _cells.get(selectedCell).setContentAreaFilled(true);
-                _cells.get(selectedCell).setBackground(WidgetsViewCustomizations.CLICKED_CELL_BUTTON_COLOR);
-            }
+            Cell selectedCell = event.cell();
+            _cells.get(selectedCell).setOpaque(true);
+            _cells.get(selectedCell).setContentAreaFilled(true);
+            _cells.get(selectedCell).setBackground(GameWidgetUtils.getColor(ColorType.CELL_IN_WORD));
         }
 
         @Override
@@ -164,7 +154,7 @@ public class GameFieldWidget extends JPanel {
             if(selectedCell != null) {
                 selectedCell.setOpaque(true);
                 selectedCell.setContentAreaFilled(true);
-                selectedCell.setBackground(Color.RED);
+                selectedCell.setBackground(GameWidgetUtils.getColor(ColorType.CHANGED_CELL));
                 selectedCell.setText(String.valueOf(event.cell().letter()));
             }
         }
