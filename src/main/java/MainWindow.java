@@ -1,9 +1,9 @@
-import model.GameField;
 import model.GameModel;
 import model.Player;
 import model.events.GameModelEvent;
 import model.events.GameModelListener;
 import ui.*;
+import ui.panels.GameOverPanel;
 import ui.tables.PlayersScoreTable;
 import ui.tables.UsedWordsTable;
 import ui.utils.GameWidgetUtils;
@@ -35,6 +35,7 @@ public class MainWindow extends JFrame {
         this.setBounds(screenSize.width/2 - windowSize.width/2, screenSize.height/2 - windowSize.height/2, windowSize.width, windowSize.height);
     }
 
+    // TODO: вынести как отдельный класс
     private JMenu createMainMenu() {
         JMenu mainMenu = new JMenu("Главное меню");
 
@@ -84,40 +85,28 @@ public class MainWindow extends JFrame {
         this.setBounds(screenSize.width/2 - windowSize.width/2, screenSize.height/2 - windowSize.height/2, windowSize.width, windowSize.height);
     }
 
-    private class GameController implements GameModelListener {
-        private JPanel createGameOverPanel(List<Player> winners) {
-            JPanel gameOverPanel = new JPanel();
-            gameOverPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+    private void disableAllGameWidgets(Container container) {
+        Component[] components = container.getComponents();
+        for (Component component : components) {
+            component.setEnabled(false);
 
-            JLabel label = new JLabel();
-            String message = "";
-            if(winners.size() == 1) {
-                message += "<html>" + "<div style='text-align: center;'>" + "Игра окончена.<br>Победитель: " +
-                        winners.get(winners.size() - 1).name() + "<br>Желаете начать новую игру?" + "</div></html>";
-
-                label.setText(message);
-            } else if (winners.size() > 1) {
-                message = "<html><div style='text-align: center;'>" + "Игра окончена.<br>Победители: ";
-                for(Player player: winners) {
-                    message += "<br>" + player.name();
-                }
-                message += "<br>Желаете начать новую игру?" + "</div></html>";
-
-                label.setText(message);
+            if (!(component instanceof JMenuBar || component instanceof JMenu || component instanceof JMenuItem) && component instanceof Container) {
+                disableAllGameWidgets((Container) component);
             }
-
-            gameOverPanel.add(label);
-
-            return gameOverPanel;
         }
+    }
 
+    private class GameController implements GameModelListener {
         @Override
         public void gameIsFinished(GameModelEvent event) {
-            // TODO: Выводить окошко о победе, блокировать все виджеты, выводить кто победил
-            int result = JOptionPane.showConfirmDialog(MainWindow.this, createGameOverPanel(event.winners()), "Настройки игры", JOptionPane.YES_NO_OPTION);
+            int result = JOptionPane.showConfirmDialog(MainWindow.this, new GameOverPanel(event.winners()), "Настройки игры", JOptionPane.YES_NO_OPTION);
 
             if(result == JOptionPane.YES_OPTION) {
                 // restart game
+            }
+
+            if(result == JOptionPane.NO_OPTION) {
+                MainWindow.this.disableAllGameWidgets(MainWindow.this);
             }
         }
 
