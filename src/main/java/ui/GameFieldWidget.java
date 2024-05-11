@@ -153,12 +153,17 @@ public class GameFieldWidget extends JPanel {
         }
 
         @Override
-        public void choseLetter(@NotNull PlayerActionEvent event) {
-            // DON'T NEED IT HERE
+        public void skippedTurn(@NotNull PlayerActionEvent event) {
+            for(CellButton button: _cells.values()) {
+                button.setOpaque(false);
+                button.setContentAreaFilled(false);
+            }
+
+            GameFieldWidget.this.paintImmediately(getVisibleRect());
         }
 
         @Override
-        public void skippedTurn(@NotNull PlayerActionEvent event) {
+        public void choseLetter(@NotNull PlayerActionEvent event) {
             // DON'T NEED IT HERE
         }
 

@@ -116,7 +116,7 @@ public class KeyboardWidget extends JPanel {
         public void choseLetter(@NotNull PlayerActionEvent event) {
             KeyboardButton selectedLetter = _letters.get(event.letter());
             selectedLetter.setOpaque(true);
-            selectedLetter.setOpaque(true);
+            selectedLetter.setContentAreaFilled(true);
         }
 
         @Override
@@ -128,12 +128,16 @@ public class KeyboardWidget extends JPanel {
         }
 
         @Override
-        public void canceledActionOnField(@NotNull PlayerActionEvent event) {
-            // DON'T NEED IT HERE
+        public void skippedTurn(@NotNull PlayerActionEvent event) {
+            for(KeyboardButton button: _letters.values()) {
+                button.setOpaque(false);
+                button.setContentAreaFilled(false);
+            }
         }
 
+
         @Override
-        public void skippedTurn(@NotNull PlayerActionEvent event) {
+        public void canceledActionOnField(@NotNull PlayerActionEvent event) {
             // DON'T NEED IT HERE
         }
 
