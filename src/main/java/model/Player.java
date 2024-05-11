@@ -20,14 +20,9 @@ public class Player {
 
     public Player(@NotNull String name, @NotNull Alphabet alphabet, @NotNull WordsDB wordsDB, @NotNull GameField field) {
         _wordsDB = wordsDB;
-        _wordsDB.addWordsDBListener(new WordsDBObserve());
-
         _alphabet = alphabet;
         _field = field;
-
         _word = new Word();
-        _word.addWordListener(new WordObserve());
-
         _name = name;
         _scoreCounter = new ScoreCounter();
 
@@ -187,6 +182,7 @@ public class Player {
             return;
         }
 
+        fireSubmittedWord(wordStringRepresentation);
         finishTurn();
     }
 
@@ -201,39 +197,6 @@ public class Player {
 
     public boolean isSkippedTurn() {
         return _state == PlayerState.SKIPPED_TURN;
-    }
-
-    /* ============================================================================================================== */
-    // WordsDB observe TODO: как-будто нафиг не нужен
-    private class WordsDBObserve implements WordsDBListener {
-        @Override
-        public void addedUsedWord(WordsDBEvent event) {
-            fireSubmittedWord(event.word());
-        }
-
-        @Override
-        public void failedToAddUsedWord(WordsDBEvent event) {
-            fireFailedToSubmitWord(event.word(), event.isKnown(), event.isUsedAlready());
-        }
-
-        @Override
-        public void addedNewWordToDictionary(WordsDBEvent event) {
-            fireAddedNewWordToDictionary(event.word());
-        }
-
-        @Override
-        public void failedToAddNewWordToDictionary(WordsDBEvent event) {
-            fireFailedToAddNewWordToDictionary(event.word());
-        }
-    }
-
-    /* ============================================================================================================== */
-    // Word observe TODO: как-будто нафиг не нужен
-    private class WordObserve implements WordListener {
-        @Override
-        public void failedToAddLetter(WordEvent event) {
-            fireChoseWrongCell(event.cell(), event.isNotNeighborOfLastCell(), event.isContainCellAlready(), event.isCellWithoutLetter());
-        }
     }
 
     /* ============================================================================================================== */
@@ -319,6 +282,17 @@ public class Player {
         }
     }
 
+    // TODO: нужен
+    private void fireSubmittedWord(@NotNull String word) {
+        for (Object listener : _playerListeners) {
+            PlayerActionEvent event = new PlayerActionEvent(this);
+            event.setPlayer(this);
+            event.setWord(word);
+
+            ((PlayerActionListener) listener).submittedWord(event);
+        }
+    }
+
     private void fireAddedNewWordToDictionary(@NotNull String word) {
         for (Object listener : _playerListeners) {
             PlayerActionEvent event = new PlayerActionEvent(this);
@@ -359,16 +333,6 @@ public class Player {
             event.setCell(changeableCell);
 
             ((PlayerActionListener) listener).submittedWordWithoutChangeableCell(event);
-        }
-    }
-
-    private void fireSubmittedWord(@NotNull String word) {
-        for (Object listener : _playerListeners) {
-            PlayerActionEvent event = new PlayerActionEvent(this);
-            event.setPlayer(this);
-            event.setWord(word);
-
-            ((PlayerActionListener) listener).submittedWord(event);
         }
     }
 
