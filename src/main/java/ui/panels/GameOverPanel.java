@@ -14,7 +14,7 @@ public class GameOverPanel extends JPanel {
         String message = "<html>" + "<div style='text-align: center;'>";
 
         if(winners.size() == 1) {
-            message += "Игра окончена.<br>Победитель: " + winners.get(winners.size() - 1).name() + "<br>Желаете начать новую игру?";
+            message += "Игра окончена.<br>Победитель: " + winners.get(winners.size() - 1).name();
         }
 
         else if (winners.size() > 1) {
@@ -23,8 +23,6 @@ public class GameOverPanel extends JPanel {
             for(Player player: winners) {
                 message += "<br>" + player.name();
             }
-
-            message += "<br>Желаете начать новую игру?";
         }
 
         else {

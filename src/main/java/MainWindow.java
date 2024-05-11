@@ -1,5 +1,4 @@
 import model.GameModel;
-import model.Player;
 import model.events.GameModelEvent;
 import model.events.GameModelListener;
 import ui.*;
@@ -7,12 +6,10 @@ import ui.panels.GameOverPanel;
 import ui.panels.GameSettingsPanel;
 import ui.tables.PlayersScoreTable;
 import ui.tables.UsedWordsTable;
-import ui.utils.GameWidgetUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.List;
 
 public class MainWindow extends JFrame {
     private GameModel _gameModel;
@@ -39,11 +36,11 @@ public class MainWindow extends JFrame {
     private JMenu createMainMenu() {
         JMenu mainMenu = new JMenu("Главное меню");
 
-        JMenuItem start = new JMenuItem(new StartNewGameAction());
-        JMenuItem exit = new JMenuItem(new ExitAction());
+        JMenuItem startNewGameItem = new JMenuItem(new StartNewGameAction());
+        JMenuItem exitGameItem = new JMenuItem(new ExitAction());
 
-        mainMenu.add(start);
-        mainMenu.add(exit);
+        mainMenu.add(startNewGameItem);
+        mainMenu.add(exitGameItem);
 
         return mainMenu;
     }
@@ -106,7 +103,7 @@ public class MainWindow extends JFrame {
         public void actionPerformed(ActionEvent e) {
             int result = JOptionPane.showConfirmDialog(MainWindow.this, _gameSettings, "Настройки игры", JOptionPane.OK_CANCEL_OPTION);
             if(result == JOptionPane.OK_OPTION) {
-                MainWindow.this.startNewGame(_gameSettings.getWidthSpinnerValue(), _gameSettings.getWidthSpinnerValue());
+                MainWindow.this.startNewGame(_gameSettings.getWidthSpinnerValue(), _gameSettings.getHeightSpinnerValue());
             }
         }
     }
@@ -125,15 +122,9 @@ public class MainWindow extends JFrame {
     private class GameController implements GameModelListener {
         @Override
         public void gameIsFinished(GameModelEvent event) {
-            int result = JOptionPane.showConfirmDialog(MainWindow.this, new GameOverPanel(event.winners()), "Настройки игры", JOptionPane.YES_NO_OPTION);
+            MainWindow.this.disableAllGameWidgets(MainWindow.this);
 
-            if(result == JOptionPane.YES_OPTION) {
-                // restart game
-            }
-
-            if(result == JOptionPane.NO_OPTION) {
-                MainWindow.this.disableAllGameWidgets(MainWindow.this);
-            }
+            JOptionPane.showMessageDialog(MainWindow.this, new GameOverPanel(event.winners()), "Конец игры", JOptionPane.PLAIN_MESSAGE);
         }
 
         @Override
