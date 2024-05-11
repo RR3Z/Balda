@@ -3,7 +3,6 @@ package ui.utils;
 import javax.swing.*;
 
 public class ButtonUtils {
-    // For CellButton and KeyboardButton
     public static class FixedStateButtonModel extends DefaultButtonModel {
         @Override
         public boolean isPressed() {

@@ -201,19 +201,16 @@ public class Player {
 
     // ================================================================================================================
     private class WordsDBObserve implements WordsDBListener {
-        // TODO: нужен
         @Override
         public void addedUsedWord(WordsDBEvent event) {
             fireSubmittedWord(event.word());
         }
 
-        // TODO: нужен
         @Override
         public void failedToAddUsedWord(WordsDBEvent event) {
             fireFailedToSubmitWord(event.word(), event.isKnown(), event.isUsedAlready());
         }
 
-        // TODO: нужен
         @Override
         public void addedNewWordToDictionary(WordsDBEvent event) {
             fireAddedNewWordToDictionary(event.word());
@@ -229,7 +226,6 @@ public class Player {
         _playerListeners.add(listener);
     }
 
-    // TODO: нужен
     private void fireChangedState() {
         for (Object listener : _playerListeners) {
             PlayerActionEvent event = new PlayerActionEvent(this);
@@ -239,7 +235,6 @@ public class Player {
         }
     }
 
-    // TODO: нужен
     private void fireSkippedTurn() {
         for (Object listener : _playerListeners) {
             PlayerActionEvent event = new PlayerActionEvent(this);
@@ -249,7 +244,6 @@ public class Player {
         }
     }
 
-    // TODO: нужен
     private void fireFinishedTurn() {
         for (Object listener : _playerListeners) {
             PlayerActionEvent event = new PlayerActionEvent(this);
@@ -259,7 +253,6 @@ public class Player {
         }
     }
 
-    // TODO: нужен
     private void firePlacedLetter(@NotNull Character letter, @NotNull Cell cell) {
         for (Object listener : _playerListeners) {
             PlayerActionEvent event = new PlayerActionEvent(this);
@@ -271,7 +264,6 @@ public class Player {
         }
     }
 
-    // TODO: нужен
     private void fireChoseLetter(@NotNull Character letter) {
         for (Object listener : _playerListeners) {
             PlayerActionEvent event = new PlayerActionEvent(this);
@@ -282,7 +274,6 @@ public class Player {
         }
     }
 
-    // TODO: нужен
     private void fireChoseCell(@NotNull Cell cell) {
         for (Object listener : _playerListeners) {
             PlayerActionEvent event = new PlayerActionEvent(this);
@@ -293,7 +284,6 @@ public class Player {
         }
     }
 
-    // TODO: нужен
     private void fireCanceledActionOnField() {
         for (Object listener : _playerListeners) {
             PlayerActionEvent event = new PlayerActionEvent(this);
@@ -304,7 +294,6 @@ public class Player {
         }
     }
 
-    // TODO: нужен
     private void fireSubmittedWord(@NotNull String word) {
         for (Object listener : _playerListeners) {
             PlayerActionEvent event = new PlayerActionEvent(this);

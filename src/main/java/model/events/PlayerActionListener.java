@@ -14,7 +14,7 @@ public interface PlayerActionListener extends EventListener {
     public void placedLetter(@NotNull PlayerActionEvent event);
 
     public void choseLetter(@NotNull PlayerActionEvent event);
-    // -------- НИЖНИЕ НЕ НУЖНЫ ---------
+
     public void addedNewWordToDictionary(@NotNull PlayerActionEvent event);
 
     public void choseCell(@NotNull PlayerActionEvent event);

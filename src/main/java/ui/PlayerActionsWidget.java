@@ -27,7 +27,6 @@ public class PlayerActionsWidget extends JPanel {
         _gameModel = gameModel;
 
         for(Player player: _gameModel.players()) {
-            // TODO: мне очень не нравится метод players, проще хранить в виджете список игроков и постепенно подписываться на активных игроков
             player.addPlayerActionListener(new PlayerController());
         }
 

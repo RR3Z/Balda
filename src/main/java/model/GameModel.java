@@ -67,17 +67,17 @@ public class GameModel {
 
         List<Player> winners = new ArrayList<>();
 
-        // Нахожу игрока с наибольшим количеством очков
+        // Find the player with the most points
         Player playerWithMostScore = _players.get(0);
         for (int i = 1; i < _players.size(); i++) {
             if (playerWithMostScore.scoreCounter().score() < _players.get(i).scoreCounter().score()) {
                 playerWithMostScore = _players.get(i);
             }
         }
-        // Считаю игрока с наибольшим количеством очков победителем
+        // Consider the player with the most points the winner
         winners.add(playerWithMostScore);
 
-        // Смотрю, есть ли еще игроки с таким же количеством очков и если есть, то тоже считаю их победителем
+        // Looking to see if there are any other players with the same number of points, and if there are,  also consider them the winner
         for (Player player : _players) {
             if (!winners.contains(player) && player.scoreCounter().score() == playerWithMostScore.scoreCounter().score()) {
                 winners.add(player);
@@ -231,7 +231,6 @@ public class GameModel {
         _gameModelListeners.add(listener);
     }
 
-    // TODO: нужен
     private void firePlayerExchanged(@NotNull Player player) {
         for (Object listener : _gameModelListeners) {
             GameModelEvent event = new GameModelEvent(this);
@@ -241,7 +240,6 @@ public class GameModel {
         }
     }
 
-    // TODO: нужен
     private void fireGameIsFinished(@NotNull List<Player> winners) {
         for (Object listener : _gameModelListeners) {
             GameModelEvent event = new GameModelEvent(this);
@@ -251,7 +249,6 @@ public class GameModel {
         }
     }
 
-    // TODO: нужен
     private void fireDefinedStartWord(@NotNull String word) {
         for (Object listener : _gameModelListeners) {
             GameModelEvent event = new GameModelEvent(this);

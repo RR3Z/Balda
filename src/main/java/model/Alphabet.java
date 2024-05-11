@@ -52,9 +52,9 @@ public class Alphabet {
 
     private void readFromFile(@NotNull String filePath) {
         try {
-            // Читаю данные из файла
+            // Read data from file
             List<String> fileOutput = Files.readAllLines(Paths.get(filePath));
-            // Преобразую строки в символы
+            // Convert strings to characters
             for (String line : fileOutput) {
                 for (char c : line.toCharArray()) {
                     _availableLetters.add(c);

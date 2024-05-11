@@ -9,7 +9,7 @@ public class GameSettingsPanel extends JPanel {
     private JSpinner _heightSpinner;
 
     public GameSettingsPanel() {
-        // --------- Панель с размерами поля ---------
+        // --------- Panel with field sizes ---------
         JPanel fieldSizesPanel = new JPanel();
 
         JLabel fieldSizesLabel = new JLabel("Выберите размеры поля:");
