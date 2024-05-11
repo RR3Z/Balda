@@ -143,7 +143,7 @@ public class GameModel {
 
     public List<Player> players() {
         return Collections.unmodifiableList(_players);
-    } // TODO: убрать и где используется подписываться к активным игрокам потихоньку
+    }
 
     public GameState state() {
         return _state;
