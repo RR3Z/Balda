@@ -7,7 +7,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 
 public class TableUtils {
-    public static DefaultTableCellRenderer HEADER_TABLE_CELL_RENDERER = new DefaultTableCellRenderer() {
+
+    public static DefaultTableCellRenderer DEFAULT_TABLE_HEADER_RENDERER = new DefaultTableCellRenderer() {
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -29,7 +30,7 @@ public class TableUtils {
         }
     };
 
-    public static DefaultTableCellRenderer DEFAULT_TABLE_CELL_RENDERER = new DefaultTableCellRenderer() {
+    public static DefaultTableCellRenderer DEFAULT_CELL_RENDERER = new DefaultTableCellRenderer() {
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);

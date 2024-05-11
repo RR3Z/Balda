@@ -25,13 +25,13 @@ public class CustomJTable extends JTable {
 
     private void setupTableView() {
         JTableHeader header = this.getTableHeader();
-        header.setDefaultRenderer(TableUtils.HEADER_TABLE_CELL_RENDERER);
+        header.setDefaultRenderer(TableUtils.DEFAULT_TABLE_HEADER_RENDERER);
         header.setOpaque(false);
         header.setBackground(GameWidgetUtils.getColor(ColorType.TRANSPARENT));
         header.setReorderingAllowed(false);
         header.setResizingAllowed(false);
 
-        this.setDefaultRenderer(Object.class, TableUtils.DEFAULT_TABLE_CELL_RENDERER);
+        this.setDefaultRenderer(Object.class, TableUtils.DEFAULT_CELL_RENDERER);
         this.setOpaque(false);
         this.setBackground(GameWidgetUtils.getColor(ColorType.TRANSPARENT));
         this.setIntercellSpacing(new Dimension(0, 0));
