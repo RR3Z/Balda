@@ -198,6 +198,13 @@ public class GameField {
         }
 
         @Override
+        public void definedStartWord(GameModelEvent event) {
+            if(event.word() != null) {
+                firePlacedStartWord(event.word());
+            }
+        }
+
+        @Override
         public void gameIsFinished(GameModelEvent event) {
             // DON'T NEED IT HERE
         }
@@ -216,6 +223,15 @@ public class GameField {
             event.setCell(cell);
 
             ((GameFieldListener) listener).forgetChangedCell(event);
+        }
+    }
+
+    private void firePlacedStartWord(String word) {
+        for (Object listener : _gameFieldListeners) {
+            GameFieldEvent event = new GameFieldEvent(this);
+            event.setWord(word);
+
+            ((GameFieldListener) listener).placedStartWord(event);
         }
     }
 }

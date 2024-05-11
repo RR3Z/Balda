@@ -50,7 +50,6 @@ public class MainWindow extends JFrame {
     private void startNewGame(int width, int height) {
         _gameModel = new GameModel(width, height);
         _gameModel.addGameModelListener(new GameController());
-        _gameModel.startGame();
 
         // Очистить содержимое панели
         JPanel content = (JPanel) this.getContentPane();
@@ -74,6 +73,8 @@ public class MainWindow extends JFrame {
         usedWordsTablePane.setBorder(BorderFactory.createEmptyBorder());
         content.add(usedWordsTablePane);
         // ----------------------------------------
+
+        _gameModel.startGame();
 
         this.pack();
 
@@ -122,6 +123,11 @@ public class MainWindow extends JFrame {
 
         @Override
         public void playerExchanged(GameModelEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
+        public void definedStartWord(GameModelEvent event) {
             // DON'T NEED IT HERE
         }
     }

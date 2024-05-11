@@ -206,5 +206,22 @@ public class GameFieldWidget extends JPanel {
             JButton changedCell = _cells.get(event.cell());
             changedCell.setText("");
         }
+
+        @Override
+        public void placedStartWord(GameFieldEvent event) {
+            GameField gameField = _gameModel.gameField();
+
+            for(int i = 0; i < gameField.height(); i++) {
+                for(int j = 0; j < gameField.width(); j++){
+                    Cell cell = gameField.cell(new Point(j, i));
+
+                    if(cell.letter() != null) {
+                        GameFieldWidget.this._cells.get(cell).setText(String.valueOf(cell.letter()));
+                    }
+                }
+            }
+
+            GameFieldWidget.this.repaint();
+        }
     }
 }

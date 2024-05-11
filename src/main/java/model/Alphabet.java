@@ -72,6 +72,11 @@ public class Alphabet {
         }
 
         @Override
+        public void definedStartWord(GameModelEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
         public void gameIsFinished(GameModelEvent event) {
             // DON'T NEED IT HERE
         }
