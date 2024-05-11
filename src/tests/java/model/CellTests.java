@@ -1,5 +1,6 @@
 package model;
 
+import model.enums.Direction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -69,6 +70,13 @@ public class CellTests {
     }
 
     @Test
+    public void test_removeLetter_FromCellWithoutLetter() {
+        _cell.removeLetter();
+
+        assertNull(_cell.letter());
+    }
+
+    @Test
     public void test_setAdjacentCell_AdjacentRight() {
         Point pos = new Point(0, 0);
         _cell.setPosition(pos);
@@ -83,7 +91,7 @@ public class CellTests {
 
     @Test
     public void test_setAdjacentCell_AdjacentLeft() {
-        Point pos = new Point(0, 0);
+        Point pos = new Point(1, 1);
         _cell.setPosition(pos);
 
         Point adjacentPos = new Point((int) pos.getX() - 1, (int) pos.getY());
@@ -109,7 +117,7 @@ public class CellTests {
 
     @Test
     public void test_setAdjacentCell_AdjacentBottom() {
-        Point pos = new Point(0, 0);
+        Point pos = new Point(1, 1);
         _cell.setPosition(pos);
 
         Point adjacentPos = new Point((int) pos.getX(), (int) pos.getY() - 1);
@@ -164,7 +172,7 @@ public class CellTests {
         Point pos = new Point(0, 0);
         _cell.setPosition(pos);
 
-        Point notAdjacentPos = new Point((int) pos.getX() - 1, (int) pos.getY() + 1);
+        Point notAdjacentPos = new Point((int) pos.getX() + 1, (int) pos.getY() - 1);
         Cell notAdjacentCell = new Cell(notAdjacentPos);
 
         _cell.setAdjacentCell(notAdjacentCell);
