@@ -9,6 +9,7 @@ import model.events.AlphabetListener;
 import model.events.PlayerActionEvent;
 import model.events.PlayerActionListener;
 import org.jetbrains.annotations.NotNull;
+import ui.buttons.KeyboardButton;
 import ui.utils.GameWidgetUtils;
 import ui.utils.ButtonUtils;
 
@@ -16,17 +17,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.security.Key;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class KeyboardWidget extends JPanel {
-    private final int KEYBOARD_ROWS_COUNT = 3;
-    private final int BUTTON_SIZE = 50;
+    private final int KEYBOARD_MAX_ROWS_COUNT = 3;
 
     private GameModel _gameModel;
 
-    private Map<Character, JButton> _letters = new HashMap<>();
+    private Map<Character, KeyboardButton> _letters = new HashMap<>();
 
     public KeyboardWidget(GameModel gameModel) {
         super();
@@ -41,22 +42,21 @@ public class KeyboardWidget extends JPanel {
             player.addPlayerActionListener(new PlayerController());
         }
 
-        int numberOfColumns = Math.ceilDiv(alphabet.availableLetters().size(), KEYBOARD_ROWS_COUNT);
-        this.setLayout(new GridLayout(KEYBOARD_ROWS_COUNT, numberOfColumns));
+        int numberOfColumns = Math.ceilDiv(alphabet.availableLetters().size(), KEYBOARD_MAX_ROWS_COUNT);
+        this.setLayout(new GridLayout(KEYBOARD_MAX_ROWS_COUNT, numberOfColumns));
 
         fillWidget(alphabet.availableLetters());
 
         this.setMaximumSize(new Dimension(
-                numberOfColumns * BUTTON_SIZE,
-                KEYBOARD_ROWS_COUNT * BUTTON_SIZE
+                numberOfColumns * KeyboardButton.BUTTON_SIZE,
+                KEYBOARD_MAX_ROWS_COUNT * KeyboardButton.BUTTON_SIZE
         ));
     }
 
     private void fillWidget(@NotNull List<Character> letters) {
         for(Character letter: letters) {
-            JButton keyboardButton = new JButton();
+            KeyboardButton keyboardButton = new KeyboardButton();
 
-            setupButtonView(keyboardButton);
             keyboardButton.setText(String.valueOf(letter));
             keyboardButton.addMouseListener(new KeyboardButtonMouseListener(keyboardButton));
 
@@ -66,25 +66,10 @@ public class KeyboardWidget extends JPanel {
         }
     }
 
-    private void setupButtonView(@NotNull JButton button) {
-        button.setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));
-
-        button.setModel(new ButtonUtils.FixedStateButtonModel());
-
-        button.setOpaque(false);
-        button.setContentAreaFilled(false);
-        button.setBackground(GameWidgetUtils.getColor(ColorType.ACTIVE_KEYBOARD_BUTTON));
-
-        button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER)));
-        button.setBorderPainted(true);
-
-        button.setFocusable(false);
-    }
-
     private class KeyboardButtonMouseListener extends MouseAdapter {
-        private JButton _button;
+        private KeyboardButton _button;
 
-        public KeyboardButtonMouseListener(@NotNull JButton button) {
+        public KeyboardButtonMouseListener(@NotNull KeyboardButton button) {
             _button = button;
         }
 
@@ -117,14 +102,14 @@ public class KeyboardWidget extends JPanel {
 
         @Override
         public void choseLetter(@NotNull PlayerActionEvent event) {
-            JButton selectedLetter = _letters.get(event.letter());
+            KeyboardButton selectedLetter = _letters.get(event.letter());
             selectedLetter.setOpaque(true);
             selectedLetter.setOpaque(true);
         }
 
         @Override
         public void finishedTurn(@NotNull PlayerActionEvent event) {
-            for(JButton button: _letters.values()) {
+            for(KeyboardButton button: _letters.values()) {
                 button.setOpaque(false);
                 button.setContentAreaFilled(false);
             }
@@ -185,7 +170,7 @@ public class KeyboardWidget extends JPanel {
     private class AlphabetController implements AlphabetListener {
         @Override
         public void forgetSelectedLetter(AlphabetEvent event) {
-            JButton selectedLetter = _letters.get(event.letter());
+            KeyboardButton selectedLetter = _letters.get(event.letter());
             selectedLetter.setOpaque(false);
             selectedLetter.setContentAreaFilled(false);
         }
