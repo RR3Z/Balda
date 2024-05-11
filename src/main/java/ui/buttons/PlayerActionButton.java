@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class PlayerActionButton extends JButton {
-    public final int BUTTON_WIDTH = 130;
+    public final int BUTTON_WIDTH = 200;
     public final int BUTTON_HEIGHT = 40;
 
     public PlayerActionButton(String buttonText, Color color) {
@@ -19,6 +19,8 @@ public class PlayerActionButton extends JButton {
 
         this.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER)));
         this.setBorderPainted(true);
+
+        this.setFont(GameWidgetUtils.getFont());
 
         this.setFocusable(false);
     }

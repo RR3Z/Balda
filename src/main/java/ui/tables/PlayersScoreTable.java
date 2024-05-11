@@ -54,8 +54,10 @@ public class PlayersScoreTable extends JTable {
         this.setBackground(GameWidgetUtils.getColor(ColorType.TRANSPARENT));
 
         this.setDefaultRenderer(Object.class, TableUtils.DEFAULT_TABLE_CELL_RENDERER);
-        header.setDefaultRenderer(TableUtils.DEFAULT_TABLE_CELL_RENDERER);
+        header.setDefaultRenderer(TableUtils.HEADER_TABLE_CELL_RENDERER);
         this.setIntercellSpacing(new Dimension(0, 0));
+
+        this.setFont(GameWidgetUtils.getFont());
 
         header.setReorderingAllowed(false);
         header.setResizingAllowed(false);
@@ -68,7 +70,7 @@ public class PlayersScoreTable extends JTable {
             Player player = _rowIndexToPlayer.get(i);
 
             if(player.state() == PlayerState.SELECTING_LETTER) {
-                highlightRow(i);
+                TableUtils.highlightRow(this, i, GameWidgetUtils.getColor(ColorType.ACTIVE_PLAYER), GameWidgetUtils.getColor(ColorType.TRANSPARENT));
             }
 
             _playersScoreTableModel.setValueAt(player.scoreCounter().score(), i, getColumn(HEADERS[1]).getModelIndex());

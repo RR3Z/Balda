@@ -24,6 +24,8 @@ public class CellButton extends JButton {
         this.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER)));
         this.setBorderPainted(true);
 
+        this.setFont(GameWidgetUtils.getFont());
+
         this.setFocusable(false);
     }
 }
