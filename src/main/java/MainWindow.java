@@ -20,7 +20,7 @@ public class MainWindow extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.setResizable(false);
-        this.getContentPane().setLayout(new FlowLayout());
+        this.getContentPane().setLayout(new GridBagLayout());
 
         // Создание главного меню
         JMenuBar mainMenuBar = new JMenuBar();
@@ -31,6 +31,7 @@ public class MainWindow extends JFrame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension windowSize = new Dimension(400, 200);
         this.setBounds(screenSize.width/2 - windowSize.width/2, screenSize.height/2 - windowSize.height/2, windowSize.width, windowSize.height);
+        startNewGame(14,14);
     }
 
     private JMenu createMainMenu() {
@@ -53,11 +54,22 @@ public class MainWindow extends JFrame {
         JPanel content = (JPanel) this.getContentPane();
         content.removeAll();
 
-        // ----------- Добавить виджеты -----------
+        // Виджеты
+        // ============================================================================================================
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.anchor = GridBagConstraints.NORTHWEST;
+        constraints.insets = new Insets(5,5,5,5);
+        // Таблица слева
         JScrollPane playersScoreTablePane = new JScrollPane(new PlayersScoreTableWidget(_gameModel, new Object[]{ "Игрок", "Очки" }));
         playersScoreTablePane.setBorder(BorderFactory.createEmptyBorder());
-        content.add(playersScoreTablePane);
+        content.add(playersScoreTablePane, constraints);
 
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        constraints.anchor = GridBagConstraints.CENTER;
+        // Поле и клавиатура по центру
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.add(new GameFieldWidget(_gameModel));
@@ -65,12 +77,16 @@ public class MainWindow extends JFrame {
         centerPanel.add(new PlayerActionsWidget(_gameModel));
         centerPanel.add(Box.createRigidArea(new Dimension(5, 5)));
         centerPanel.add(new KeyboardWidget(_gameModel));
-        content.add(centerPanel);
+        content.add(centerPanel, constraints);
 
+        constraints.gridx = 2;
+        constraints.gridy = 0;
+        constraints.anchor = GridBagConstraints.NORTHEAST;
+        // Таблица справа
         JScrollPane usedWordsTablePane = new JScrollPane(new UsedWordsTableWidget(_gameModel.wordsDB(), new Object[]{ "Слово", "Игрок" }));
         usedWordsTablePane.setBorder(BorderFactory.createEmptyBorder());
-        content.add(usedWordsTablePane);
-        // ----------------------------------------
+        content.add(usedWordsTablePane, constraints);
+        // ============================================================================================================
 
         _gameModel.startGame();
 
