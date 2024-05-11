@@ -6,6 +6,7 @@ import ui.panels.GameOverPanel;
 import ui.panels.GameSettingsPanel;
 import ui.PlayersScoreTableWidget;
 import ui.UsedWordsTableWidget;
+import ui.utils.GameWidgetUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,16 +23,16 @@ public class MainWindow extends JFrame {
         this.setResizable(false);
         this.getContentPane().setLayout(new GridBagLayout());
 
-        // Создание главного меню
         JMenuBar mainMenuBar = new JMenuBar();
         mainMenuBar.add(createMainMenu());
         this.setJMenuBar(mainMenuBar);
+        
+        UIManager.put("OptionPane.messageFont", GameWidgetUtils.getFont(GameWidgetUtils.getOptionPaneFontSize()));
+        UIManager.put("OptionPane.buttonFont", GameWidgetUtils.getFont(GameWidgetUtils.getOptionPaneFontSize()));
 
-        // Расположить окно посередине экрана
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension windowSize = new Dimension(400, 200);
         this.setBounds(screenSize.width/2 - windowSize.width/2, screenSize.height/2 - windowSize.height/2, windowSize.width, windowSize.height);
-        startNewGame(14,14);
     }
 
     private JMenu createMainMenu() {
@@ -43,6 +44,10 @@ public class MainWindow extends JFrame {
         mainMenu.add(startNewGameItem);
         mainMenu.add(exitGameItem);
 
+        mainMenu.setFont(GameWidgetUtils.getFont(14));
+        startNewGameItem.setFont(GameWidgetUtils.getFont(14));
+        exitGameItem.setFont(GameWidgetUtils.getFont(14));
+
         return mainMenu;
     }
 
@@ -50,18 +55,18 @@ public class MainWindow extends JFrame {
         _gameModel = new GameModel(width, height);
         _gameModel.addGameModelListener(new GameController());
 
-        // Очистить содержимое панели
+        // Clear MainWindow
         JPanel content = (JPanel) this.getContentPane();
         content.removeAll();
 
-        // Виджеты
+        // Widgets
         // ============================================================================================================
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.anchor = GridBagConstraints.NORTHWEST;
         constraints.insets = new Insets(5,5,5,5);
-        // Таблица слева
+        // Left table
         JScrollPane playersScoreTablePane = new JScrollPane(new PlayersScoreTableWidget(_gameModel, new Object[]{ "Игрок", "Очки" }));
         playersScoreTablePane.setBorder(BorderFactory.createEmptyBorder());
         content.add(playersScoreTablePane, constraints);
@@ -69,7 +74,7 @@ public class MainWindow extends JFrame {
         constraints.gridx = 1;
         constraints.gridy = 0;
         constraints.anchor = GridBagConstraints.CENTER;
-        // Поле и клавиатура по центру
+        // Field and keyboard
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.add(new GameFieldWidget(_gameModel));
@@ -82,7 +87,7 @@ public class MainWindow extends JFrame {
         constraints.gridx = 2;
         constraints.gridy = 0;
         constraints.anchor = GridBagConstraints.NORTHEAST;
-        // Таблица справа
+        // Right table
         JScrollPane usedWordsTablePane = new JScrollPane(new UsedWordsTableWidget(_gameModel.wordsDB(), new Object[]{ "Слово", "Игрок" }));
         usedWordsTablePane.setBorder(BorderFactory.createEmptyBorder());
         content.add(usedWordsTablePane, constraints);
@@ -92,7 +97,6 @@ public class MainWindow extends JFrame {
 
         this.pack();
 
-        // Расположить окно посередине экрана
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension windowSize = this.getSize();
         this.setBounds(screenSize.width/2 - windowSize.width/2, screenSize.height/2 - windowSize.height/2, windowSize.width, windowSize.height);
@@ -117,7 +121,7 @@ public class MainWindow extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            int result = JOptionPane.showConfirmDialog(MainWindow.this, _gameSettings, "Настройки игры", JOptionPane.OK_CANCEL_OPTION);
+            int result = JOptionPane.showConfirmDialog(null, _gameSettings, "Настройки игры", JOptionPane.OK_CANCEL_OPTION);
             if(result == JOptionPane.OK_OPTION) {
                 MainWindow.this.startNewGame(_gameSettings.getWidthSpinnerValue(), _gameSettings.getHeightSpinnerValue());
             }
@@ -140,7 +144,7 @@ public class MainWindow extends JFrame {
         public void gameIsFinished(GameModelEvent event) {
             MainWindow.this.disableAllGameWidgets(MainWindow.this);
 
-            JOptionPane.showMessageDialog(MainWindow.this, new GameOverPanel(event.winners()), "Конец игры", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(null, new GameOverPanel(event.winners()), "Конец игры", JOptionPane.PLAIN_MESSAGE);
         }
 
         @Override
