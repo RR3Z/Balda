@@ -97,10 +97,12 @@ public class KeyboardWidget extends JPanel {
 
         @Override
         public void mouseExited(MouseEvent e) {
-            _button.setBorder(BorderFactory.createLineBorder(
-                    GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER),
-                    GameWidgetUtils.getBorderThickness(BorderType.DEFAULT))
-            );
+            if(KeyboardWidget.this.isEnabled()) {
+                _button.setBorder(BorderFactory.createLineBorder(
+                        GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER),
+                        GameWidgetUtils.getBorderThickness(BorderType.DEFAULT))
+                );
+            }
         }
     }
 
