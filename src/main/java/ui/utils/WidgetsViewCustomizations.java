@@ -61,6 +61,9 @@ public class WidgetsViewCustomizations {
 
 
 
+    // General for tables
+    public static Color TABLE_BORDER_COLOR = Color.BLACK;
+
     // PlayersScoreTable customizations
     public static final Object[] PLAYERS_SCORE_TABLE_HEADERS = new Object[] {"Игрок", "Очки"};
 
