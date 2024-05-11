@@ -7,6 +7,7 @@ import model.events.GameModelListener;
 import ui.utils.WidgetsViewCustomizations;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
@@ -48,9 +49,20 @@ public class PlayersScoreTable extends JTable {
         this.setOpaque(false);
         this.setBackground(WidgetsViewCustomizations.TRANSPARENT_COLOR);
 
-        //this.setBorder(BorderFactory.createLineBorder(WidgetsViewCustomizations.TABLE_BORDER_COLOR, 1));
-        //this.setGridColor(WidgetsViewCustomizations.TABLE_BORDER_COLOR);
-        //this.setIntercellSpacing(new Dimension(1, 1));
+        DefaultTableCellRenderer tableCellRenderer = new DefaultTableCellRenderer() {
+            @Override
+            public void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.setColor(Color.BLACK); // Цвет линий
+                g.fillRect(0, 0, 1, getHeight()); // Левая вертикальная линия
+                g.fillRect(0, 0, getWidth(), 1); // Верхняя горизонтальная линия
+                g.fillRect(getWidth() - 1, 0, 1, getHeight()); // Правая вертикальная линия
+                g.fillRect(0, getHeight() - 1, getWidth(), 1); // Нижняя горизонтальная линия
+            }
+        };
+        this.setDefaultRenderer(Object.class, tableCellRenderer);
+        header.setDefaultRenderer(tableCellRenderer);
+        this.setIntercellSpacing(new Dimension(0, 0));
 
         header.setReorderingAllowed(false);
         header.setResizingAllowed(false);
@@ -76,12 +88,6 @@ public class PlayersScoreTable extends JTable {
         public void gameIsFinished(GameModelEvent event) {
             // DON'T NEED IT HERE
         }
-    }
-
-    @Override
-    public Dimension getPreferredScrollableViewportSize() {
-        return new Dimension(super.getPreferredSize().width,
-                getRowHeight() * getRowCount());
     }
 
     @Override
