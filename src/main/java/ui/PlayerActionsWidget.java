@@ -162,12 +162,12 @@ public class PlayerActionsWidget extends JPanel {
             if(event.player().state() == PlayerState.FORMS_WORD) {
                 if(event.isUsedAlready() && event.isKnown()) {
                     String message = "<html><div style='text-align: center;'>" + "Слово уже было сыграно (см. таблицу справа)." + "</div></html>";
-                    JOptionPane.showMessageDialog(PlayerActionsWidget.this, message, "Ошибка", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, message, "Ошибка", JOptionPane.WARNING_MESSAGE);
                 }
 
                 if(!event.isUsedAlready() && !event.isKnown()) {
                     String message = "<html><div style='text-align: center;'>" + "Было разыграно неизвестное слово.<br>Добавить в словарь?" + "</div></html>";
-                    int result = JOptionPane.showConfirmDialog(PlayerActionsWidget.this, message, "Неизвестное слово", JOptionPane.OK_CANCEL_OPTION);
+                    int result = JOptionPane.showConfirmDialog(null, message, "Неизвестное слово", JOptionPane.OK_CANCEL_OPTION);
                     if(result == JOptionPane.OK_OPTION) {
                         _gameModel.activePlayer().addNewWordToDictionary();
                     }
@@ -179,7 +179,7 @@ public class PlayerActionsWidget extends JPanel {
         public void submittedWordWithoutChangeableCell(@NotNull PlayerActionEvent event) {
             if(event.player() == _gameModel.activePlayer()) {
                 String message = "<html><div style='text-align: center;'>" + "В составленном слове отсутствует измененная ячейка" + "</div></html>";
-                JOptionPane.showMessageDialog(PlayerActionsWidget.this, message, "Ошибка", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, message, "Ошибка", JOptionPane.WARNING_MESSAGE);
             }
         }
 
@@ -187,7 +187,7 @@ public class PlayerActionsWidget extends JPanel {
         public void addedNewWordToDictionary(@NotNull PlayerActionEvent event) {
             if(event.player().state() == PlayerState.FORMS_WORD) {
                 String message = "<html><div style='text-align: center;'>" + "Слово \"" + event.word() + "\" успешно добавлено" + "</div></html>";
-                JOptionPane.showMessageDialog(PlayerActionsWidget.this, message, "Новое слово", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(null, message, "Новое слово", JOptionPane.PLAIN_MESSAGE);
                 _gameModel.activePlayer().submitWord();
             }
         }
