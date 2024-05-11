@@ -6,7 +6,7 @@ import model.events.GameModelEvent;
 import model.events.GameModelListener;
 import model.events.PlayerActionEvent;
 import model.events.PlayerActionListener;
-import model.utils.FilePaths;
+import model.utils.DataFilePaths;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -21,8 +21,8 @@ public class GameModel {
 
     public GameModel(int width, int height) {
         _field = new GameField(this, width, height);
-        _wordsDB = new WordsDB(FilePaths.DICTIONARY_FILE_PATH);
-        _alphabet = new Alphabet(this, FilePaths.ALPHABET_FILE_PATH);
+        _wordsDB = new WordsDB(DataFilePaths.DICTIONARY_FILE_PATH);
+        _alphabet = new Alphabet(this, DataFilePaths.ALPHABET_FILE_PATH);
 
         Player firstPlayer = new Player("Игрок 1", _alphabet, _wordsDB, _field);
         firstPlayer.addPlayerActionListener(new PlayerObserve());

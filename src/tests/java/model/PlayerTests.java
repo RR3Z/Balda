@@ -4,7 +4,7 @@ import model.enums.Direction;
 import model.enums.PlayerState;
 import model.events.PlayerActionEvent;
 import model.events.PlayerActionListener;
-import model.utils.FilePaths;
+import model.utils.DataFilePaths;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -109,7 +109,7 @@ public class PlayerTests {
         _expectedEvents.clear();
 
         // Setup alphabet
-        _alphabet = new Alphabet(FilePaths.ALPHABET_FILE_PATH);
+        _alphabet = new Alphabet(DataFilePaths.ALPHABET_FILE_PATH);
 
         // Setup wordsDB
         List<String> words = new ArrayList<>();
