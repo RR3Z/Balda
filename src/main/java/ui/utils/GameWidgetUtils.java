@@ -12,8 +12,6 @@ import java.util.Map;
 public class GameWidgetUtils {
     private final static String RESOURCE_FOLDER = "Resources/";
 
-    private static Font FONT = null;
-
     public final static int MIN_FIELD_SIZE_SPINNER_VALUE = 2;
     public final static int MAX_FIELD_SIZE_SPINNER_VALUE = 14;
 
@@ -45,19 +43,19 @@ public class GameWidgetUtils {
         };
     }
 
-    public static Font getFont() {
-        if(FONT == null) {
-            // Uploading font
-            try {
-                File fontFile = new File(RESOURCE_FOLDER + "SrirachaCyrillic.ttf");
-                FONT = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(fontFile)).deriveFont(Font.PLAIN, 22);
-                GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(FONT);
-            }
-            catch (IOException | FontFormatException e) {
-                throw new RuntimeException(e);
-            }
+    public static Font getFont(int fontSize) {
+        Font font = null;
+
+        // Uploading font
+        try {
+            File fontFile = new File(RESOURCE_FOLDER + "SrirachaCyrillic.ttf");
+            font = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(fontFile)).deriveFont(Font.PLAIN, fontSize);
+            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
+        }
+        catch (IOException | FontFormatException e) {
+            throw new RuntimeException(e);
         }
 
-        return FONT;
+        return font;
     }
 }

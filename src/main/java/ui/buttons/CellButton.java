@@ -10,6 +10,8 @@ import java.awt.*;
 public class CellButton extends JButton {
     public static final int CELL_SIZE = 50;
 
+    private final int FONT_SIZE = 26;
+
     public CellButton() {
         super();
 
@@ -24,7 +26,7 @@ public class CellButton extends JButton {
         this.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER)));
         this.setBorderPainted(true);
 
-        this.setFont(GameWidgetUtils.getFont());
+        this.setFont(GameWidgetUtils.getFont(FONT_SIZE));
 
         this.setFocusable(false);
     }

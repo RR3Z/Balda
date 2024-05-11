@@ -10,6 +10,8 @@ import java.awt.*;
 public class KeyboardButton extends JButton {
     public static final int BUTTON_SIZE = 50;
 
+    private final int FONT_SIZE = 28;
+
     public KeyboardButton() {
         super();
 
@@ -24,7 +26,7 @@ public class KeyboardButton extends JButton {
         this.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER)));
         this.setBorderPainted(true);
 
-        this.setFont(GameWidgetUtils.getFont());
+        this.setFont(GameWidgetUtils.getFont(FONT_SIZE));
 
         this.setFocusable(false);
     }

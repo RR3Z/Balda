@@ -10,6 +10,8 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 
 public class CustomJTable extends JTable {
+    private final int FONT_SIZE = 20;
+
     public CustomJTable(Object[] headers) {
         super();
 
@@ -35,7 +37,7 @@ public class CustomJTable extends JTable {
         this.setCellSelectionEnabled(false);
         this.setFocusable(false);
 
-        this.setFont(GameWidgetUtils.getFont());
+        this.setFont(GameWidgetUtils.getFont(FONT_SIZE));
     }
 
     @Override
