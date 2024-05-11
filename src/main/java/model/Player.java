@@ -4,7 +4,6 @@ import model.enums.PlayerState;
 import model.events.*;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.List;
@@ -20,6 +19,8 @@ public class Player {
 
     public Player(@NotNull String name, @NotNull Alphabet alphabet, @NotNull WordsDB wordsDB, @NotNull GameField field) {
         _wordsDB = wordsDB;
+        _wordsDB.addWordsDBListener(new WordsDBObserve());
+
         _alphabet = alphabet;
         _field = field;
         _word = new Word();
@@ -173,7 +174,7 @@ public class Player {
 
         Cell changedCell = _field.changedCell();
         if (!_word.containCell(changedCell)) {
-            fireWordDoesNotContainChangeableCell(changedCell);
+            fireSubmittedWordDoesNotContainChangeableCell(changedCell);
             return;
         }
 
@@ -182,7 +183,6 @@ public class Player {
             return;
         }
 
-        fireSubmittedWord(wordStringRepresentation);
         finishTurn();
     }
 
@@ -199,7 +199,29 @@ public class Player {
         return _state == PlayerState.SKIPPED_TURN;
     }
 
-    /* ============================================================================================================== */
+    // ================================================================================================================
+    private class WordsDBObserve implements WordsDBListener {
+        // TODO: нужен
+        @Override
+        public void addedUsedWord(WordsDBEvent event) {
+            fireSubmittedWord(event.word());
+        }
+
+        // TODO: нужен
+        @Override
+        public void failedToAddUsedWord(WordsDBEvent event) {
+            fireFailedToSubmitWord(event.word(), event.isKnown(), event.isUsedAlready());
+        }
+
+        // TODO: нужен
+        @Override
+        public void addedNewWordToDictionary(WordsDBEvent event) {
+            fireAddedNewWordToDictionary(event.word());
+        }
+    }
+    // ================================================================================================================
+
+
     // Listeners
     private List<EventListener> _playerListeners = new ArrayList<>();
 
@@ -303,30 +325,7 @@ public class Player {
         }
     }
 
-    private void fireFailedToAddNewWordToDictionary(@NotNull String word) {
-        for (Object listener : _playerListeners) {
-            PlayerActionEvent event = new PlayerActionEvent(this);
-            event.setPlayer(this);
-            event.setWord(word);
-
-            ((PlayerActionListener) listener).failedToAddNewWordToDictionary(event);
-        }
-    }
-
-    private void fireChoseWrongCell(@NotNull Cell cell, boolean isNotNeighborOfLastCell, boolean isContainCellAlready, boolean isCellWithoutLetter) {
-        for (Object listener : _playerListeners) {
-            PlayerActionEvent event = new PlayerActionEvent(this);
-            event.setPlayer(this);
-            event.setCell(cell);
-            event.setIsCellWithoutLetter(isCellWithoutLetter);
-            event.setIsContainCellAlready(isContainCellAlready);
-            event.setIsNotNeighborOfLastCell(isNotNeighborOfLastCell);
-
-            ((PlayerActionListener) listener).choseWrongCell(event);
-        }
-    }
-
-    private void fireWordDoesNotContainChangeableCell(Cell changeableCell) {
+    private void fireSubmittedWordDoesNotContainChangeableCell(Cell changeableCell) {
         for (Object listener : _playerListeners) {
             PlayerActionEvent event = new PlayerActionEvent(this);
             event.setPlayer(this);
