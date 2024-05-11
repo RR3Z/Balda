@@ -7,6 +7,7 @@ import model.Player;
 import model.enums.PlayerState;
 import model.events.*;
 import org.jetbrains.annotations.NotNull;
+import ui.buttons.CellButton;
 import ui.utils.GameWidgetUtils;
 import ui.utils.ButtonUtils;
 
@@ -18,10 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GameFieldWidget extends JPanel {
-    private final int CELL_SIZE = 50;
-
     private GameModel _gameModel;
-    private Map<Cell, JButton> _cells = new HashMap<>();
+    private Map<Cell, CellButton> _cells = new HashMap<>();
 
     public GameFieldWidget(GameModel gameModel) {
         super();
@@ -32,15 +31,16 @@ public class GameFieldWidget extends JPanel {
         gameField.addGameFieldListener(new GameFieldController());
 
         for(Player player: _gameModel.players()) {
-            player.addPlayerActionListener(new PlayerController()); // TODO: подписываться по мере активновсти игроков
+            player.addPlayerActionListener(new PlayerController());
         }
 
         fillWidget(gameField.height(), gameField.width());
 
         this.setLayout(new GridLayout(gameField.height(), gameField.width()));
+
         this.setMaximumSize(new Dimension(
-                gameField.width() * CELL_SIZE,
-                gameField.height() * CELL_SIZE
+                gameField.width() * CellButton.CELL_SIZE,
+                gameField.height() * CellButton.CELL_SIZE
                 )
         );
     }
@@ -52,8 +52,7 @@ public class GameFieldWidget extends JPanel {
             for(int j = 0; j < numberOfColumns; j++){
                 Cell cell = gameField.cell(new Point(j, i));
 
-                JButton cellButton = new JButton();
-                setupButtonView(cellButton);
+                CellButton cellButton = new CellButton();
                 cellButton.addMouseListener(new CellButtonMouseListener(cellButton));
 
                 if(cell.letter() != null) {
@@ -67,25 +66,10 @@ public class GameFieldWidget extends JPanel {
         }
     }
 
-    private void setupButtonView(JButton button) {
-        button.setPreferredSize(new Dimension(CELL_SIZE, CELL_SIZE));
-
-        button.setModel(new ButtonUtils.FixedStateButtonModel());
-
-        button.setOpaque(false);
-        button.setContentAreaFilled(false);
-        button.setBackground(GameWidgetUtils.getColor(ColorType.INACTIVE_CELL));
-
-        button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER)));
-        button.setBorderPainted(true);
-
-        button.setFocusable(false);
-    }
-
     private class CellButtonMouseListener extends MouseAdapter {
-        private JButton _button;
+        private CellButton _button;
 
-        public CellButtonMouseListener(JButton button) {
+        public CellButtonMouseListener(CellButton button) {
             _button = button;
         }
 
@@ -120,7 +104,7 @@ public class GameFieldWidget extends JPanel {
 
         @Override
         public void finishedTurn(@NotNull PlayerActionEvent event) {
-            for(JButton button: _cells.values()) {
+            for(CellButton button: _cells.values()) {
                 button.setOpaque(false);
                 button.setContentAreaFilled(false);
             }
@@ -145,12 +129,12 @@ public class GameFieldWidget extends JPanel {
 
         @Override
         public void canceledActionOnField(@NotNull PlayerActionEvent event) {
-            for(JButton button: _cells.values()) {
+            for(CellButton button: _cells.values()) {
                 button.setOpaque(false);
                 button.setContentAreaFilled(false);
             }
 
-            JButton selectedCell = _cells.get(event.cell());
+            CellButton selectedCell = _cells.get(event.cell());
             if(selectedCell != null) {
                 selectedCell.setOpaque(true);
                 selectedCell.setContentAreaFilled(true);
@@ -203,7 +187,7 @@ public class GameFieldWidget extends JPanel {
     private class GameFieldController implements GameFieldListener {
         @Override
         public void forgetChangedCell(GameFieldEvent event) {
-            JButton changedCell = _cells.get(event.cell());
+            CellButton changedCell = _cells.get(event.cell());
             changedCell.setText("");
         }
 
