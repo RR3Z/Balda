@@ -17,11 +17,7 @@ public interface PlayerActionListener extends EventListener {
     // -------- НИЖНИЕ НЕ НУЖНЫ ---------
     public void addedNewWordToDictionary(@NotNull PlayerActionEvent event);
 
-    public void failedToAddNewWordToDictionary(@NotNull PlayerActionEvent event);
-
     public void choseCell(@NotNull PlayerActionEvent event);
-
-    public void choseWrongCell(@NotNull PlayerActionEvent event);
 
     public void submittedWordWithoutChangeableCell(@NotNull PlayerActionEvent event);
 

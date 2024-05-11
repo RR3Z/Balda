@@ -156,6 +156,20 @@ public class PlayerActionsWidget extends JPanel {
                 _skipTurnButton.setEnabled(true);
             }
         }
+        @Override
+        public void failedToSubmitWord(@NotNull PlayerActionEvent event) {
+
+        }
+
+        @Override
+        public void addedNewWordToDictionary(@NotNull PlayerActionEvent event) {
+
+        }
+
+        @Override
+        public void submittedWordWithoutChangeableCell(@NotNull PlayerActionEvent event) {
+
+        }
 
         @Override
         public void canceledActionOnField(@NotNull PlayerActionEvent event) {
@@ -173,22 +187,7 @@ public class PlayerActionsWidget extends JPanel {
         }
 
         @Override
-        public void addedNewWordToDictionary(@NotNull PlayerActionEvent event) {
-            // DON'T NEED IT HERE
-        }
-
-        @Override
-        public void failedToAddNewWordToDictionary(@NotNull PlayerActionEvent event) {
-            // DON'T NEED IT HERE
-        }
-
-        @Override
         public void choseCell(@NotNull PlayerActionEvent event) {
-            // DON'T NEED IT HERE
-        }
-
-        @Override
-        public void choseWrongCell(@NotNull PlayerActionEvent event) {
             // DON'T NEED IT HERE
         }
 
@@ -203,17 +202,7 @@ public class PlayerActionsWidget extends JPanel {
         }
 
         @Override
-        public void submittedWordWithoutChangeableCell(@NotNull PlayerActionEvent event) {
-            // DON'T NEED IT HERE
-        }
-
-        @Override
         public void submittedWord(@NotNull PlayerActionEvent event) {
-            // DON'T NEED IT HERE
-        }
-
-        @Override
-        public void failedToSubmitWord(@NotNull PlayerActionEvent event) {
             // DON'T NEED IT HERE
         }
     }

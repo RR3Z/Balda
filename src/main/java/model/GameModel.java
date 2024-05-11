@@ -193,17 +193,7 @@ public class GameModel {
         }
 
         @Override
-        public void failedToAddNewWordToDictionary(@NotNull PlayerActionEvent event) {
-            // DON'T NEED IT HERE
-        }
-
-        @Override
         public void choseCell(@NotNull PlayerActionEvent event) {
-            // DON'T NEED IT HERE
-        }
-
-        @Override
-        public void choseWrongCell(@NotNull PlayerActionEvent event) {
             // DON'T NEED IT HERE
         }
 

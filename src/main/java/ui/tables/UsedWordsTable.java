@@ -70,11 +70,6 @@ public class UsedWordsTable extends JTable {
         public void addedNewWordToDictionary(WordsDBEvent event) {
             // DON'T NEED IT HERE
         }
-
-        @Override
-        public void failedToAddNewWordToDictionary(WordsDBEvent event) {
-            // DON'T NEED IT HERE
-        }
     }
 
     @Override
