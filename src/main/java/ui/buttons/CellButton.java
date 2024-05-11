@@ -11,6 +11,8 @@ public class CellButton extends JButton {
     public static final int CELL_SIZE = 50;
 
     public CellButton() {
+        super();
+
         this.setPreferredSize(new Dimension(CELL_SIZE, CELL_SIZE));
 
         this.setModel(new ButtonUtils.FixedStateButtonModel());

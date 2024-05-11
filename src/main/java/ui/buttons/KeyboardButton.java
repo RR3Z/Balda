@@ -11,6 +11,8 @@ public class KeyboardButton extends JButton {
     public static final int BUTTON_SIZE = 50;
 
     public KeyboardButton() {
+        super();
+
         this.setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));
 
         this.setModel(new ButtonUtils.FixedStateButtonModel());
