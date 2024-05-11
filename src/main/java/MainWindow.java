@@ -57,7 +57,9 @@ public class MainWindow extends JFrame {
         content.removeAll();
 
         // ----------- Добавить виджеты -----------
-        content.add(new JScrollPane(new PlayersScoreTable(_gameModel)));
+        JScrollPane playersScoreTablePane = new JScrollPane(new PlayersScoreTable(_gameModel));
+        playersScoreTablePane.setBorder(BorderFactory.createEmptyBorder());
+        content.add(playersScoreTablePane);
 
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
@@ -68,7 +70,9 @@ public class MainWindow extends JFrame {
         centerPanel.add(new KeyboardWidget(_gameModel));
         content.add(centerPanel);
 
-        content.add(new JScrollPane(new UsedWordsTable(_gameModel, _gameModel.wordsDB())));
+        JScrollPane usedWordsTablePane = new JScrollPane(new UsedWordsTable(_gameModel.wordsDB()));
+        usedWordsTablePane.setBorder(BorderFactory.createEmptyBorder());
+        content.add(usedWordsTablePane);
         // ----------------------------------------
 
         this.pack();
@@ -87,7 +91,7 @@ public class MainWindow extends JFrame {
             JLabel label = new JLabel();
             String message = "";
             if(winners.size() == 1) {
-                message = "<html>" + "<div style='text-align: center;'>" + "Игра окончена.<br>Победитель: " +
+                message += "<html>" + "<div style='text-align: center;'>" + "Игра окончена.<br>Победитель: " +
                         winners.get(winners.size() - 1).name() + "<br>Желаете начать новую игру?" + "</div></html>";
 
                 label.setText(message);
