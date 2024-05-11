@@ -4,6 +4,7 @@ import model.events.GameModelEvent;
 import model.events.GameModelListener;
 import ui.*;
 import ui.panels.GameOverPanel;
+import ui.panels.GameSettingsPanel;
 import ui.tables.PlayersScoreTable;
 import ui.tables.UsedWordsTable;
 import ui.utils.GameWidgetUtils;
@@ -35,7 +36,6 @@ public class MainWindow extends JFrame {
         this.setBounds(screenSize.width/2 - windowSize.width/2, screenSize.height/2 - windowSize.height/2, windowSize.width, windowSize.height);
     }
 
-    // TODO: вынести как отдельный класс
     private JMenu createMainMenu() {
         JMenu mainMenu = new JMenu("Главное меню");
 
@@ -96,6 +96,32 @@ public class MainWindow extends JFrame {
         }
     }
 
+    private class StartNewGameAction extends AbstractAction {
+        public StartNewGameAction() {
+            this.putValue(NAME, "Новая игра");
+        }
+        GameSettingsPanel _gameSettings = new GameSettingsPanel();
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int result = JOptionPane.showConfirmDialog(MainWindow.this, _gameSettings, "Настройки игры", JOptionPane.OK_CANCEL_OPTION);
+            if(result == JOptionPane.OK_OPTION) {
+                MainWindow.this.startNewGame(_gameSettings.getWidthSpinnerValue(), _gameSettings.getWidthSpinnerValue());
+            }
+        }
+    }
+
+    private class ExitAction extends AbstractAction {
+        public ExitAction() {
+            this.putValue(NAME, "Выход");
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.exit(0);
+        }
+    }
+
     private class GameController implements GameModelListener {
         @Override
         public void gameIsFinished(GameModelEvent event) {
@@ -118,55 +144,6 @@ public class MainWindow extends JFrame {
         @Override
         public void definedStartWord(GameModelEvent event) {
             // DON'T NEED IT HERE
-        }
-    }
-
-    private class StartNewGameAction extends AbstractAction {
-        private JSpinner _widthSpinner;
-        private JSpinner _heightSpinner;
-
-        public StartNewGameAction() {
-            this.putValue(NAME, "Новая игра");
-        }
-
-        private JPanel createGameSettingsPanel() {
-            JPanel gameSettingsPanel = new JPanel();
-
-            // --------- Панель с размерами поля ---------
-            JPanel fieldSizesPanel = new JPanel();
-
-            JLabel fieldSizesLabel = new JLabel("Выберите размеры поля:");
-
-            _widthSpinner = new JSpinner(new SpinnerNumberModel(5, GameWidgetUtils.MIN_FIELD_SIZE, GameWidgetUtils.MAX_FIELD_SIZE, 1));
-            _heightSpinner = new JSpinner(new SpinnerNumberModel(5, GameWidgetUtils.MIN_FIELD_SIZE, GameWidgetUtils.MAX_FIELD_SIZE, 1));
-
-            fieldSizesPanel.add(fieldSizesLabel);
-            fieldSizesPanel.add(_widthSpinner);
-            fieldSizesPanel.add(_heightSpinner);
-            // -----------------------------------------
-
-            gameSettingsPanel.add(fieldSizesPanel);
-
-            return gameSettingsPanel;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            int result = JOptionPane.showConfirmDialog(MainWindow.this, createGameSettingsPanel(), "Настройки игры", JOptionPane.OK_CANCEL_OPTION);
-            if(result == JOptionPane.OK_OPTION) {
-                MainWindow.this.startNewGame((int)_widthSpinner.getValue(), (int)_heightSpinner.getValue());
-            }
-        }
-    }
-
-    private class ExitAction extends AbstractAction {
-        public ExitAction() {
-            this.putValue(NAME, "Выход");
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            System.exit(0);
         }
     }
 
