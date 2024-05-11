@@ -3,11 +3,19 @@ package ui.utils;
 import ui.enums.ColorType;
 
 import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Map;
 
 public class GameWidgetUtils {
-    public final static int MIN_FIELD_SIZE = 2;
-    public final static int MAX_FIELD_SIZE = 14;
+    private final static String RESOURCE_FOLDER = "Resources/";
+
+    private static Font FONT = null;
+
+    public final static int MIN_FIELD_SIZE_SPINNER_VALUE = 2;
+    public final static int MAX_FIELD_SIZE_SPINNER_VALUE = 14;
 
     public static  <K, V> K getKeyByValue(Map<K, V> map, V value) {
         for (Map.Entry<K, V> entry : map.entrySet()) {
@@ -38,7 +46,18 @@ public class GameWidgetUtils {
     }
 
     public static Font getFont() {
-        // Здесь подгружать фон из ресурсов
-        return null;
+        if(FONT == null) {
+            // Uploading font
+            try {
+                File fontFile = new File(RESOURCE_FOLDER + "SrirachaCyrillic.ttf");
+                FONT = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(fontFile)).deriveFont(Font.PLAIN, 26);
+                GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(FONT);
+            }
+            catch (IOException | FontFormatException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return FONT;
     }
 }
