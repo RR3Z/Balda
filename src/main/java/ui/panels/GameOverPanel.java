@@ -1,17 +1,21 @@
 package ui.panels;
 
+import model.GameModel;
 import model.Player;
 import org.jetbrains.annotations.NotNull;
+import ui.utils.GameWidgetUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
 public class GameOverPanel extends JPanel {
+
+
     public GameOverPanel(@NotNull List<Player> winners) {
         this.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        String message = "<html>" + "<div style='text-align: center;'>";
+        String message = "<html>" + "<div style='text-align: center;'>" + GameWidgetUtils.getHtmlFont(GameWidgetUtils.getOptionPaneFontSize());
 
         if(winners.size() == 1) {
             message += "Игра окончена.<br>Победитель: " + winners.get(winners.size() - 1).name();

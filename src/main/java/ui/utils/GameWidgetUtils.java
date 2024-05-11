@@ -47,7 +47,7 @@ public class GameWidgetUtils {
     }
 
     public static Font getFont(int fontSize) {
-        Font font = null;
+        Font font;
 
         // Uploading font
         try {
@@ -60,5 +60,16 @@ public class GameWidgetUtils {
         }
 
         return font;
+    }
+
+    public static String getHtmlFont(int fontSize) {
+        return String.format("<font face=\"%s\" size=\"%d\">",
+                GameWidgetUtils.getFont(fontSize).getFontName(),
+                fontSize/5
+        );
+    }
+
+    public static int getOptionPaneFontSize() {
+        return 16;
     }
 }
