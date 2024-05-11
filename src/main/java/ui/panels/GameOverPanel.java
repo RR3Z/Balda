@@ -1,19 +1,22 @@
 package ui.panels;
 
 import model.Player;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
 public class GameOverPanel extends JPanel {
-    public GameOverPanel(List<Player> winners) {
+    public GameOverPanel(@NotNull List<Player> winners) {
         this.setLayout(new FlowLayout(FlowLayout.CENTER));
 
         String message = "<html>" + "<div style='text-align: center;'>";
+
         if(winners.size() == 1) {
             message += "Игра окончена.<br>Победитель: " + winners.get(winners.size() - 1).name() + "<br>Желаете начать новую игру?";
         }
+
         else if (winners.size() > 1) {
             message += "Игра окончена.<br>Победители:";
 
@@ -23,9 +26,11 @@ public class GameOverPanel extends JPanel {
 
             message += "<br>Желаете начать новую игру?";
         }
+
         else {
             message += "Игра окончена.<br>Победитель не определен";
         }
+
         message += "</div></html>";
 
         JLabel text = new JLabel(message);
