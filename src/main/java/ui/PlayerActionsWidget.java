@@ -195,7 +195,7 @@ public class PlayerActionsWidget extends JPanel {
                 }
 
                 if(!event.isUsedAlready() && !event.isKnown()) {
-                    String message = "<html><div style='text-align: center;'>" + htmlFont + "Было разыграно неизвестное слово.<br>Добавить в словарь?" + "</div></html>";
+                    String message = "<html><div style='text-align: center;'>" + htmlFont + "Было составлено неизвестное слово.<br>Добавить в словарь?" + "</div></html>";
                     int result = JOptionPane.showConfirmDialog(null, message, "Неизвестное слово", JOptionPane.OK_CANCEL_OPTION);
                     if(result == JOptionPane.OK_OPTION) {
                         _gameModel.activePlayer().addNewWordToDictionary();
