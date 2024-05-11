@@ -10,6 +10,7 @@ import model.events.PlayerActionEvent;
 import model.events.PlayerActionListener;
 import org.jetbrains.annotations.NotNull;
 import ui.buttons.KeyboardButton;
+import ui.enums.BorderType;
 import ui.enums.ColorType;
 import ui.utils.GameWidgetUtils;
 
@@ -73,23 +74,33 @@ public class KeyboardWidget extends JPanel {
         }
 
         @Override
-        public void mouseClicked(MouseEvent e) {
+        public void mousePressed(MouseEvent e) {
             if(KeyboardWidget.this.isEnabled()) {
                 // Logic
                 _gameModel.activePlayer().chooseLetter(_button.getText().charAt(0));
+                _button.setBorder(BorderFactory.createLineBorder(
+                        GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER),
+                        GameWidgetUtils.getBorderThickness(BorderType.DEFAULT))
+                );
             }
         }
 
         @Override
         public void mouseEntered(MouseEvent e) {
             if(KeyboardWidget.this.isEnabled()) {
-                _button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.HOVERED_BORDER)));
+                _button.setBorder(BorderFactory.createLineBorder(
+                        GameWidgetUtils.getColor(ColorType.DEFAULT_HIGHLIGHTED_BORDER),
+                        GameWidgetUtils.getBorderThickness(BorderType.BOLD))
+                );
             }
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            _button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER)));
+            _button.setBorder(BorderFactory.createLineBorder(
+                    GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER),
+                    GameWidgetUtils.getBorderThickness(BorderType.DEFAULT))
+            );
         }
     }
 

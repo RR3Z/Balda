@@ -7,12 +7,11 @@ import model.events.PlayerActionEvent;
 import model.events.PlayerActionListener;
 import org.jetbrains.annotations.NotNull;
 import ui.buttons.PlayerActionButton;
+import ui.enums.BorderType;
 import ui.enums.ColorType;
-import ui.panels.GameOverPanel;
 import ui.utils.GameWidgetUtils;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -60,23 +59,33 @@ public class PlayerActionsWidget extends JPanel {
         }
 
         @Override
-        public void mouseClicked(MouseEvent e) {
+        public void mousePressed(MouseEvent e) {
             if(_button.isEnabled()) {
                 // Logic
                 _gameModel.activePlayer().cancelActionOnField();
+                _button.setBorder(BorderFactory.createLineBorder(
+                        GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER),
+                        GameWidgetUtils.getBorderThickness(BorderType.DEFAULT))
+                );
             }
         }
 
         @Override
         public void mouseEntered(MouseEvent e) {
             if(_button.isEnabled()) {
-                _button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.HOVERED_BORDER)));
+                _button.setBorder(BorderFactory.createLineBorder(
+                        GameWidgetUtils.getColor(ColorType.DEFAULT_HIGHLIGHTED_BORDER),
+                        GameWidgetUtils.getBorderThickness(BorderType.BOLD))
+                );
             }
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            _button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER)));
+            _button.setBorder(BorderFactory.createLineBorder(
+                    GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER),
+                    GameWidgetUtils.getBorderThickness(BorderType.DEFAULT))
+            );
         }
     }
 
@@ -86,25 +95,34 @@ public class PlayerActionsWidget extends JPanel {
         public SkipTurnButtonMouseListener(PlayerActionButton button) {
             _button = button;
         }
-
         @Override
-        public void mouseClicked(MouseEvent e) {
+        public void mousePressed(MouseEvent e) {
             if(_button.isEnabled()) {
                 // Logic
                 _gameModel.activePlayer().skipTurn();
+                _button.setBorder(BorderFactory.createLineBorder(
+                        GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER),
+                        GameWidgetUtils.getBorderThickness(BorderType.DEFAULT))
+                );
             }
         }
 
         @Override
         public void mouseEntered(MouseEvent e) {
             if(_button.isEnabled()) {
-                _button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.HOVERED_BORDER)));
+                _button.setBorder(BorderFactory.createLineBorder(
+                        GameWidgetUtils.getColor(ColorType.HIGHLIGHTED_SKIP_TURN_BORDER),
+                        GameWidgetUtils.getBorderThickness(BorderType.BOLD))
+                );
             }
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            _button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER)));
+            _button.setBorder(BorderFactory.createLineBorder(
+                    GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER),
+                    GameWidgetUtils.getBorderThickness(BorderType.DEFAULT))
+            );
         }
     }
 
@@ -116,23 +134,33 @@ public class PlayerActionsWidget extends JPanel {
         }
 
         @Override
-        public void mouseClicked(MouseEvent e) {
+        public void mousePressed(MouseEvent e) {
             if(_button.isEnabled()) {
                 // Logic
                 _gameModel.activePlayer().submitWord();
+                _button.setBorder(BorderFactory.createLineBorder(
+                        GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER),
+                        GameWidgetUtils.getBorderThickness(BorderType.DEFAULT))
+                );
             }
         }
 
         @Override
         public void mouseEntered(MouseEvent e) {
             if(_button.isEnabled()) {
-                _button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.HOVERED_BORDER)));
+                _button.setBorder(BorderFactory.createLineBorder(
+                        GameWidgetUtils.getColor(ColorType.DEFAULT_HIGHLIGHTED_BORDER),
+                        GameWidgetUtils.getBorderThickness(BorderType.BOLD))
+                );
             }
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            _button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER)));
+            _button.setBorder(BorderFactory.createLineBorder(
+                    GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER),
+                    GameWidgetUtils.getBorderThickness(BorderType.DEFAULT))
+            );
         }
     }
 

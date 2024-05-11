@@ -8,6 +8,7 @@ import model.enums.PlayerState;
 import model.events.*;
 import org.jetbrains.annotations.NotNull;
 import ui.buttons.CellButton;
+import ui.enums.BorderType;
 import ui.enums.ColorType;
 import ui.utils.GameWidgetUtils;
 
@@ -74,7 +75,7 @@ public class GameFieldWidget extends JPanel {
         }
 
         @Override
-        public void mouseClicked(MouseEvent e) {
+        public void mousePressed(MouseEvent e) {
             if(GameFieldWidget.this.isEnabled()) {
                 _gameModel.activePlayer().chooseCell(GameWidgetUtils.getKeyByValue(_cells, _button));
             }
@@ -83,13 +84,19 @@ public class GameFieldWidget extends JPanel {
         @Override
         public void mouseEntered(MouseEvent e) {
             if(GameFieldWidget.this.isEnabled()) {
-                _button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.HOVERED_BORDER)));
+                _button.setBorder(BorderFactory.createLineBorder(
+                        GameWidgetUtils.getColor(ColorType.DEFAULT_HIGHLIGHTED_BORDER),
+                        GameWidgetUtils.getBorderThickness(BorderType.BOLD))
+                );
             }
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            _button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER)));
+            _button.setBorder(BorderFactory.createLineBorder(
+                    GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER),
+                    GameWidgetUtils.getBorderThickness(BorderType.DEFAULT))
+            );
         }
     }
 
