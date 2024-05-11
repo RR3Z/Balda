@@ -38,7 +38,7 @@ public class PlayersScoreTableWidget extends CustomJTable {
             Player player = _rowIndexToPlayer.get(i);
 
             if(player.state() == PlayerState.SELECTING_LETTER) {
-                TableUtils.highlightRow(this, i, GameWidgetUtils.getColor(ColorType.ACTIVE_PLAYER), GameWidgetUtils.getColor(ColorType.TRANSPARENT));
+                highlightRow(i, GameWidgetUtils.getColor(ColorType.ACTIVE_PLAYER), GameWidgetUtils.getColor(ColorType.TRANSPARENT));
             }
 
             playersScoreTableModel.setValueAt(player.scoreCounter().score(), i, playersScoreTableModel.getColumnCount() - 1);
