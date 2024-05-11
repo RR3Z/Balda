@@ -46,11 +46,21 @@ public class CustomJTable extends JTable {
             @Override
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                g.setColor(Color.BLACK);
+
+                // Border color
+                g.setColor(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER));
+
+                // Left vertical line
                 g.fillRect(0, 0, 1, getHeight());
+                // Top horizontal line
                 g.fillRect(0, 0, getWidth(), 1);
+                // Right vertical line
                 g.fillRect(getWidth() - 1, 0, 1, getHeight());
+                // Bottom horizontal line
                 g.fillRect(0, getHeight() - 1, getWidth(), 1);
+
+                // Text alignment
+                setHorizontalAlignment(SwingConstants.CENTER);
             }
 
             @Override
@@ -62,6 +72,9 @@ public class CustomJTable extends JTable {
                 } else {
                     component.setBackground(defaultColor);
                 }
+
+                // Text alignment
+                setHorizontalAlignment(SwingConstants.CENTER);
 
                 return component;
             }

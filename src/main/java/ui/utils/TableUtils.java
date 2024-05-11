@@ -11,12 +11,20 @@ public class TableUtils {
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
-            g.setColor(Color.BLACK); // Цвет линий
-            g.fillRect(0, 0, 1, getHeight());                       // Левая вертикальная линия
-            g.fillRect(0, 0, getWidth(), 1);                        // Верхняя горизонтальная линия
-            g.fillRect(getWidth() - 1, 0, 1, getHeight());          // Правая вертикальная линия
-            g.fillRect(0, getHeight() - 1, getWidth(), 1);          // Нижняя горизонтальная линия
 
+            // Border color
+            g.setColor(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER));
+
+            // Left vertical line
+            g.fillRect(0, 0, 1, getHeight());
+            // Top horizontal line
+            g.fillRect(0, 0, getWidth(), 1);
+            // Right vertical line
+            g.fillRect(getWidth() - 1, 0, 1, getHeight());
+            // Bottom horizontal line
+            g.fillRect(0, getHeight() - 1, getWidth(), 1);
+
+            // Text alignment
             setHorizontalAlignment(SwingConstants.CENTER);
         }
     };
@@ -25,11 +33,21 @@ public class TableUtils {
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
-            g.setColor(Color.BLACK); // Цвет линий
-            g.fillRect(0, 0, 1, getHeight());                       // Левая вертикальная линия
-            g.fillRect(0, 0, getWidth(), 1);                        // Верхняя горизонтальная линия
-            g.fillRect(getWidth() - 1, 0, 1, getHeight());          // Правая вертикальная линия
-            g.fillRect(0, getHeight() - 1, getWidth(), 1);          // Нижняя горизонтальная линия
+
+            // Border color
+            g.setColor(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER));
+
+            // Left vertical line
+            g.fillRect(0, 0, 1, getHeight());
+            // Top horizontal line
+            g.fillRect(0, 0, getWidth(), 1);
+            // Right vertical line
+            g.fillRect(getWidth() - 1, 0, 1, getHeight());
+            // Bottom horizontal line
+            g.fillRect(0, getHeight() - 1, getWidth(), 1);
+
+            // Text alignment
+            setHorizontalAlignment(SwingConstants.CENTER);
         }
     };
 }
