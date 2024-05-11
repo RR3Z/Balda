@@ -37,7 +37,7 @@ public class GameWidgetUtils {
             case SKIP_TURN_BUTTON -> new Color(235, 93, 95);
             case SUBMIT_WORD_BUTTON -> new Color(167, 201, 87);
             case ACTIVE_KEYBOARD_BUTTON -> new Color(167, 201, 87);
-            case INACTIVE_KEYBOARD_BUTTON -> Color.WHITE;
+            case TABLE_HEADER -> new Color(242, 232, 207);
             case ACTIVE_PLAYER -> new Color(167, 201, 87);
             default -> Color.RED;
         };
