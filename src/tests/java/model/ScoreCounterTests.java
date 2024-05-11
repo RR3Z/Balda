@@ -8,9 +8,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ScoreCounterTests {
     private ScoreCounter _scoreCounter;
 
-    public ScoreCounterTests() {
-    }
-
     @BeforeEach
     public void testSetup() {
         _scoreCounter = new ScoreCounter();
@@ -48,7 +45,6 @@ public class ScoreCounterTests {
 
         int expectedValue = startValue - decreaseValue;
 
-        assertTrue(_scoreCounter.decreaseScore(decreaseValue));
         assertEquals(expectedValue, _scoreCounter.score());
     }
 
@@ -61,7 +57,6 @@ public class ScoreCounterTests {
 
         int expectedValue = startValue - decreaseValue;
 
-        assertTrue(_scoreCounter.decreaseScore(decreaseValue));
         assertEquals(expectedValue, _scoreCounter.score());
     }
 
@@ -81,7 +76,6 @@ public class ScoreCounterTests {
 
         int expectedValue = startValue - decreaseValue;
 
-        assertTrue(_scoreCounter.decreaseScore(decreaseValue));
         assertEquals(expectedValue, _scoreCounter.score());
     }
 
@@ -92,7 +86,6 @@ public class ScoreCounterTests {
 
         int decreaseValue = 17;
 
-        assertFalse(_scoreCounter.decreaseScore(decreaseValue));
-        assertEquals(startValue, _scoreCounter.score());
+        assertThrows(IllegalArgumentException.class, () -> _scoreCounter.decreaseScore(decreaseValue));
     }
 }
