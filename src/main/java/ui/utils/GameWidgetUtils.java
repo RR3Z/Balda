@@ -50,7 +50,7 @@ public class GameWidgetUtils {
             // Uploading font
             try {
                 File fontFile = new File(RESOURCE_FOLDER + "SrirachaCyrillic.ttf");
-                FONT = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(fontFile)).deriveFont(Font.PLAIN, 26);
+                FONT = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(fontFile)).deriveFont(Font.PLAIN, 22);
                 GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(FONT);
             }
             catch (IOException | FontFormatException e) {
