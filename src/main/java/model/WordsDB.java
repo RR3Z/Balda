@@ -31,7 +31,6 @@ public class WordsDB {
 
     public boolean addToDictionary(@NotNull String word) {
         if (_dictionary.contains(word.toLowerCase())) {
-            fireFailedToAddNewWordToDictionary(word, true);
             return false;
         }
 
@@ -145,17 +144,6 @@ public class WordsDB {
             event.setWord(word);
 
             ((WordsDBListener) listener).addedNewWordToDictionary(event);
-        }
-    }
-
-    private void fireFailedToAddNewWordToDictionary(@NotNull String word, boolean isKnown) {
-        for (Object listener : _wordsDBListeners) {
-            WordsDBEvent event = new WordsDBEvent(this);
-            event.setPlayer(null);
-            event.setWord(word);
-            event.setIsKnown(isKnown);
-
-            ((WordsDBListener) listener).failedToAddNewWordToDictionary(event);
         }
     }
 }
