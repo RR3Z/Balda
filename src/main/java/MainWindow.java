@@ -4,8 +4,8 @@ import model.events.GameModelListener;
 import ui.*;
 import ui.panels.GameOverPanel;
 import ui.panels.GameSettingsPanel;
-import ui.tables.PlayersScoreTable;
-import ui.tables.UsedWordsTable;
+import ui.PlayersScoreTableWidget;
+import ui.UsedWordsTableWidget;
 
 import javax.swing.*;
 import java.awt.*;
@@ -54,7 +54,7 @@ public class MainWindow extends JFrame {
         content.removeAll();
 
         // ----------- Добавить виджеты -----------
-        JScrollPane playersScoreTablePane = new JScrollPane(new PlayersScoreTable(_gameModel));
+        JScrollPane playersScoreTablePane = new JScrollPane(new PlayersScoreTableWidget(_gameModel, new Object[]{ "Игрок", "Очки" }));
         playersScoreTablePane.setBorder(BorderFactory.createEmptyBorder());
         content.add(playersScoreTablePane);
 
@@ -67,7 +67,7 @@ public class MainWindow extends JFrame {
         centerPanel.add(new KeyboardWidget(_gameModel));
         content.add(centerPanel);
 
-        JScrollPane usedWordsTablePane = new JScrollPane(new UsedWordsTable(_gameModel.wordsDB()));
+        JScrollPane usedWordsTablePane = new JScrollPane(new UsedWordsTableWidget(_gameModel.wordsDB(), new Object[]{ "Слово", "Игрок" }));
         usedWordsTablePane.setBorder(BorderFactory.createEmptyBorder());
         content.add(usedWordsTablePane);
         // ----------------------------------------
