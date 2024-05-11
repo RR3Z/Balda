@@ -6,6 +6,7 @@ import model.enums.PlayerState;
 import model.events.PlayerActionEvent;
 import model.events.PlayerActionListener;
 import org.jetbrains.annotations.NotNull;
+import ui.buttons.PlayerActionButton;
 import ui.enums.ColorType;
 import ui.utils.GameWidgetUtils;
 
@@ -15,13 +16,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class PlayerActionsWidget extends JPanel {
-    public static final int BUTTON_WIDTH = 130;
-    public static final int BUTTON_HEIGHT = 40;
-
     private GameModel _gameModel;
-    private JButton _cancelActionButton;
-    private JButton _skipTurnButton;
-    private JButton _submitWordButton;
+
+    private PlayerActionButton _cancelActionButton;
+    private PlayerActionButton _skipTurnButton;
+    private PlayerActionButton _submitWordButton;
 
     public PlayerActionsWidget(GameModel gameModel) {
         super();
@@ -36,46 +35,26 @@ public class PlayerActionsWidget extends JPanel {
     }
 
     private void fillWidget() {
-        _cancelActionButton = new JButton("Отменить действие");
-        setupButtonView(_cancelActionButton);
+        _cancelActionButton = new PlayerActionButton("Отменить действие", GameWidgetUtils.getColor(ColorType.CANCEL_ACTION_BUTTON));
         _cancelActionButton.addMouseListener(new CancelActionButtonMouseListener(_cancelActionButton));
         _cancelActionButton.setEnabled(false);
         this.add(_cancelActionButton);
 
-        _skipTurnButton = new JButton("Пропустить ход");
-        setupButtonView(_skipTurnButton);
+        _skipTurnButton = new PlayerActionButton("Пропустить ход", GameWidgetUtils.getColor(ColorType.SKIP_TURN_BUTTON));
         _skipTurnButton.addMouseListener(new SkipTurnButtonMouseListener(_skipTurnButton));
         _skipTurnButton.setEnabled(true);
         this.add(_skipTurnButton);
 
-        _submitWordButton = new JButton("Подтвердить слово");
-        setupButtonView(_submitWordButton);
+        _submitWordButton = new PlayerActionButton("Подтвердить слово", GameWidgetUtils.getColor(ColorType.SUBMIT_WORD_BUTTON));
         _submitWordButton.setEnabled(false);
         _submitWordButton.addMouseListener(new SubmitWordButtonMouseListener(_submitWordButton));
         this.add(_submitWordButton);
     }
 
-    private void setupButtonView(JButton button) {
-        if(button == _cancelActionButton) {
-            button.setBackground(GameWidgetUtils.getColor(ColorType.CANCEL_ACTION_BUTTON));
-        } else if (button == _submitWordButton) {
-            button.setBackground(GameWidgetUtils.getColor(ColorType.SUBMIT_WORD_BUTTON));
-        } else {
-            button.setBackground(GameWidgetUtils.getColor(ColorType.SKIP_TURN_BUTTON));
-        }
-
-        button.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-
-        button.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER)));
-        button.setBorderPainted(true);
-
-        button.setFocusable(false);
-    }
-
     private class CancelActionButtonMouseListener extends MouseAdapter {
-        private JButton _button;
+        private PlayerActionButton _button;
 
-        public CancelActionButtonMouseListener(JButton button) {
+        public CancelActionButtonMouseListener(PlayerActionButton button) {
             _button = button;
         }
 
@@ -101,9 +80,9 @@ public class PlayerActionsWidget extends JPanel {
     }
 
     private class SkipTurnButtonMouseListener extends MouseAdapter {
-        private JButton _button;
+        private PlayerActionButton _button;
 
-        public SkipTurnButtonMouseListener(JButton button) {
+        public SkipTurnButtonMouseListener(PlayerActionButton button) {
             _button = button;
         }
 
@@ -129,9 +108,9 @@ public class PlayerActionsWidget extends JPanel {
     }
 
     private class SubmitWordButtonMouseListener extends MouseAdapter {
-        private JButton _button;
+        private PlayerActionButton _button;
 
-        public SubmitWordButtonMouseListener(JButton button) {
+        public SubmitWordButtonMouseListener(PlayerActionButton button) {
             _button = button;
         }
 
