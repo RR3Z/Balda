@@ -21,7 +21,7 @@ public class CellButton extends JButton {
 
         this.setOpaque(false);
         this.setContentAreaFilled(false);
-        this.setBackground(GameWidgetUtils.getColor(ColorType.INACTIVE_CELL));
+        this.setBackground(GameWidgetUtils.getColor(ColorType.TRANSPARENT));
 
         this.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER)));
         this.setBorderPainted(true);
