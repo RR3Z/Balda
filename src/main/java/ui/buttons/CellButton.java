@@ -1,6 +1,6 @@
 package ui.buttons;
 
-import ui.ColorType;
+import ui.enums.ColorType;
 import ui.utils.ButtonUtils;
 import ui.utils.GameWidgetUtils;
 

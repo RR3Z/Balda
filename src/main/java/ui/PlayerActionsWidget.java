@@ -6,6 +6,7 @@ import model.enums.PlayerState;
 import model.events.PlayerActionEvent;
 import model.events.PlayerActionListener;
 import org.jetbrains.annotations.NotNull;
+import ui.enums.ColorType;
 import ui.utils.GameWidgetUtils;
 
 import javax.swing.*;

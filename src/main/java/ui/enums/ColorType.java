@@ -1,4 +1,4 @@
-package ui;
+package ui.enums;
 
 public enum ColorType {
     TRANSPARENT,

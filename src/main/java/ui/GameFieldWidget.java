@@ -8,8 +8,8 @@ import model.enums.PlayerState;
 import model.events.*;
 import org.jetbrains.annotations.NotNull;
 import ui.buttons.CellButton;
+import ui.enums.ColorType;
 import ui.utils.GameWidgetUtils;
-import ui.utils.ButtonUtils;
 
 import javax.swing.*;
 import java.awt.*;

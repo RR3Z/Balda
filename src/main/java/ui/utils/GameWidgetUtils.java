@@ -1,6 +1,6 @@
 package ui.utils;
 
-import ui.ColorType;
+import ui.enums.ColorType;
 
 import java.awt.*;
 import java.util.Map;
