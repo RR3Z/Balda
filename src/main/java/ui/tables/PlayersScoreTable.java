@@ -2,6 +2,7 @@ package ui.tables;
 
 import model.GameModel;
 import model.Player;
+import model.enums.PlayerState;
 import model.events.GameModelEvent;
 import model.events.GameModelListener;
 import ui.enums.ColorType;
@@ -9,6 +10,7 @@ import ui.utils.GameWidgetUtils;
 import ui.utils.TableUtils;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
@@ -51,8 +53,8 @@ public class PlayersScoreTable extends JTable {
         this.setOpaque(false);
         this.setBackground(GameWidgetUtils.getColor(ColorType.TRANSPARENT));
 
-        this.setDefaultRenderer(Object.class, TableUtils.CUSTOM_TABLE_CELL_RENDERER);
-        header.setDefaultRenderer(TableUtils.CUSTOM_TABLE_CELL_RENDERER);
+        this.setDefaultRenderer(Object.class, TableUtils.DEFAULT_TABLE_CELL_RENDERER);
+        header.setDefaultRenderer(TableUtils.DEFAULT_TABLE_CELL_RENDERER);
         this.setIntercellSpacing(new Dimension(0, 0));
 
         header.setReorderingAllowed(false);
@@ -65,8 +67,45 @@ public class PlayersScoreTable extends JTable {
         for (int i = 0; i < _playersScoreTableModel.getRowCount(); i++) {
             Player player = _rowIndexToPlayer.get(i);
 
+            if(player.state() == PlayerState.SELECTING_LETTER) {
+                highlightRow(i);
+            }
+
             _playersScoreTableModel.setValueAt(player.scoreCounter().score(), i, getColumn(HEADERS[1]).getModelIndex());
         }
+    }
+
+    private void highlightRow(int rowIndex) {
+        DefaultTableCellRenderer highlightCellRenderer = new DefaultTableCellRenderer() {
+            @Override
+            public void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.setColor(Color.BLACK);
+                g.fillRect(0, 0, 1, getHeight());
+                g.fillRect(0, 0, getWidth(), 1);
+                g.fillRect(getWidth() - 1, 0, 1, getHeight());
+                g.fillRect(0, getHeight() - 1, getWidth(), 1);
+            }
+
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                if (row == rowIndex) {
+                    component.setBackground(GameWidgetUtils.getColor(ColorType.ACTIVE_PLAYER));
+                } else {
+                    component.setBackground(GameWidgetUtils.getColor(ColorType.TRANSPARENT));
+                }
+
+                return component;
+            }
+        };
+
+        for (int i = 0; i < this.getColumnCount(); i++) {
+            this.getColumnModel().getColumn(i).setCellRenderer(highlightCellRenderer);
+        }
+
+        _playersScoreTableModel.fireTableDataChanged();
     }
 
     private class GameController implements GameModelListener {

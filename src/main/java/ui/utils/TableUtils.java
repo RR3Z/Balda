@@ -1,10 +1,13 @@
 package ui.utils;
 
+import ui.enums.ColorType;
+
+import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 
 public class TableUtils {
-    public static DefaultTableCellRenderer CUSTOM_TABLE_CELL_RENDERER = new DefaultTableCellRenderer() {
+    public static DefaultTableCellRenderer DEFAULT_TABLE_CELL_RENDERER = new DefaultTableCellRenderer() {
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);

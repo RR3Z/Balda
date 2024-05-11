@@ -37,8 +37,8 @@ public class UsedWordsTable extends JTable {
         this.setOpaque(false);
         this.setBackground(GameWidgetUtils.getColor(ColorType.TRANSPARENT));
 
-        this.setDefaultRenderer(Object.class, TableUtils.CUSTOM_TABLE_CELL_RENDERER);
-        header.setDefaultRenderer(TableUtils.CUSTOM_TABLE_CELL_RENDERER);
+        this.setDefaultRenderer(Object.class, TableUtils.DEFAULT_TABLE_CELL_RENDERER);
+        header.setDefaultRenderer(TableUtils.DEFAULT_TABLE_CELL_RENDERER);
         this.setIntercellSpacing(new Dimension(0, 0));
 
         header.setReorderingAllowed(false);

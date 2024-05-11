@@ -25,13 +25,14 @@ public class GameWidgetUtils {
             case DEFAULT_BORDER -> Color.BLACK;
             case HOVERED_BORDER -> Color.ORANGE;
             case CELL_IN_WORD -> new Color(167, 201, 87);
-            case CHANGED_CELL -> new Color(188, 71, 73);
+            case CHANGED_CELL -> new Color(235, 93, 95);
             case INACTIVE_CELL -> Color.WHITE;
             case CANCEL_ACTION_BUTTON -> new Color(167, 201, 87);
             case SKIP_TURN_BUTTON -> new Color(235, 93, 95);
             case SUBMIT_WORD_BUTTON -> new Color(167, 201, 87);
             case ACTIVE_KEYBOARD_BUTTON -> new Color(167, 201, 87);
             case INACTIVE_KEYBOARD_BUTTON -> Color.WHITE;
+            case ACTIVE_PLAYER -> new Color(167, 201, 87);
             default -> Color.RED;
         };
     }
