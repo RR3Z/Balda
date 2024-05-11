@@ -42,18 +42,18 @@ public class PlayersScoreTable extends JTable {
 
     private void setupTableView() {
         JTableHeader header = this.getTableHeader();
-        header.setOpaque(true);
+        header.setOpaque(false);
         header.setBackground(WidgetsViewCustomizations.TRANSPARENT_COLOR);
 
-        this.setOpaque(true);
+        this.setOpaque(false);
         this.setBackground(WidgetsViewCustomizations.TRANSPARENT_COLOR);
 
         //this.setBorder(BorderFactory.createLineBorder(WidgetsViewCustomizations.TABLE_BORDER_COLOR, 1));
         //this.setGridColor(WidgetsViewCustomizations.TABLE_BORDER_COLOR);
         //this.setIntercellSpacing(new Dimension(1, 1));
 
-        this.getTableHeader().setReorderingAllowed(false);
-        this.getTableHeader().setResizingAllowed(false);
+        header.setReorderingAllowed(false);
+        header.setResizingAllowed(false);
         this.setCellSelectionEnabled(false);
         this.setFocusable(false);
     }
@@ -69,8 +69,7 @@ public class PlayersScoreTable extends JTable {
     private class GameController implements GameModelListener {
         @Override
         public void playerExchanged(GameModelEvent event) {
-            // Вот здесь я обновляю кол-во очков и меняю цвет строки (вызываю метод update)
-            update();
+            PlayersScoreTable.this.update();
         }
 
         @Override
