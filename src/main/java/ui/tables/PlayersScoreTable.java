@@ -77,39 +77,6 @@ public class PlayersScoreTable extends JTable {
         }
     }
 
-    private void highlightRow(int rowIndex) {
-        DefaultTableCellRenderer highlightCellRenderer = new DefaultTableCellRenderer() {
-            @Override
-            public void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.setColor(Color.BLACK);
-                g.fillRect(0, 0, 1, getHeight());
-                g.fillRect(0, 0, getWidth(), 1);
-                g.fillRect(getWidth() - 1, 0, 1, getHeight());
-                g.fillRect(0, getHeight() - 1, getWidth(), 1);
-            }
-
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-                if (row == rowIndex) {
-                    component.setBackground(GameWidgetUtils.getColor(ColorType.ACTIVE_PLAYER));
-                } else {
-                    component.setBackground(GameWidgetUtils.getColor(ColorType.TRANSPARENT));
-                }
-
-                return component;
-            }
-        };
-
-        for (int i = 0; i < this.getColumnCount(); i++) {
-            this.getColumnModel().getColumn(i).setCellRenderer(highlightCellRenderer);
-        }
-
-        _playersScoreTableModel.fireTableDataChanged();
-    }
-
     private class GameController implements GameModelListener {
         @Override
         public void playerExchanged(GameModelEvent event) {
