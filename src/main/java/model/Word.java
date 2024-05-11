@@ -1,13 +1,9 @@
 package model;
 
-import model.events.WordEvent;
-import model.events.WordListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.EventListener;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 public class Word {
     private List<Cell> _cells = new ArrayList<>();
@@ -34,22 +30,18 @@ public class Word {
 
     public boolean addLetter(@NotNull Cell cell) {
         if (cell.letter() == null) {
-            fireFailedToAddLetter(cell, false, false, true);
             return false;
         }
 
         if (containCell(cell)) {
-            fireFailedToAddLetter(cell, false, true, false);
             return false;
         }
 
         if (!isNeighborOfLastCell(cell)) {
-            fireFailedToAddLetter(cell, true, false, false);
             return false;
         }
 
         _cells.add(cell);
-        // TODO: ивент об успешности действия?
         return true;
     }
 
@@ -69,23 +61,4 @@ public class Word {
         _cells.clear();
     }
 
-    /* ============================================================================================================== */
-    // Listeners
-    private List<EventListener> _wordListeners = new ArrayList<>();
-
-    public void addWordListener(@NotNull WordListener listener) {
-        _wordListeners.add(listener);
-    }
-
-    private void fireFailedToAddLetter(@NotNull Cell cell, boolean isNotNeighborOfLastCell, boolean isContainCellAlready, boolean isCellWithoutLetter) {
-        for (Object listener : _wordListeners) {
-            WordEvent event = new WordEvent(this);
-            event.setCell(cell);
-            event.setIsCellWithoutLetter(isCellWithoutLetter);
-            event.setIsContainCellAlready(isContainCellAlready);
-            event.setIsNotNeighborOfLastCell(isNotNeighborOfLastCell);
-
-            ((WordListener) listener).failedToAddLetter(event);
-        }
-    }
 }
