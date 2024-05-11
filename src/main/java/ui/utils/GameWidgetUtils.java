@@ -65,7 +65,7 @@ public class GameWidgetUtils {
     public static String getHtmlFont(int fontSize) {
         return String.format("<font face=\"%s\" size=\"%d\">",
                 GameWidgetUtils.getFont(fontSize).getFontName(),
-                fontSize/5
+                fontSize/4
         );
     }
 
