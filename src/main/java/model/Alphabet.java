@@ -94,6 +94,7 @@ public class Alphabet {
     private void fireForgetSelectedLetter(Character letter) {
         for (Object listener : _alphabetListeners) {
             AlphabetEvent event = new AlphabetEvent(this);
+            event.setAlphabet(this);
             event.setLetter(letter);
 
             ((AlphabetListener) listener).forgetSelectedLetter(event);
