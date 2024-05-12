@@ -117,10 +117,12 @@ public class GameFieldWidget extends JPanel {
         @Override
         public void placedLetter(@NotNull PlayerActionEvent event) {
             Cell changedCell = event.cell();
-            _cells.get(changedCell).setText(String.valueOf(changedCell.letter()));
-            _cells.get(changedCell).setOpaque(true);
-            _cells.get(changedCell).setContentAreaFilled(true);
-            _cells.get(changedCell).setBackground(GameWidgetUtils.getColor(ColorType.CHANGED_CELL));
+            CellButton button = _cells.get(changedCell);
+
+            button.setText(String.valueOf(changedCell.letter()));
+            button.setOpaque(true);
+            button.setContentAreaFilled(true);
+            button.setBackground(GameWidgetUtils.getColor(ColorType.CHANGED_CELL));
         }
 
         @Override
