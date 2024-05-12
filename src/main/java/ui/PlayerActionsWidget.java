@@ -199,6 +199,8 @@ public class PlayerActionsWidget extends JPanel {
                     int result = JOptionPane.showConfirmDialog(null, message, "Неизвестное слово", JOptionPane.OK_CANCEL_OPTION);
                     if(result == JOptionPane.OK_OPTION) {
                         _gameModel.activePlayer().addNewWordToDictionary();
+                    } else {
+                        _gameModel.activePlayer().cancelActionOnField();
                     }
                 }
             }
