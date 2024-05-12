@@ -176,17 +176,14 @@ public class GameField {
         _changedCell = null;
     }
 
-    public boolean setChangedCell(@NotNull Cell changedCell) {
+    public void setChangedCell(@NotNull Cell changedCell) {
         if(_changedCell != null) {
             throw new IllegalArgumentException("GameField -> selectChangedCell: trying to select a changed cell when it has already been selected");
         }
 
         if(cell(changedCell.position()) != null) {
             _changedCell = changedCell;
-            return true;
         }
-
-        return false;
     }
 
     private class GameModelObserve implements GameModelListener {
