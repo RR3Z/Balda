@@ -13,7 +13,14 @@ import java.awt.*;
 public class CustomJTable extends JTable {
     private final int FONT_SIZE = 20;
 
-    private final int TABLE_ROW_HEIGHT = this.getRowHeight() + this.getFont().getSize();
+    public CustomJTable() {
+        super();
+
+        setupTableView();
+
+        DefaultTableModel tableModel = new DefaultTableModel();
+        this.setModel(tableModel);
+    }
 
     public CustomJTable(Object[] headers) {
         super();
@@ -26,6 +33,11 @@ public class CustomJTable extends JTable {
     }
 
     private void setupTableView() {
+        this.setFont(GameWidgetUtils.getFont(FONT_SIZE));
+
+        int tableRowHeight = this.getRowHeight() + this.getFont().getSize();
+        this.setRowHeight(tableRowHeight);
+
         JTableHeader header = this.getTableHeader();
         header.setDefaultRenderer(TableUtils.DEFAULT_TABLE_HEADER_RENDERER);
         header.setOpaque(false);
@@ -39,10 +51,6 @@ public class CustomJTable extends JTable {
         this.setIntercellSpacing(new Dimension(0, 0));
         this.setCellSelectionEnabled(false);
         this.setFocusable(false);
-
-        this.setRowHeight(TABLE_ROW_HEIGHT);
-
-        this.setFont(GameWidgetUtils.getFont(FONT_SIZE));
     }
 
     public void highlightRow(int rowIndex, Color highlightColor, Color defaultColor) {
