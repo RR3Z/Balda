@@ -205,8 +205,6 @@ public class GameFieldWidget extends JPanel {
                     }
                 }
             }
-
-            GameFieldWidget.this.repaint();
         }
     }
 }
