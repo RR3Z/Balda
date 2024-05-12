@@ -65,7 +65,7 @@ public class MainWindow extends JFrame {
         // Field and keyboard
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-        centerPanel.add(new GameFieldWidget(_gameModel));
+        centerPanel.add(new GameFieldWidget(_gameModel, _gameModel.gameField()));
         centerPanel.add(Box.createRigidArea(new Dimension(5, 5)));
         centerPanel.add(new PlayerActionsWidget(_gameModel));
         centerPanel.add(Box.createRigidArea(new Dimension(5, 5)));

@@ -23,19 +23,18 @@ public class GameFieldWidget extends JPanel {
     private GameModel _gameModel;
     private Map<Cell, CellButton> _cells = new HashMap<>();
 
-    public GameFieldWidget(GameModel gameModel) {
+    public GameFieldWidget(GameModel gameModel, GameField gameField) {
         super();
         this.setEnabled(false);
 
         _gameModel = gameModel;
-        GameField gameField = _gameModel.gameField();
         gameField.addGameFieldListener(new GameFieldController());
 
         for(Player player: _gameModel.players()) {
             player.addPlayerActionListener(new PlayerController());
         }
 
-        fillWidget(gameField.height(), gameField.width());
+        fillWidget(gameField);
 
         this.setLayout(new GridLayout(gameField.height(), gameField.width()));
 
@@ -46,11 +45,9 @@ public class GameFieldWidget extends JPanel {
         );
     }
 
-    private void fillWidget(int numberOfRows, int numberOfColumns) {
-        GameField gameField = _gameModel.gameField();
-
-        for(int i = 0; i < numberOfRows; i++) {
-            for(int j = 0; j < numberOfColumns; j++){
+    private void fillWidget(GameField gameField) {
+        for(int i = 0; i < gameField.height(); i++) {
+            for(int j = 0; j < gameField.width(); j++){
                 Cell cell = gameField.cell(new Point(j, i));
 
                 CellButton cellButton = new CellButton();
@@ -197,7 +194,7 @@ public class GameFieldWidget extends JPanel {
 
         @Override
         public void placedStartWord(GameFieldEvent event) {
-            GameField gameField = _gameModel.gameField();
+            GameField gameField = event.gameField();
 
             for(int i = 0; i < gameField.height(); i++) {
                 for(int j = 0; j < gameField.width(); j++){
