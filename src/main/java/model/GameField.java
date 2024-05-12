@@ -220,6 +220,7 @@ public class GameField {
     private void fireForgetChangedCell(Cell cell) {
         for (Object listener : _gameFieldListeners) {
             GameFieldEvent event = new GameFieldEvent(this);
+            event.setGameField(this);
             event.setCell(cell);
 
             ((GameFieldListener) listener).forgetChangedCell(event);
@@ -229,6 +230,7 @@ public class GameField {
     private void firePlacedStartWord(String word) {
         for (Object listener : _gameFieldListeners) {
             GameFieldEvent event = new GameFieldEvent(this);
+            event.setGameField(this);
             event.setWord(word);
 
             ((GameFieldListener) listener).placedStartWord(event);
