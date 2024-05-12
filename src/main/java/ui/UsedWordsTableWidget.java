@@ -37,9 +37,4 @@ public class UsedWordsTableWidget extends CustomJTable {
             // DON'T NEED IT HERE
         }
     }
-
-    @Override
-    public boolean isCellEditable(int row, int column) {
-        return false;
-    };
 }
