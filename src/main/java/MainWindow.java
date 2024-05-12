@@ -69,7 +69,7 @@ public class MainWindow extends JFrame {
         centerPanel.add(Box.createRigidArea(new Dimension(5, 5)));
         centerPanel.add(new PlayerActionsWidget(_gameModel));
         centerPanel.add(Box.createRigidArea(new Dimension(5, 5)));
-        centerPanel.add(new KeyboardWidget(_gameModel));
+        centerPanel.add(new KeyboardWidget(_gameModel, _gameModel.alphabet()));
         content.add(centerPanel, constraints);
 
         constraints.gridx = 2;
