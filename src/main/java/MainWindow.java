@@ -2,6 +2,7 @@ import model.GameModel;
 import model.events.GameModelEvent;
 import model.events.GameModelListener;
 import ui.*;
+import ui.menus.MainMenu;
 import ui.panels.GameOverPanel;
 import ui.panels.GameSettingsPanel;
 import ui.PlayersScoreTableWidget;
@@ -24,7 +25,10 @@ public class MainWindow extends JFrame {
         this.getContentPane().setLayout(new GridBagLayout());
 
         JMenuBar mainMenuBar = new JMenuBar();
-        mainMenuBar.add(createMainMenu());
+        MainMenu mainMenu = new MainMenu();
+        mainMenu.setStartNewGameAction(new StartNewGameAction());
+        mainMenu.setExitGameAction(new ExitGameAction());
+        mainMenuBar.add(mainMenu);
         this.setJMenuBar(mainMenuBar);
         
         UIManager.put("OptionPane.messageFont", GameWidgetUtils.getFont(GameWidgetUtils.getOptionPaneFontSize()));
@@ -33,22 +37,6 @@ public class MainWindow extends JFrame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension windowSize = new Dimension(400, 200);
         this.setBounds(screenSize.width/2 - windowSize.width/2, screenSize.height/2 - windowSize.height/2, windowSize.width, windowSize.height);
-    }
-
-    private JMenu createMainMenu() {
-        JMenu mainMenu = new JMenu("Главное меню");
-
-        JMenuItem startNewGameItem = new JMenuItem(new StartNewGameAction());
-        JMenuItem exitGameItem = new JMenuItem(new ExitAction());
-
-        mainMenu.add(startNewGameItem);
-        mainMenu.add(exitGameItem);
-
-        mainMenu.setFont(GameWidgetUtils.getFont(14));
-        startNewGameItem.setFont(GameWidgetUtils.getFont(14));
-        exitGameItem.setFont(GameWidgetUtils.getFont(14));
-
-        return mainMenu;
     }
 
     private void startNewGame(int width, int height) {
@@ -128,8 +116,8 @@ public class MainWindow extends JFrame {
         }
     }
 
-    private class ExitAction extends AbstractAction {
-        public ExitAction() {
+    private class ExitGameAction extends AbstractAction {
+        public ExitGameAction() {
             this.putValue(NAME, "Выход");
         }
 
