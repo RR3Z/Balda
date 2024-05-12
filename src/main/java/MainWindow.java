@@ -90,13 +90,13 @@ public class MainWindow extends JFrame {
         this.setBounds(screenSize.width/2 - windowSize.width/2, screenSize.height/2 - windowSize.height/2, windowSize.width, windowSize.height);
     }
 
-    private void disableAllGameWidgets(Container container) {
+    private void disableGameWidgets(Container container) {
         Component[] components = container.getComponents();
         for (Component component : components) {
             component.setEnabled(false);
 
             if (!(component instanceof JMenuBar || component instanceof JMenu || component instanceof JMenuItem) && component instanceof Container) {
-                disableAllGameWidgets((Container) component);
+                disableGameWidgets((Container) component);
             }
         }
     }
@@ -130,7 +130,7 @@ public class MainWindow extends JFrame {
     private class GameController implements GameModelListener {
         @Override
         public void gameIsFinished(GameModelEvent event) {
-            MainWindow.this.disableAllGameWidgets(MainWindow.this);
+            MainWindow.this.disableGameWidgets(MainWindow.this);
 
             JOptionPane.showMessageDialog(null, new GameOverPanel(event.winners()), "Конец игры", JOptionPane.PLAIN_MESSAGE);
         }
