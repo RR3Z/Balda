@@ -15,7 +15,7 @@ public class GameOverPanel extends JPanel {
     public GameOverPanel(@NotNull List<Player> winners) {
         this.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        String message = "<html>" + "<div style='text-align: center;'>" + GameWidgetUtils.getHtmlFont(GameWidgetUtils.getOptionPaneFontSize());
+        String message = "<html>" + "<div style='text-align: center;'>" + GameWidgetUtils.getHtmlFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE);
 
         if(winners.size() == 1) {
             message += "Игра окончена.<br>Победитель: " + winners.get(winners.size() - 1).name();

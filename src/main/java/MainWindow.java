@@ -31,8 +31,8 @@ public class MainWindow extends JFrame {
         mainMenuBar.add(mainMenu);
         this.setJMenuBar(mainMenuBar);
         
-        UIManager.put("OptionPane.messageFont", GameWidgetUtils.getFont(GameWidgetUtils.getOptionPaneFontSize()));
-        UIManager.put("OptionPane.buttonFont", GameWidgetUtils.getFont(GameWidgetUtils.getOptionPaneFontSize()));
+        UIManager.put("OptionPane.messageFont", GameWidgetUtils.getFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE));
+        UIManager.put("OptionPane.buttonFont", GameWidgetUtils.getFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE));
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension windowSize = new Dimension(400, 200);

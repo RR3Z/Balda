@@ -187,7 +187,7 @@ public class PlayerActionsWidget extends JPanel {
         @Override
         public void failedToSubmitWord(@NotNull PlayerActionEvent event) {
             if(event.player().state() == PlayerState.FORMS_WORD) {
-                String htmlFont = GameWidgetUtils.getHtmlFont(GameWidgetUtils.getOptionPaneFontSize());
+                String htmlFont = GameWidgetUtils.getHtmlFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE);
 
                 if(event.isUsedAlready() && event.isKnown()) {
                     String message = "<html><div style='text-align: center;'>" + htmlFont + "Слово уже было сыграно (см. таблицу справа)." + "</div></html>";
@@ -207,7 +207,7 @@ public class PlayerActionsWidget extends JPanel {
         @Override
         public void submittedWordWithoutChangeableCell(@NotNull PlayerActionEvent event) {
             if(event.player() == _gameModel.activePlayer()) {
-                String message = "<html><div style='text-align: center;'>" + GameWidgetUtils.getHtmlFont(GameWidgetUtils.getOptionPaneFontSize()) + "В составленном слове отсутствует измененная ячейка" + "</div></html>";
+                String message = "<html><div style='text-align: center;'>" + GameWidgetUtils.getHtmlFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE) + "В составленном слове отсутствует измененная ячейка" + "</div></html>";
                 JOptionPane.showMessageDialog(null, message, "Ошибка", JOptionPane.WARNING_MESSAGE);
             }
         }
@@ -215,7 +215,7 @@ public class PlayerActionsWidget extends JPanel {
         @Override
         public void addedNewWordToDictionary(@NotNull PlayerActionEvent event) {
             if(event.player().state() == PlayerState.FORMS_WORD) {
-                String message = "<html><div style='text-align: center;'>" + GameWidgetUtils.getHtmlFont(GameWidgetUtils.getOptionPaneFontSize()) + "Слово \"" + event.word() + "\" успешно добавлено" + "</div></html>";
+                String message = "<html><div style='text-align: center;'>" + GameWidgetUtils.getHtmlFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE) + "Слово \"" + event.word() + "\" успешно добавлено" + "</div></html>";
                 JOptionPane.showMessageDialog(null, message, "Новое слово", JOptionPane.PLAIN_MESSAGE);
                 _gameModel.activePlayer().submitWord();
             }

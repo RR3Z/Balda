@@ -15,6 +15,8 @@ public class GameWidgetUtils {
     public final static int MIN_FIELD_SIZE_SPINNER_VALUE = 2;
     public final static int MAX_FIELD_SIZE_SPINNER_VALUE = 14;
 
+    public final static int OPTION_PANE_FONT_SIZE = 16;
+
     public static  <K, V> K getKeyByValue(Map<K, V> map, V value) {
         for (Map.Entry<K, V> entry : map.entrySet()) {
             if (value.equals(entry.getValue())) {
@@ -67,9 +69,5 @@ public class GameWidgetUtils {
                 GameWidgetUtils.getFont(fontSize).getFontName(),
                 fontSize/4
         );
-    }
-
-    public static int getOptionPaneFontSize() {
-        return 16;
     }
 }

@@ -22,9 +22,9 @@ public class GameSettingsPanel extends JPanel {
         fieldSizesPanel.add(_heightSpinner);
         // -----------------------------------------
 
-        _widthSpinner.setFont(GameWidgetUtils.getFont(GameWidgetUtils.getOptionPaneFontSize()));
-        _heightSpinner.setFont(GameWidgetUtils.getFont(GameWidgetUtils.getOptionPaneFontSize()));
-        fieldSizesLabel.setFont(GameWidgetUtils.getFont(GameWidgetUtils.getOptionPaneFontSize()));
+        _widthSpinner.setFont(GameWidgetUtils.getFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE));
+        _heightSpinner.setFont(GameWidgetUtils.getFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE));
+        fieldSizesLabel.setFont(GameWidgetUtils.getFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE));
 
         this.add(fieldSizesPanel);
     }
