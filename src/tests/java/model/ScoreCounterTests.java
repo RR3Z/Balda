@@ -8,13 +8,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ScoreCounterTests {
     private ScoreCounter _scoreCounter;
 
-    @BeforeEach
-    public void testSetup() {
-        _scoreCounter = new ScoreCounter();
-    }
-
     @Test
     public void test_increaseScore_OnPositiveValue() {
+        _scoreCounter = new ScoreCounter();
         int amount = 15;
         _scoreCounter.increaseScore(amount);
 
@@ -23,6 +19,7 @@ public class ScoreCounterTests {
 
     @Test
     public void test_increaseScore_OnNegativeValue() {
+        _scoreCounter = new ScoreCounter();
         int amount = -15;
 
         assertThrows(IllegalArgumentException.class, () -> _scoreCounter.increaseScore(amount));
@@ -30,6 +27,7 @@ public class ScoreCounterTests {
 
     @Test
     public void test_increaseScore_OnZeroValue() {
+        _scoreCounter = new ScoreCounter();
         int amount = 0;
         _scoreCounter.increaseScore(amount);
 
