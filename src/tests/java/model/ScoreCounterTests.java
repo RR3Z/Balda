@@ -39,9 +39,9 @@ public class ScoreCounterTests {
     @Test
     public void test_decreaseScore_ByValidValue() {
         int startValue = 16;
-        _scoreCounter.increaseScore(startValue);
-
+        _scoreCounter = new ScoreCounter(startValue);
         int decreaseValue = 15;
+        _scoreCounter.decreaseScore(decreaseValue);
 
         int expectedValue = startValue - decreaseValue;
 
@@ -51,9 +51,9 @@ public class ScoreCounterTests {
     @Test
     public void test_decreaseScore_ScoreIsZero() {
         int startValue = 16;
-        _scoreCounter.increaseScore(startValue);
-
+        _scoreCounter = new ScoreCounter(startValue);
         int decreaseValue = 16;
+        _scoreCounter.decreaseScore(decreaseValue);
 
         int expectedValue = startValue - decreaseValue;
 
@@ -70,9 +70,9 @@ public class ScoreCounterTests {
     @Test
     public void test_decreaseScore_OnZeroValue() {
         int startValue = 16;
-        _scoreCounter.increaseScore(startValue);
-
+        _scoreCounter = new ScoreCounter(startValue);
         int decreaseValue = 0;
+        _scoreCounter.decreaseScore(decreaseValue);
 
         int expectedValue = startValue - decreaseValue;
 
@@ -82,8 +82,7 @@ public class ScoreCounterTests {
     @Test
     public void test_decreaseScore_MoreThanItContains() {
         int startValue = 16;
-        _scoreCounter.increaseScore(startValue);
-
+        _scoreCounter = new ScoreCounter(startValue);
         int decreaseValue = 17;
 
         assertThrows(IllegalArgumentException.class, () -> _scoreCounter.decreaseScore(decreaseValue));
