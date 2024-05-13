@@ -1,5 +1,7 @@
 package ui.buttons;
 
+import ui.enums.BorderType;
+import ui.enums.CellButtonState;
 import ui.enums.ColorType;
 import ui.utils.GameWidgetUtils;
 
@@ -25,5 +27,19 @@ public class PlayerActionButton extends JButton {
         this.setFont(GameWidgetUtils.font(FONT_SIZE));
 
         this.setFocusable(false);
+    }
+
+    public void highlight(boolean isHighlighted) {
+        if(isHighlighted) {
+            this.setBorder(BorderFactory.createLineBorder(
+                    GameWidgetUtils.color(ColorType.HIGHLIGHTED_BORDER),
+                    GameWidgetUtils.borderThickness(BorderType.EXTRA_BOLD))
+            );
+        } else {
+            this.setBorder(BorderFactory.createLineBorder(
+                    GameWidgetUtils.color(ColorType.DEFAULT_BORDER),
+                    GameWidgetUtils.borderThickness(BorderType.DEFAULT))
+            );
+        }
     }
 }

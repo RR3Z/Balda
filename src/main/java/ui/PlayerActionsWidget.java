@@ -62,29 +62,19 @@ public class PlayerActionsWidget extends JPanel {
             if(_button.isEnabled()) {
                 // Logic
                 _gameModel.activePlayer().cancelActionOnField();
-                _button.setBorder(BorderFactory.createLineBorder(
-                        GameWidgetUtils.color(ColorType.DEFAULT_BORDER),
-                        GameWidgetUtils.borderThickness(BorderType.DEFAULT))
-                );
             }
         }
 
         @Override
         public void mouseEntered(MouseEvent e) {
             if(_button.isEnabled()) {
-                _button.setBorder(BorderFactory.createLineBorder(
-                        GameWidgetUtils.color(ColorType.HIGHLIGHTED_BORDER),
-                        GameWidgetUtils.borderThickness(BorderType.EXTRA_BOLD))
-                );
+                _button.highlight(true);
             }
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            _button.setBorder(BorderFactory.createLineBorder(
-                    GameWidgetUtils.color(ColorType.DEFAULT_BORDER),
-                    GameWidgetUtils.borderThickness(BorderType.DEFAULT))
-            );
+            _button.highlight(false);
         }
     }
 
@@ -99,29 +89,19 @@ public class PlayerActionsWidget extends JPanel {
             if(_button.isEnabled()) {
                 // Logic
                 _gameModel.activePlayer().skipTurn();
-                _button.setBorder(BorderFactory.createLineBorder(
-                        GameWidgetUtils.color(ColorType.DEFAULT_BORDER),
-                        GameWidgetUtils.borderThickness(BorderType.DEFAULT))
-                );
             }
         }
 
         @Override
         public void mouseEntered(MouseEvent e) {
             if(_button.isEnabled()) {
-                _button.setBorder(BorderFactory.createLineBorder(
-                        GameWidgetUtils.color(ColorType.HIGHLIGHTED_SKIP_TURN_BORDER),
-                        GameWidgetUtils.borderThickness(BorderType.EXTRA_BOLD))
-                );
+                _button.highlight(true);
             }
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            _button.setBorder(BorderFactory.createLineBorder(
-                    GameWidgetUtils.color(ColorType.DEFAULT_BORDER),
-                    GameWidgetUtils.borderThickness(BorderType.DEFAULT))
-            );
+            _button.highlight(false);
         }
     }
 
@@ -137,29 +117,19 @@ public class PlayerActionsWidget extends JPanel {
             if(_button.isEnabled()) {
                 // Logic
                 _gameModel.activePlayer().submitWord();
-                _button.setBorder(BorderFactory.createLineBorder(
-                        GameWidgetUtils.color(ColorType.DEFAULT_BORDER),
-                        GameWidgetUtils.borderThickness(BorderType.DEFAULT))
-                );
             }
         }
 
         @Override
         public void mouseEntered(MouseEvent e) {
             if(_button.isEnabled()) {
-                _button.setBorder(BorderFactory.createLineBorder(
-                        GameWidgetUtils.color(ColorType.HIGHLIGHTED_BORDER),
-                        GameWidgetUtils.borderThickness(BorderType.EXTRA_BOLD))
-                );
+                _button.highlight(true);
             }
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            _button.setBorder(BorderFactory.createLineBorder(
-                    GameWidgetUtils.color(ColorType.DEFAULT_BORDER),
-                    GameWidgetUtils.borderThickness(BorderType.DEFAULT))
-            );
+            _button.highlight(false);
         }
     }
 
