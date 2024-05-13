@@ -1,6 +1,9 @@
 import model.GameModel;
-import model.events.GameModelEvent;
-import model.events.GameModelListener;
+import model.Player;
+import model.WordsDB;
+import model.enums.PlayerState;
+import model.events.*;
+import org.jetbrains.annotations.NotNull;
 import ui.*;
 import ui.menus.MainMenu;
 import ui.panels.GameOverPanel;
@@ -44,6 +47,12 @@ public class MainWindow extends JFrame {
         _gameModel = new GameModel(width, height);
         _gameModel.addGameModelListener(new GameController());
 
+        _gameModel.wordsDB().addWordsDBListener(new WordsDBController());
+
+        for(Player player: _gameModel.players()) {
+            player.addPlayerActionListener(new PlayerController());
+        }
+
         // Clear MainWindow
         JPanel content = (JPanel) this.getContentPane();
         content.removeAll();
@@ -51,6 +60,7 @@ public class MainWindow extends JFrame {
         // Widgets
         // ============================================================================================================
         GridBagConstraints constraints = new GridBagConstraints();
+
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.anchor = GridBagConstraints.NORTHWEST;
@@ -143,6 +153,90 @@ public class MainWindow extends JFrame {
 
         @Override
         public void placedStartWord(GameModelEvent event) {
+            // DON'T NEED IT HERE
+        }
+    }
+
+    private class PlayerController implements PlayerActionListener {
+        @Override
+        public void submittedWordWithoutChangeableCell(@NotNull PlayerActionEvent event) {
+            if(event.player() == _gameModel.activePlayer()) {
+                String message = "<html><div style='text-align: center;'>" + GameWidgetUtils.getHtmlFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE) + "В составленном слове отсутствует измененная ячейка" + "</div></html>";
+                JOptionPane.showMessageDialog(null, message, "Ошибка", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+
+        @Override
+        public void changedState(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
+        public void skippedTurn(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
+        public void finishedTurn(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
+        public void placedLetter(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
+        public void choseLetter(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
+        public void choseCell(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
+        public void canceledActionOnField(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+    }
+
+    private class WordsDBController implements WordsDBListener {
+        @Override
+        public void failedToAddUsedWord(WordsDBEvent event) {
+            if(event.player() == _gameModel.activePlayer()) {
+                String htmlFont = GameWidgetUtils.getHtmlFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE);
+
+                if(event.isUsedAlready() && event.isKnown()) {
+                    String message = "<html><div style='text-align: center;'>" + htmlFont + "Слово уже было сыграно (см. таблицу справа)." + "</div></html>";
+                    JOptionPane.showMessageDialog(null, message, "Ошибка", JOptionPane.WARNING_MESSAGE);
+                }
+
+                if(!event.isUsedAlready() && !event.isKnown()) {
+                    String message = "<html><div style='text-align: center;'>" + htmlFont + "Было составлено неизвестное слово.<br>Добавить в словарь?" + "</div></html>";
+                    int result = JOptionPane.showConfirmDialog(null, message, "Неизвестное слово", JOptionPane.OK_CANCEL_OPTION);
+                    if(result == JOptionPane.OK_OPTION) {
+                        _gameModel.activePlayer().addNewWordToDictionary();
+                    } else {
+                        _gameModel.activePlayer().cancelActionOnField();
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void addedNewWordToDictionary(WordsDBEvent event) {
+            if(event.player() == _gameModel.activePlayer()) {
+                System.out.println("DA");
+                String message = "<html><div style='text-align: center;'>" + GameWidgetUtils.getHtmlFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE) + "Слово \"" + event.word() + "\" успешно добавлено" + "</div></html>";
+                JOptionPane.showMessageDialog(null, message, "Новое слово", JOptionPane.PLAIN_MESSAGE);
+                _gameModel.activePlayer().submitWord();
+            }
+        }
+
+        @Override
+        public void addedUsedWord(WordsDBEvent event) {
             // DON'T NEED IT HERE
         }
     }
