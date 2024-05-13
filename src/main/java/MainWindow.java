@@ -99,6 +99,8 @@ public class MainWindow extends JFrame {
         this.pack();
 
         GameWidgetUtils.placeContainerInCenter(this);
+
+        content.paintImmediately(content.getVisibleRect());
     }
 
     private void disableGameWidgets(@NotNull Container container) {
