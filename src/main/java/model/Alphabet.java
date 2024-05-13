@@ -29,8 +29,10 @@ public class Alphabet {
     public Character selectedLetter() { return _selectedLetter; }
 
     public void forgetSelectedLetter() {
-        fireForgetSelectedLetter(_selectedLetter);
-        _selectedLetter = null;
+        if(_selectedLetter != null) {
+            fireForgetSelectedLetter(_selectedLetter);
+            _selectedLetter = null;
+        }
     }
 
     public boolean selectLetter(@NotNull Character letter) {
@@ -68,7 +70,7 @@ public class Alphabet {
     private class GameModelObserve implements GameModelListener {
         @Override
         public void playerExchanged(GameModelEvent event) {
-            _selectedLetter = null;
+            forgetSelectedLetter();
         }
 
         @Override

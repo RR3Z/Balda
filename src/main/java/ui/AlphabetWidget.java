@@ -10,9 +10,7 @@ import model.events.PlayerActionEvent;
 import model.events.PlayerActionListener;
 import org.jetbrains.annotations.NotNull;
 import ui.buttons.LetterButton;
-import ui.enums.BorderType;
-import ui.enums.ColorType;
-import ui.utils.GameWidgetUtils;
+import ui.enums.LetterButtonState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -76,32 +74,22 @@ public class AlphabetWidget extends JPanel {
         @Override
         public void mousePressed(MouseEvent e) {
             if(AlphabetWidget.this.isEnabled()) {
-                // Logic
                 _gameModel.activePlayer().chooseLetter(_button.getText().charAt(0));
-                _button.setBorder(BorderFactory.createLineBorder(
-                        GameWidgetUtils.color(ColorType.DEFAULT_BORDER),
-                        GameWidgetUtils.borderThickness(BorderType.DEFAULT))
-                );
+                _button.highlight(false);
             }
         }
 
         @Override
         public void mouseEntered(MouseEvent e) {
             if(AlphabetWidget.this.isEnabled()) {
-                _button.setBorder(BorderFactory.createLineBorder(
-                        GameWidgetUtils.color(ColorType.HIGHLIGHTED_BORDER),
-                        GameWidgetUtils.borderThickness(BorderType.EXTRA_BOLD))
-                );
+                _button.highlight(true);
             }
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
             if(AlphabetWidget.this.isEnabled()) {
-                _button.setBorder(BorderFactory.createLineBorder(
-                        GameWidgetUtils.color(ColorType.DEFAULT_BORDER),
-                        GameWidgetUtils.borderThickness(BorderType.DEFAULT))
-                );
+                _button.highlight(false);
             }
         }
     }
@@ -114,25 +102,17 @@ public class AlphabetWidget extends JPanel {
 
         @Override
         public void choseLetter(@NotNull PlayerActionEvent event) {
-            LetterButton selectedLetter = _letters.get(event.letter());
-            selectedLetter.setOpaque(true);
-            selectedLetter.setContentAreaFilled(true);
+            _letters.get(event.letter()).changeState(LetterButtonState.SELECTED);
         }
 
         @Override
         public void finishedTurn(@NotNull PlayerActionEvent event) {
-            for(LetterButton button: _letters.values()) {
-                button.setOpaque(false);
-                button.setContentAreaFilled(false);
-            }
+            // DON'T NEED IT HERE
         }
 
         @Override
         public void skippedTurn(@NotNull PlayerActionEvent event) {
-            for(LetterButton button: _letters.values()) {
-                button.setOpaque(false);
-                button.setContentAreaFilled(false);
-            }
+            // DON'T NEED IT HERE
         }
 
 
@@ -161,9 +141,7 @@ public class AlphabetWidget extends JPanel {
     private class AlphabetController implements AlphabetListener {
         @Override
         public void forgetSelectedLetter(AlphabetEvent event) {
-            LetterButton selectedLetter = _letters.get(event.letter());
-            selectedLetter.setOpaque(false);
-            selectedLetter.setContentAreaFilled(false);
+            _letters.get(event.letter()).changeState(LetterButtonState.UNSELECTED);
         }
     }
 }
