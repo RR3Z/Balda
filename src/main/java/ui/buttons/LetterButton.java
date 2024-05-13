@@ -7,12 +7,12 @@ import ui.utils.GameWidgetUtils;
 import javax.swing.*;
 import java.awt.*;
 
-public class KeyboardButton extends JButton {
+public class LetterButton extends JButton {
     public static final int BUTTON_SIZE = 50;
 
     private final int FONT_SIZE = 28;
 
-    public KeyboardButton() {
+    public LetterButton() {
         super();
 
         this.setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));

@@ -9,7 +9,7 @@ import model.events.AlphabetListener;
 import model.events.PlayerActionEvent;
 import model.events.PlayerActionListener;
 import org.jetbrains.annotations.NotNull;
-import ui.buttons.KeyboardButton;
+import ui.buttons.LetterButton;
 import ui.enums.BorderType;
 import ui.enums.ColorType;
 import ui.utils.GameWidgetUtils;
@@ -27,7 +27,7 @@ public class AlphabetWidget extends JPanel {
 
     private GameModel _gameModel;
 
-    private Map<Character, KeyboardButton> _letters = new HashMap<>();
+    private Map<Character, LetterButton> _letters = new HashMap<>();
 
     public AlphabetWidget(GameModel gameModel) {
         super();
@@ -48,28 +48,28 @@ public class AlphabetWidget extends JPanel {
         fillWidget(alphabet.availableLetters());
 
         this.setMaximumSize(new Dimension(
-                numberOfColumns * KeyboardButton.BUTTON_SIZE,
-                ALPHABET_MAX_ROWS_COUNT * KeyboardButton.BUTTON_SIZE
+                numberOfColumns * LetterButton.BUTTON_SIZE,
+                ALPHABET_MAX_ROWS_COUNT * LetterButton.BUTTON_SIZE
         ));
     }
 
     private void fillWidget(@NotNull List<Character> letters) {
         for(Character letter: letters) {
-            KeyboardButton keyboardButton = new KeyboardButton();
+            LetterButton letterButton = new LetterButton();
 
-            keyboardButton.setText(String.valueOf(letter));
-            keyboardButton.addMouseListener(new KeyboardButtonMouseListener(keyboardButton));
+            letterButton.setText(String.valueOf(letter));
+            letterButton.addMouseListener(new KeyboardButtonMouseListener(letterButton));
 
-            _letters.put(letter, keyboardButton);
+            _letters.put(letter, letterButton);
 
-            this.add(keyboardButton);
+            this.add(letterButton);
         }
     }
 
     private class KeyboardButtonMouseListener extends MouseAdapter {
-        private KeyboardButton _button;
+        private LetterButton _button;
 
-        public KeyboardButtonMouseListener(@NotNull KeyboardButton button) {
+        public KeyboardButtonMouseListener(@NotNull LetterButton button) {
             _button = button;
         }
 
@@ -89,7 +89,7 @@ public class AlphabetWidget extends JPanel {
         public void mouseEntered(MouseEvent e) {
             if(AlphabetWidget.this.isEnabled()) {
                 _button.setBorder(BorderFactory.createLineBorder(
-                        GameWidgetUtils.color(ColorType.DEFAULT_HIGHLIGHTED_BORDER),
+                        GameWidgetUtils.color(ColorType.HIGHLIGHTED_BORDER),
                         GameWidgetUtils.borderThickness(BorderType.BOLD))
                 );
             }
@@ -114,14 +114,14 @@ public class AlphabetWidget extends JPanel {
 
         @Override
         public void choseLetter(@NotNull PlayerActionEvent event) {
-            KeyboardButton selectedLetter = _letters.get(event.letter());
+            LetterButton selectedLetter = _letters.get(event.letter());
             selectedLetter.setOpaque(true);
             selectedLetter.setContentAreaFilled(true);
         }
 
         @Override
         public void finishedTurn(@NotNull PlayerActionEvent event) {
-            for(KeyboardButton button: _letters.values()) {
+            for(LetterButton button: _letters.values()) {
                 button.setOpaque(false);
                 button.setContentAreaFilled(false);
             }
@@ -129,7 +129,7 @@ public class AlphabetWidget extends JPanel {
 
         @Override
         public void skippedTurn(@NotNull PlayerActionEvent event) {
-            for(KeyboardButton button: _letters.values()) {
+            for(LetterButton button: _letters.values()) {
                 button.setOpaque(false);
                 button.setContentAreaFilled(false);
             }
@@ -161,7 +161,7 @@ public class AlphabetWidget extends JPanel {
     private class AlphabetController implements AlphabetListener {
         @Override
         public void forgetSelectedLetter(AlphabetEvent event) {
-            KeyboardButton selectedLetter = _letters.get(event.letter());
+            LetterButton selectedLetter = _letters.get(event.letter());
             selectedLetter.setOpaque(false);
             selectedLetter.setContentAreaFilled(false);
         }
