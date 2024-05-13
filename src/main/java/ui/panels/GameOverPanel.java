@@ -10,8 +10,6 @@ import java.awt.*;
 import java.util.List;
 
 public class GameOverPanel extends JPanel {
-
-
     public GameOverPanel(@NotNull List<Player> winners) {
         this.setLayout(new FlowLayout(FlowLayout.CENTER));
 
