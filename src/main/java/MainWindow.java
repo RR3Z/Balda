@@ -32,7 +32,6 @@ public class MainWindow extends JFrame {
         mainMenuBar.add(mainMenu);
         this.setJMenuBar(mainMenuBar);
 
-        // TODO: надо выделить свои диалоговые панели и там выставлять для них шрифт
         UIManager.put("OptionPane.messageFont", GameWidgetUtils.font(GameWidgetUtils.OPTION_PANE_FONT_SIZE));
         UIManager.put("OptionPane.buttonFont", GameWidgetUtils.font(GameWidgetUtils.OPTION_PANE_FONT_SIZE));
 
