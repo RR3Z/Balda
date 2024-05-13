@@ -20,7 +20,7 @@ public class GameWidgetUtils {
     public static void placeContainerInCenter(@NotNull Container container) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension windowSize = container.getSize();
-        container.setBounds(screenSize.width/2 - windowSize.width/2, screenSize.height/2 - windowSize.height/2, windowSize.width, windowSize.height);
+        container.setBounds(screenSize.width/2 - windowSize.width/2, screenSize.height/2 - windowSize.height/2, windowSize.width + 20, windowSize.height + 20);
     }
 
     public static Color color(ColorType type) {
