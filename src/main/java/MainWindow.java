@@ -42,7 +42,7 @@ public class MainWindow extends JFrame {
 
     private void startNewGame(int width, int height) {
         _gameModel = new GameModel(width, height);
-        _gameModel.addGameModelListener(new GameController());
+        _gameModel.addGameModelListener(new GameModelController());
 
         _gameModel.wordsDB().addWordsDBListener(new WordsDBController());
 
@@ -141,7 +141,7 @@ public class MainWindow extends JFrame {
         }
     }
 
-    private class GameController implements GameModelListener {
+    private class GameModelController implements GameModelListener {
         @Override
         public void gameIsFinished(GameModelEvent event) {
             MainWindow.this.disableGameWidgets(MainWindow.this);
