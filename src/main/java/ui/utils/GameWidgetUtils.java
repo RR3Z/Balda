@@ -1,5 +1,6 @@
 package ui.utils;
 
+import org.jetbrains.annotations.NotNull;
 import ui.enums.BorderType;
 import ui.enums.ColorType;
 
@@ -16,6 +17,12 @@ public class GameWidgetUtils {
     public final static int MAX_FIELD_SIZE_SPINNER_VALUE = 14;
 
     public final static int OPTION_PANE_FONT_SIZE = 16;
+
+    public static void placeContainerInCenter(@NotNull Container container) {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension windowSize = container.getSize();
+        container.setBounds(screenSize.width/2 - windowSize.width/2, screenSize.height/2 - windowSize.height/2, windowSize.width, windowSize.height);
+    }
 
     public static Color getColor(ColorType type) {
         return switch (type) {

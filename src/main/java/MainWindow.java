@@ -38,9 +38,9 @@ public class MainWindow extends JFrame {
         UIManager.put("OptionPane.messageFont", GameWidgetUtils.getFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE));
         UIManager.put("OptionPane.buttonFont", GameWidgetUtils.getFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE));
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension windowSize = new Dimension(400, 200);
-        this.setBounds(screenSize.width/2 - windowSize.width/2, screenSize.height/2 - windowSize.height/2, windowSize.width, windowSize.height);
+        this.setMinimumSize(new Dimension(400, 200));
+
+        GameWidgetUtils.placeContainerInCenter(this);
     }
 
     private void startNewGame(int width, int height) {
@@ -96,9 +96,7 @@ public class MainWindow extends JFrame {
 
         this.pack();
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension windowSize = this.getSize();
-        this.setBounds(screenSize.width/2 - windowSize.width/2, screenSize.height/2 - windowSize.height/2, windowSize.width, windowSize.height);
+        GameWidgetUtils.placeContainerInCenter(this);
     }
 
     private void disableGameWidgets(Container container) {
