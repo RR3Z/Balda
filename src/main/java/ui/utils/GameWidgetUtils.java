@@ -10,21 +10,12 @@ import java.io.IOException;
 import java.util.Map;
 
 public class GameWidgetUtils {
-    private final static String RESOURCE_FOLDER = "Resources/";
+    private final static String RESOURCES_FOLDER = "Resources/";
 
     public final static int MIN_FIELD_SIZE_SPINNER_VALUE = 2;
     public final static int MAX_FIELD_SIZE_SPINNER_VALUE = 14;
 
     public final static int OPTION_PANE_FONT_SIZE = 16;
-
-    public static  <K, V> K getKeyByValue(Map<K, V> map, V value) {
-        for (Map.Entry<K, V> entry : map.entrySet()) {
-            if (value.equals(entry.getValue())) {
-                return entry.getKey();
-            }
-        }
-        return null;
-    }
 
     public static Color getColor(ColorType type) {
         return switch (type) {
@@ -53,7 +44,7 @@ public class GameWidgetUtils {
 
         // Uploading font
         try {
-            File fontFile = new File(RESOURCE_FOLDER + "SrirachaCyrillic.ttf");
+            File fontFile = new File(RESOURCES_FOLDER + "SrirachaCyrillic.ttf");
             font = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(fontFile)).deriveFont(Font.PLAIN, fontSize);
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
         }
