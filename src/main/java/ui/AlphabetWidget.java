@@ -29,12 +29,13 @@ public class AlphabetWidget extends JPanel {
 
     private Map<Character, KeyboardButton> _letters = new HashMap<>();
 
-    public AlphabetWidget(GameModel gameModel, Alphabet alphabet) {
+    public AlphabetWidget(GameModel gameModel) {
         super();
         this.setEnabled(true);
 
         _gameModel = gameModel;
 
+        Alphabet alphabet = _gameModel.alphabet();
         alphabet.addAlphabetListener(new AlphabetController());
 
         for(Player player: gameModel.players()) {
