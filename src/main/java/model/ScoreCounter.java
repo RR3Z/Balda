@@ -1,5 +1,13 @@
 package model;
 
+import model.events.ScoreCounterEvent;
+import model.events.ScoreCounterListener;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.EventListener;
+import java.util.List;
+
 public class ScoreCounter {
     private int _score;
 
@@ -21,6 +29,7 @@ public class ScoreCounter {
         }
 
         _score += amount;
+        fireScoreChanged();
     }
 
     public void decreaseScore(int amount) {
@@ -33,5 +42,22 @@ public class ScoreCounter {
         }
 
         _score -= amount;
+        fireScoreChanged();
+    }
+
+    // Listeners
+    private List<EventListener> _scoreCounterListeners = new ArrayList<>();
+
+    public void addScoreCounterListener(@NotNull ScoreCounterListener listener) {
+        _scoreCounterListeners.add(listener);
+    }
+
+    private void fireScoreChanged() {
+        for (Object listener : _scoreCounterListeners) {
+            ScoreCounterEvent event = new ScoreCounterEvent(this);
+            event.setScoreCounter(this);
+
+            ((ScoreCounterListener) listener).scoreChanged(event);
+        }
     }
 }
