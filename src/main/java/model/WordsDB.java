@@ -41,12 +41,12 @@ public class WordsDB {
 
     public boolean addToUsedWords(@NotNull String word, Player player) {
         if (!containsInDictionary(word)) {
-            fireFailedToAddUsedWord(player, word, false, false);
+            fireWordNotAllowed(player, word);
             return false;
         }
 
         if (containsInUsedWords(word)) {
-            fireFailedToAddUsedWord(player, word, true, true);
+            fireWordAlreadyUsed(player, word);
             return false;
         }
 
@@ -125,15 +125,23 @@ public class WordsDB {
         }
     }
 
-    private void fireFailedToAddUsedWord(Player player, @NotNull String word, boolean isUsedAlready, boolean isKnown) {
+    private void fireWordAlreadyUsed(Player player, @NotNull String word) {
         for (Object listener : _wordsDBListeners) {
             WordsDBEvent event = new WordsDBEvent(this);
             event.setPlayer(player);
             event.setWord(word);
-            event.setIsUsedAlready(isUsedAlready);
-            event.setIsKnown(isKnown);
 
-            ((WordsDBListener) listener).failedToAddUsedWord(event);
+            ((WordsDBListener) listener).wordAlreadyUsed(event);
+        }
+    }
+
+    private void fireWordNotAllowed(Player player, @NotNull String word) {
+        for (Object listener : _wordsDBListeners) {
+            WordsDBEvent event = new WordsDBEvent(this);
+            event.setPlayer(player);
+            event.setWord(word);
+
+            ((WordsDBListener) listener).wordNotAllowed(event);
         }
     }
 

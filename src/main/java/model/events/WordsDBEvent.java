@@ -28,24 +28,4 @@ public class WordsDBEvent extends EventObject {
     public String word() {
         return _word;
     }
-
-    private boolean _isKnown;
-
-    public void setIsKnown(boolean status) {
-        _isKnown = status;
-    }
-
-    public boolean isKnown() {
-        return _isKnown;
-    }
-
-    private boolean _isUsedAlready;
-
-    public void setIsUsedAlready(boolean status) {
-        _isUsedAlready = status;
-    }
-
-    public boolean isUsedAlready() {
-        return _isUsedAlready;
-    }
 }
