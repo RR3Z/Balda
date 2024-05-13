@@ -95,7 +95,7 @@ public class Player {
         }
 
         String wordStringRepresentation = _word.toString();
-        _wordsDB.addToDictionary(wordStringRepresentation);
+        _wordsDB.addToDictionary(wordStringRepresentation, this);
     }
 
     public void cancelActionOnField() {

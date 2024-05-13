@@ -29,13 +29,13 @@ public class WordsDB {
         readFromFile(filePath);
     }
 
-    public boolean addToDictionary(@NotNull String word) {
+    public boolean addToDictionary(@NotNull String word, Player player) {
         if (_dictionary.contains(word.toLowerCase())) {
             return false;
         }
 
         _dictionary.add(word.toLowerCase());
-        fireAddedNewWordToDictionary(word);
+        fireAddedNewWordToDictionary(player, word);
         return true;
     }
 
@@ -137,10 +137,10 @@ public class WordsDB {
         }
     }
 
-    private void fireAddedNewWordToDictionary(@NotNull String word) {
+    private void fireAddedNewWordToDictionary(Player player, @NotNull String word) {
         for (Object listener : _wordsDBListeners) {
             WordsDBEvent event = new WordsDBEvent(this);
-            event.setPlayer(null);
+            event.setPlayer(player);
             event.setWord(word);
 
             ((WordsDBListener) listener).addedNewWordToDictionary(event);
