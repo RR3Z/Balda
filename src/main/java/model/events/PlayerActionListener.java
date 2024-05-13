@@ -15,15 +15,9 @@ public interface PlayerActionListener extends EventListener {
 
     public void choseLetter(@NotNull PlayerActionEvent event);
 
-    public void addedNewWordToDictionary(@NotNull PlayerActionEvent event);
-
     public void choseCell(@NotNull PlayerActionEvent event);
 
     public void submittedWordWithoutChangeableCell(@NotNull PlayerActionEvent event);
-
-    public void submittedWord(@NotNull PlayerActionEvent event);
-
-    public void failedToSubmitWord(@NotNull PlayerActionEvent event);
 
     public void canceledActionOnField(@NotNull PlayerActionEvent event);
 }

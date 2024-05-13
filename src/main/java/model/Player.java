@@ -19,8 +19,6 @@ public class Player {
 
     public Player(@NotNull String name, @NotNull Alphabet alphabet, @NotNull WordsDB wordsDB, @NotNull GameField field) {
         _wordsDB = wordsDB;
-        _wordsDB.addWordsDBListener(new WordsDBObserve());
-
         _alphabet = alphabet;
         _field = field;
         _word = new Word();
@@ -199,24 +197,6 @@ public class Player {
         return _state == PlayerState.SKIPPED_TURN;
     }
 
-    // ================================================================================================================
-    private class WordsDBObserve implements WordsDBListener {
-        @Override
-        public void addedUsedWord(WordsDBEvent event) {
-            fireSubmittedWord(event.word());
-        }
-
-        @Override
-        public void failedToAddUsedWord(WordsDBEvent event) {
-            fireFailedToSubmitWord(event.word(), event.isKnown(), event.isUsedAlready());
-        }
-
-        @Override
-        public void addedNewWordToDictionary(WordsDBEvent event) {
-            fireAddedNewWordToDictionary(event.word());
-        }
-    }
-    // ================================================================================================================
 
 
     // Listeners
@@ -294,26 +274,6 @@ public class Player {
         }
     }
 
-    private void fireSubmittedWord(@NotNull String word) {
-        for (Object listener : _playerListeners) {
-            PlayerActionEvent event = new PlayerActionEvent(this);
-            event.setPlayer(this);
-            event.setWord(word);
-
-            ((PlayerActionListener) listener).submittedWord(event);
-        }
-    }
-
-    private void fireAddedNewWordToDictionary(@NotNull String word) {
-        for (Object listener : _playerListeners) {
-            PlayerActionEvent event = new PlayerActionEvent(this);
-            event.setPlayer(this);
-            event.setWord(word);
-
-            ((PlayerActionListener) listener).addedNewWordToDictionary(event);
-        }
-    }
-
     private void fireSubmittedWordDoesNotContainChangeableCell(Cell changeableCell) {
         for (Object listener : _playerListeners) {
             PlayerActionEvent event = new PlayerActionEvent(this);
@@ -321,19 +281,6 @@ public class Player {
             event.setCell(changeableCell);
 
             ((PlayerActionListener) listener).submittedWordWithoutChangeableCell(event);
-        }
-    }
-
-    private void fireFailedToSubmitWord(@NotNull String word, boolean isKnown, boolean isUsedAlready) {
-        for (Object listener : _playerListeners) {
-            PlayerActionEvent event = new PlayerActionEvent(this);
-            event.setPlayer(this);
-            event.setWord(word);
-            event.setIsKnown(isKnown);
-            event.setIsUsedAlready(isUsedAlready);
-
-
-            ((PlayerActionListener) listener).failedToSubmitWord(event);
         }
     }
 }
