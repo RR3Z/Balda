@@ -22,14 +22,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class KeyboardWidget extends JPanel {
+public class AlphabetWidget extends JPanel {
     private final int KEYBOARD_MAX_ROWS_COUNT = 3;
 
     private GameModel _gameModel;
 
     private Map<Character, KeyboardButton> _letters = new HashMap<>();
 
-    public KeyboardWidget(GameModel gameModel, Alphabet alphabet) {
+    public AlphabetWidget(GameModel gameModel, Alphabet alphabet) {
         super();
         this.setEnabled(true);
 
@@ -74,7 +74,7 @@ public class KeyboardWidget extends JPanel {
 
         @Override
         public void mousePressed(MouseEvent e) {
-            if(KeyboardWidget.this.isEnabled()) {
+            if(AlphabetWidget.this.isEnabled()) {
                 // Logic
                 _gameModel.activePlayer().chooseLetter(_button.getText().charAt(0));
                 _button.setBorder(BorderFactory.createLineBorder(
@@ -86,7 +86,7 @@ public class KeyboardWidget extends JPanel {
 
         @Override
         public void mouseEntered(MouseEvent e) {
-            if(KeyboardWidget.this.isEnabled()) {
+            if(AlphabetWidget.this.isEnabled()) {
                 _button.setBorder(BorderFactory.createLineBorder(
                         GameWidgetUtils.getColor(ColorType.DEFAULT_HIGHLIGHTED_BORDER),
                         GameWidgetUtils.getBorderThickness(BorderType.BOLD))
@@ -96,7 +96,7 @@ public class KeyboardWidget extends JPanel {
 
         @Override
         public void mouseExited(MouseEvent e) {
-            if(KeyboardWidget.this.isEnabled()) {
+            if(AlphabetWidget.this.isEnabled()) {
                 _button.setBorder(BorderFactory.createLineBorder(
                         GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER),
                         GameWidgetUtils.getBorderThickness(BorderType.DEFAULT))
@@ -108,7 +108,7 @@ public class KeyboardWidget extends JPanel {
     private class PlayerController implements PlayerActionListener {
         @Override
         public void changedState(@NotNull PlayerActionEvent event) {
-            KeyboardWidget.this.setEnabled(event.player().state() == PlayerState.SELECTING_LETTER);
+            AlphabetWidget.this.setEnabled(event.player().state() == PlayerState.SELECTING_LETTER);
         }
 
         @Override

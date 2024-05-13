@@ -30,7 +30,8 @@ public class MainWindow extends JFrame {
         mainMenu.setExitGameAction(new ExitGameAction());
         mainMenuBar.add(mainMenu);
         this.setJMenuBar(mainMenuBar);
-        
+
+        // TODO: надо выделить свои диалоговые панели и там выставлять для них шрифт
         UIManager.put("OptionPane.messageFont", GameWidgetUtils.getFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE));
         UIManager.put("OptionPane.buttonFont", GameWidgetUtils.getFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE));
 
@@ -69,7 +70,7 @@ public class MainWindow extends JFrame {
         centerPanel.add(Box.createRigidArea(new Dimension(5, 5)));
         centerPanel.add(new PlayerActionsWidget(_gameModel));
         centerPanel.add(Box.createRigidArea(new Dimension(5, 5)));
-        centerPanel.add(new KeyboardWidget(_gameModel, _gameModel.alphabet()));
+        centerPanel.add(new AlphabetWidget(_gameModel, _gameModel.alphabet()));
         content.add(centerPanel, constraints);
 
         constraints.gridx = 2;
