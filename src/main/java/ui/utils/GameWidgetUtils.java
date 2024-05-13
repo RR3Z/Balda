@@ -8,7 +8,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Map;
 
 public class GameWidgetUtils {
     private final static String RESOURCES_FOLDER = "Resources/";
@@ -47,6 +46,10 @@ public class GameWidgetUtils {
     }
 
     public static Font getFont(int fontSize) {
+        if(fontSize <= 0) {
+            throw new IllegalArgumentException("GameWidgetUtils -> getFont: font size must be greater than 0");
+        }
+
         Font font;
 
         // Uploading font
@@ -63,6 +66,10 @@ public class GameWidgetUtils {
     }
 
     public static String getHtmlFont(int fontSize) {
+        if(fontSize <= 0) {
+            throw new IllegalArgumentException("GameWidgetUtils -> getHtmlFont: font size must be greater than 0");
+        }
+
         return String.format("<font face=\"%s\" size=\"%d\">",
                 GameWidgetUtils.getFont(fontSize).getFontName(),
                 fontSize/4
