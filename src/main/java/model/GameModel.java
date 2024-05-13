@@ -2,10 +2,7 @@ package model;
 
 import model.enums.Direction;
 import model.enums.GameState;
-import model.events.GameModelEvent;
-import model.events.GameModelListener;
-import model.events.PlayerActionEvent;
-import model.events.PlayerActionListener;
+import model.events.*;
 import model.utils.DataFilePaths;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,8 +18,10 @@ public class GameModel {
 
     public GameModel(int width, int height) {
         _field = new GameField(this, width, height);
-        _wordsDB = new WordsDB(DataFilePaths.DICTIONARY_FILE_PATH);
         _alphabet = new Alphabet(this, DataFilePaths.ALPHABET_FILE_PATH);
+
+        _wordsDB = new WordsDB(DataFilePaths.DICTIONARY_FILE_PATH);
+        _wordsDB.addWordsDBListener(new WordsDBObserve());
 
         Player firstPlayer = new Player("Игрок 1", _alphabet, _wordsDB, _field);
         firstPlayer.addPlayerActionListener(new PlayerObserve());
@@ -176,19 +175,7 @@ public class GameModel {
         }
 
         @Override
-        public void submittedWord(@NotNull PlayerActionEvent event) {
-            if(event.player() == _activePlayer) {
-                _activePlayer.scoreCounter().increaseScore(event.word().length());
-            }
-        }
-
-        @Override
         public void changedState(@NotNull PlayerActionEvent event) {
-            // DON'T NEED IT HERE
-        }
-
-        @Override
-        public void addedNewWordToDictionary(@NotNull PlayerActionEvent event) {
             // DON'T NEED IT HERE
         }
 
@@ -213,12 +200,28 @@ public class GameModel {
         }
 
         @Override
-        public void failedToSubmitWord(@NotNull PlayerActionEvent event) {
+        public void canceledActionOnField(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+    }
+
+    /* ============================================================================================================== */
+
+    private class WordsDBObserve implements WordsDBListener {
+        @Override
+        public void addedUsedWord(WordsDBEvent event) {
+            if(event.player() == _activePlayer) {
+                _activePlayer.scoreCounter().increaseScore(event.word().length());
+            }
+        }
+
+        @Override
+        public void failedToAddUsedWord(WordsDBEvent event) {
             // DON'T NEED IT HERE
         }
 
         @Override
-        public void canceledActionOnField(@NotNull PlayerActionEvent event) {
+        public void addedNewWordToDictionary(WordsDBEvent event) {
             // DON'T NEED IT HERE
         }
     }
