@@ -60,6 +60,7 @@ public class ScoreCounterTests {
 
     @Test
     public void test_decreaseScore_OnNegativeValue() {
+        _scoreCounter = new ScoreCounter(4);
         int decreaseValue = -15;
 
         assertThrows(IllegalArgumentException.class, () -> _scoreCounter.decreaseScore(decreaseValue));
