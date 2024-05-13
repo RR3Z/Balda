@@ -115,17 +115,21 @@ public class GameFieldWidget extends JPanel {
 
         @Override
         public void placedLetter(@NotNull PlayerActionEvent event) {
-            Cell changedCell = event.cell();
-            CellButton button = _cells.get(changedCell);
+            if(GameFieldWidget.this.isEnabled()) {
+                Cell changedCell = event.cell();
+                CellButton button = _cells.get(changedCell);
 
-            button.setText(String.valueOf(changedCell.letter()));
-            button.changeState(CellButtonState.CHANGED);
+                button.setText(String.valueOf(changedCell.letter()));
+                button.changeState(CellButtonState.CHANGED);
+            }
         }
 
         @Override
         public void choseCell(@NotNull PlayerActionEvent event) {
-            CellButton selectedCell = _cells.get(event.cell());
-            selectedCell.changeState(CellButtonState.IN_WORD);
+            if(GameFieldWidget.this.isEnabled()) {
+                CellButton selectedCell = _cells.get(event.cell());
+                selectedCell.changeState(CellButtonState.IN_WORD);
+            }
         }
 
         @Override

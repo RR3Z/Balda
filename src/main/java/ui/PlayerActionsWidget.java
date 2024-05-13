@@ -136,22 +136,24 @@ public class PlayerActionsWidget extends JPanel {
     private class PlayerController implements PlayerActionListener {
         @Override
         public void changedState(@NotNull PlayerActionEvent event) {
-            if(event.player().state() == PlayerState.SELECTING_LETTER) {
-                _cancelActionButton.setEnabled(false);
-                _submitWordButton.setEnabled(false);
-                _skipTurnButton.setEnabled(true);
-            }
+            if(PlayerActionsWidget.this.isEnabled()){
+                if(event.player().state() == PlayerState.SELECTING_LETTER) {
+                    _cancelActionButton.setEnabled(false);
+                    _submitWordButton.setEnabled(false);
+                    _skipTurnButton.setEnabled(true);
+                }
 
-            if(event.player().state() == PlayerState.PLACES_LETTER) {
-                _cancelActionButton.setEnabled(true);
-                _submitWordButton.setEnabled(false);
-                _skipTurnButton.setEnabled(true);
-            }
+                if(event.player().state() == PlayerState.PLACES_LETTER) {
+                    _cancelActionButton.setEnabled(true);
+                    _submitWordButton.setEnabled(false);
+                    _skipTurnButton.setEnabled(true);
+                }
 
-            if(event.player().state() == PlayerState.FORMS_WORD) {
-                _cancelActionButton.setEnabled(true);
-                _submitWordButton.setEnabled(true);
-                _skipTurnButton.setEnabled(true);
+                if(event.player().state() == PlayerState.FORMS_WORD) {
+                    _cancelActionButton.setEnabled(true);
+                    _submitWordButton.setEnabled(true);
+                    _skipTurnButton.setEnabled(true);
+                }
             }
         }
 

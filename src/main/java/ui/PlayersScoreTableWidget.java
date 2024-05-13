@@ -14,7 +14,6 @@ import ui.tables.CustomJTable;
 import ui.utils.GameWidgetUtils;
 
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +41,7 @@ public class PlayersScoreTableWidget extends CustomJTable {
 
     }
 
-    private void updateRowValue(int rowIndex, int newValue) {
+    private void updateScoreValue(int rowIndex, int newValue) {
         DefaultTableModel playersScoreTableModel = (DefaultTableModel)this.getModel();
 
         playersScoreTableModel.setValueAt(newValue, rowIndex, playersScoreTableModel.getColumnCount() - 1);
@@ -52,7 +51,7 @@ public class PlayersScoreTableWidget extends CustomJTable {
         @Override
         public void scoreChanged(ScoreCounterEvent event) {
             ScoreCounter scoreCounter = event.scoreCounter();
-            PlayersScoreTableWidget.this.updateRowValue(_scoreCounterToRowIndex.get(scoreCounter), scoreCounter.score());
+            PlayersScoreTableWidget.this.updateScoreValue(_scoreCounterToRowIndex.get(scoreCounter), scoreCounter.score());
         }
     }
 
