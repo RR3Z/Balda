@@ -9,6 +9,7 @@ import model.events.*;
 import org.jetbrains.annotations.NotNull;
 import ui.buttons.CellButton;
 import ui.enums.BorderType;
+import ui.enums.CellButtonState;
 import ui.enums.ColorType;
 import ui.utils.GameWidgetUtils;
 import ui.utils.MapUtils;
@@ -86,19 +87,13 @@ public class GameFieldWidget extends JPanel {
         @Override
         public void mouseEntered(MouseEvent e) {
             if(GameFieldWidget.this.isEnabled()) {
-                _button.setBorder(BorderFactory.createLineBorder(
-                        GameWidgetUtils.color(ColorType.HIGHLIGHTED_BORDER),
-                        GameWidgetUtils.borderThickness(BorderType.EXTRA_BOLD))
-                );
+                _button.highlight(true);
             }
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            _button.setBorder(BorderFactory.createLineBorder(
-                    GameWidgetUtils.color(ColorType.DEFAULT_BORDER),
-                    GameWidgetUtils.borderThickness(BorderType.DEFAULT))
-            );
+            _button.highlight(false);
         }
     }
 
@@ -114,8 +109,7 @@ public class GameFieldWidget extends JPanel {
         @Override
         public void finishedTurn(@NotNull PlayerActionEvent event) {
             for(CellButton button: _cells.values()) {
-                button.setOpaque(false);
-                button.setContentAreaFilled(false);
+                button.changeState(CellButtonState.DEFAULT);
             }
         }
 
@@ -125,32 +119,25 @@ public class GameFieldWidget extends JPanel {
             CellButton button = _cells.get(changedCell);
 
             button.setText(String.valueOf(changedCell.letter()));
-            button.setOpaque(true);
-            button.setContentAreaFilled(true);
-            button.setBackground(GameWidgetUtils.color(ColorType.CHANGED_CELL));
+            button.changeState(CellButtonState.CHANGED);
         }
 
         @Override
         public void choseCell(@NotNull PlayerActionEvent event) {
-            Cell selectedCell = event.cell();
-            _cells.get(selectedCell).setOpaque(true);
-            _cells.get(selectedCell).setContentAreaFilled(true);
-            _cells.get(selectedCell).setBackground(GameWidgetUtils.color(ColorType.CELL_IN_WORD));
+            CellButton selectedCell = _cells.get(event.cell());
+            selectedCell.changeState(CellButtonState.IN_WORD);
         }
 
         @Override
         public void canceledActionOnField(@NotNull PlayerActionEvent event) {
             for(CellButton button: _cells.values()) {
-                button.setOpaque(false);
-                button.setContentAreaFilled(false);
+                button.changeState(CellButtonState.DEFAULT);
             }
 
             CellButton selectedCell = _cells.get(event.cell());
             if(selectedCell != null) {
-                selectedCell.setOpaque(true);
-                selectedCell.setContentAreaFilled(true);
-                selectedCell.setBackground(GameWidgetUtils.color(ColorType.CHANGED_CELL));
                 selectedCell.setText(String.valueOf(event.cell().letter()));
+                selectedCell.changeState(CellButtonState.CHANGED);
             }
 
             GameFieldWidget.this.paintImmediately(getVisibleRect());
@@ -159,8 +146,7 @@ public class GameFieldWidget extends JPanel {
         @Override
         public void skippedTurn(@NotNull PlayerActionEvent event) {
             for(CellButton button: _cells.values()) {
-                button.setOpaque(false);
-                button.setContentAreaFilled(false);
+                button.changeState(CellButtonState.DEFAULT);
             }
 
             GameFieldWidget.this.paintImmediately(getVisibleRect());
