@@ -24,18 +24,20 @@ public class GameFieldWidget extends JPanel {
     private GameModel _gameModel;
     private Map<Cell, CellButton> _cells = new HashMap<>();
 
-    public GameFieldWidget(GameModel gameModel, GameField gameField) {
+    public GameFieldWidget(GameModel gameModel) {
         super();
         this.setEnabled(false);
 
         _gameModel = gameModel;
+
+        GameField gameField = _gameModel.gameField();
         gameField.addGameFieldListener(new GameFieldController());
 
         for(Player player: _gameModel.players()) {
             player.addPlayerActionListener(new PlayerController());
         }
 
-        fillWidget(gameField);
+        fillWidget();
 
         this.setLayout(new GridLayout(gameField.height(), gameField.width()));
 
@@ -46,7 +48,9 @@ public class GameFieldWidget extends JPanel {
         );
     }
 
-    private void fillWidget(GameField gameField) {
+    private void fillWidget() {
+        GameField gameField = _gameModel.gameField();
+
         for(int i = 0; i < gameField.height(); i++) {
             for(int j = 0; j < gameField.width(); j++){
                 Cell cell = gameField.cell(new Point(j, i));
