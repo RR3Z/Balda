@@ -1,5 +1,6 @@
 import model.GameModel;
 import model.Player;
+import model.enums.GameState;
 import model.events.*;
 import org.jetbrains.annotations.NotNull;
 import ui.*;
@@ -144,9 +145,11 @@ public class MainWindow extends JFrame {
     private class GameModelController implements GameModelListener {
         @Override
         public void gameIsFinished(GameModelEvent event) {
-            MainWindow.this.disableGameWidgets(MainWindow.this);
+            if(_gameModel.state() == GameState.FINISHED) {
+                MainWindow.this.disableGameWidgets(MainWindow.this);
 
-            JOptionPane.showMessageDialog(null, new GameOverPanel(event.winners()), "Конец игры", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(null, new GameOverPanel(event.winners()), "Конец игры", JOptionPane.PLAIN_MESSAGE);
+            }
         }
 
         @Override
