@@ -73,7 +73,7 @@ public class PlayerActionsWidget extends JPanel {
         public void mouseEntered(MouseEvent e) {
             if(_button.isEnabled()) {
                 _button.setBorder(BorderFactory.createLineBorder(
-                        GameWidgetUtils.color(ColorType.DEFAULT_HIGHLIGHTED_BORDER),
+                        GameWidgetUtils.color(ColorType.HIGHLIGHTED_BORDER),
                         GameWidgetUtils.borderThickness(BorderType.BOLD))
                 );
             }
@@ -148,7 +148,7 @@ public class PlayerActionsWidget extends JPanel {
         public void mouseEntered(MouseEvent e) {
             if(_button.isEnabled()) {
                 _button.setBorder(BorderFactory.createLineBorder(
-                        GameWidgetUtils.color(ColorType.DEFAULT_HIGHLIGHTED_BORDER),
+                        GameWidgetUtils.color(ColorType.HIGHLIGHTED_BORDER),
                         GameWidgetUtils.borderThickness(BorderType.BOLD))
                 );
             }
