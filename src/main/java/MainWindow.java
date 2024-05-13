@@ -97,7 +97,7 @@ public class MainWindow extends JFrame {
         GameWidgetUtils.placeContainerInCenter(this);
     }
 
-    private void disableGameWidgets(Container container) {
+    private void disableGameWidgets(@NotNull Container container) {
         Component[] components = container.getComponents();
         for (Component component : components) {
             component.setEnabled(false);
@@ -204,14 +204,15 @@ public class MainWindow extends JFrame {
         public void failedToAddUsedWord(WordsDBEvent event) {
             if(event.player() == _gameModel.activePlayer()) {
                 String htmlFont = GameWidgetUtils.htmlFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE);
+                String message = "<html><div style='text-align: center;'>" + htmlFont;
 
                 if(event.isUsedAlready() && event.isKnown()) {
-                    String message = "<html><div style='text-align: center;'>" + htmlFont + "Слово уже было сыграно (см. таблицу справа)." + "</div></html>";
+                    message +=  "Слово уже было использовано.";
                     JOptionPane.showMessageDialog(null, message, "Ошибка", JOptionPane.WARNING_MESSAGE);
                 }
 
                 if(!event.isUsedAlready() && !event.isKnown()) {
-                    String message = "<html><div style='text-align: center;'>" + htmlFont + "Было составлено неизвестное слово.<br>Добавить в словарь?" + "</div></html>";
+                    message += "Было составлено неизвестное слово \"" + event.word() + "\". <br>Добавить в словарь?";
                     int result = JOptionPane.showConfirmDialog(null, message, "Неизвестное слово", JOptionPane.OK_CANCEL_OPTION);
                     if(result == JOptionPane.OK_OPTION) {
                         _gameModel.activePlayer().addNewWordToDictionary();
@@ -219,6 +220,8 @@ public class MainWindow extends JFrame {
                         _gameModel.activePlayer().cancelActionOnField();
                     }
                 }
+
+                message += "</div></html>";
             }
         }
 
