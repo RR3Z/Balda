@@ -29,11 +29,11 @@ public class GameSettingsPanel extends JPanel {
         this.add(fieldSizesPanel);
     }
 
-    public int getWidthSpinnerValue() {
+    public int widthSpinnerValue() {
         return (int)_widthSpinner.getValue();
     }
 
-    public int getHeightSpinnerValue() {
+    public int heightSpinnerValue() {
         return (int)_heightSpinner.getValue();
     }
 }

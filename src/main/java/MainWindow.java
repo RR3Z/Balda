@@ -119,7 +119,7 @@ public class MainWindow extends JFrame {
         public void actionPerformed(ActionEvent e) {
             int result = JOptionPane.showConfirmDialog(null, _gameSettings, "Настройки игры", JOptionPane.OK_CANCEL_OPTION);
             if(result == JOptionPane.OK_OPTION) {
-                MainWindow.this.startNewGame(_gameSettings.getWidthSpinnerValue(), _gameSettings.getHeightSpinnerValue());
+                MainWindow.this.startNewGame(_gameSettings.widthSpinnerValue(), _gameSettings.heightSpinnerValue());
             }
         }
     }
