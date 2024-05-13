@@ -8,7 +8,6 @@ import model.events.GameModelListener;
 import ui.enums.ColorType;
 import ui.tables.CustomJTable;
 import ui.utils.GameWidgetUtils;
-import ui.utils.TableUtils;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.HashMap;
@@ -38,7 +37,7 @@ public class PlayersScoreTableWidget extends CustomJTable {
             Player player = _rowIndexToPlayer.get(i);
 
             if(player.state() == PlayerState.SELECTING_LETTER) {
-                highlightRow(i, GameWidgetUtils.getColor(ColorType.ACTIVE_PLAYER), GameWidgetUtils.getColor(ColorType.TRANSPARENT));
+                highlightRow(i, GameWidgetUtils.сolor(ColorType.ACTIVE_PLAYER), GameWidgetUtils.сolor(ColorType.TRANSPARENT));
             }
 
             playersScoreTableModel.setValueAt(player.scoreCounter().score(), i, playersScoreTableModel.getColumnCount() - 1);

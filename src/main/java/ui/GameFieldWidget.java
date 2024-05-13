@@ -83,8 +83,8 @@ public class GameFieldWidget extends JPanel {
         public void mouseEntered(MouseEvent e) {
             if(GameFieldWidget.this.isEnabled()) {
                 _button.setBorder(BorderFactory.createLineBorder(
-                        GameWidgetUtils.getColor(ColorType.DEFAULT_HIGHLIGHTED_BORDER),
-                        GameWidgetUtils.getBorderThickness(BorderType.BOLD))
+                        GameWidgetUtils.сolor(ColorType.DEFAULT_HIGHLIGHTED_BORDER),
+                        GameWidgetUtils.borderThickness(BorderType.BOLD))
                 );
             }
         }
@@ -92,8 +92,8 @@ public class GameFieldWidget extends JPanel {
         @Override
         public void mouseExited(MouseEvent e) {
             _button.setBorder(BorderFactory.createLineBorder(
-                    GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER),
-                    GameWidgetUtils.getBorderThickness(BorderType.DEFAULT))
+                    GameWidgetUtils.сolor(ColorType.DEFAULT_BORDER),
+                    GameWidgetUtils.borderThickness(BorderType.DEFAULT))
             );
         }
     }
@@ -123,7 +123,7 @@ public class GameFieldWidget extends JPanel {
             button.setText(String.valueOf(changedCell.letter()));
             button.setOpaque(true);
             button.setContentAreaFilled(true);
-            button.setBackground(GameWidgetUtils.getColor(ColorType.CHANGED_CELL));
+            button.setBackground(GameWidgetUtils.сolor(ColorType.CHANGED_CELL));
         }
 
         @Override
@@ -131,7 +131,7 @@ public class GameFieldWidget extends JPanel {
             Cell selectedCell = event.cell();
             _cells.get(selectedCell).setOpaque(true);
             _cells.get(selectedCell).setContentAreaFilled(true);
-            _cells.get(selectedCell).setBackground(GameWidgetUtils.getColor(ColorType.CELL_IN_WORD));
+            _cells.get(selectedCell).setBackground(GameWidgetUtils.сolor(ColorType.CELL_IN_WORD));
         }
 
         @Override
@@ -145,7 +145,7 @@ public class GameFieldWidget extends JPanel {
             if(selectedCell != null) {
                 selectedCell.setOpaque(true);
                 selectedCell.setContentAreaFilled(true);
-                selectedCell.setBackground(GameWidgetUtils.getColor(ColorType.CHANGED_CELL));
+                selectedCell.setBackground(GameWidgetUtils.сolor(ColorType.CHANGED_CELL));
                 selectedCell.setText(String.valueOf(event.cell().letter()));
             }
 

@@ -19,10 +19,10 @@ public class PlayerActionButton extends JButton {
 
         this.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
 
-        this.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER)));
+        this.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.сolor(ColorType.DEFAULT_BORDER)));
         this.setBorderPainted(true);
 
-        this.setFont(GameWidgetUtils.getFont(FONT_SIZE));
+        this.setFont(GameWidgetUtils.font(FONT_SIZE));
 
         this.setFocusable(false);
     }

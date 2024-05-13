@@ -33,7 +33,7 @@ public class CustomJTable extends JTable {
     }
 
     private void setupTableView() {
-        this.setFont(GameWidgetUtils.getFont(FONT_SIZE));
+        this.setFont(GameWidgetUtils.font(FONT_SIZE));
 
         int tableRowHeight = this.getRowHeight() + this.getFont().getSize();
         this.setRowHeight(tableRowHeight);
@@ -41,13 +41,13 @@ public class CustomJTable extends JTable {
         JTableHeader header = this.getTableHeader();
         header.setDefaultRenderer(TableUtils.DEFAULT_TABLE_HEADER_RENDERER);
         header.setOpaque(false);
-        header.setBackground(GameWidgetUtils.getColor(ColorType.TRANSPARENT));
+        header.setBackground(GameWidgetUtils.сolor(ColorType.TRANSPARENT));
         header.setReorderingAllowed(false);
         header.setResizingAllowed(false);
 
         this.setDefaultRenderer(Object.class, TableUtils.DEFAULT_CELL_RENDERER);
         this.setOpaque(false);
-        this.setBackground(GameWidgetUtils.getColor(ColorType.TRANSPARENT));
+        this.setBackground(GameWidgetUtils.сolor(ColorType.TRANSPARENT));
         this.setIntercellSpacing(new Dimension(0, 0));
         this.setCellSelectionEnabled(false);
         this.setFocusable(false);
@@ -60,7 +60,7 @@ public class CustomJTable extends JTable {
                 super.paintComponent(g);
 
                 // Border color
-                g.setColor(GameWidgetUtils.getColor(ColorType.DEFAULT_BORDER));
+                g.setColor(GameWidgetUtils.сolor(ColorType.DEFAULT_BORDER));
 
                 // Left vertical line
                 g.fillRect(0, 0, 1, getHeight());

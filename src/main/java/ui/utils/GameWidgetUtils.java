@@ -23,7 +23,7 @@ public class GameWidgetUtils {
         container.setBounds(screenSize.width/2 - windowSize.width/2, screenSize.height/2 - windowSize.height/2, windowSize.width, windowSize.height);
     }
 
-    public static Color getColor(ColorType type) {
+    public static Color сolor(ColorType type) {
         return switch (type) {
             case TRANSPARENT -> new Color(0, 0, 0, 0);
             case BACKGROUND -> new Color(250, 237,205, 80);
@@ -37,7 +37,7 @@ public class GameWidgetUtils {
         };
     }
 
-    public static int getBorderThickness(BorderType type) {
+    public static int borderThickness(BorderType type) {
         return switch (type) {
             case DEFAULT -> 1;
             case BOLD -> 2;
@@ -45,7 +45,7 @@ public class GameWidgetUtils {
         };
     }
 
-    public static Font getFont(int fontSize) {
+    public static Font font(int fontSize) {
         if(fontSize <= 0) {
             throw new IllegalArgumentException("GameWidgetUtils -> getFont: font size must be greater than 0");
         }
@@ -65,13 +65,13 @@ public class GameWidgetUtils {
         return font;
     }
 
-    public static String getHtmlFont(int fontSize) {
+    public static String htmlFont(int fontSize) {
         if(fontSize <= 0) {
             throw new IllegalArgumentException("GameWidgetUtils -> getHtmlFont: font size must be greater than 0");
         }
 
         return String.format("<font face=\"%s\" size=\"%d\">",
-                GameWidgetUtils.getFont(fontSize).getFontName(),
+                GameWidgetUtils.font(fontSize).getFontName(),
                 fontSize/4
         );
     }

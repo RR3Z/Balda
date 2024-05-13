@@ -1,7 +1,5 @@
 import model.GameModel;
 import model.Player;
-import model.WordsDB;
-import model.enums.PlayerState;
 import model.events.*;
 import org.jetbrains.annotations.NotNull;
 import ui.*;
@@ -35,8 +33,8 @@ public class MainWindow extends JFrame {
         this.setJMenuBar(mainMenuBar);
 
         // TODO: надо выделить свои диалоговые панели и там выставлять для них шрифт
-        UIManager.put("OptionPane.messageFont", GameWidgetUtils.getFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE));
-        UIManager.put("OptionPane.buttonFont", GameWidgetUtils.getFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE));
+        UIManager.put("OptionPane.messageFont", GameWidgetUtils.font(GameWidgetUtils.OPTION_PANE_FONT_SIZE));
+        UIManager.put("OptionPane.buttonFont", GameWidgetUtils.font(GameWidgetUtils.OPTION_PANE_FONT_SIZE));
 
         this.setMinimumSize(new Dimension(400, 200));
 
@@ -159,7 +157,7 @@ public class MainWindow extends JFrame {
         @Override
         public void submittedWordWithoutChangeableCell(@NotNull PlayerActionEvent event) {
             if(event.player() == _gameModel.activePlayer()) {
-                String message = "<html><div style='text-align: center;'>" + GameWidgetUtils.getHtmlFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE) + "В составленном слове отсутствует измененная ячейка" + "</div></html>";
+                String message = "<html><div style='text-align: center;'>" + GameWidgetUtils.htmlFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE) + "В составленном слове отсутствует измененная ячейка" + "</div></html>";
                 JOptionPane.showMessageDialog(null, message, "Ошибка", JOptionPane.WARNING_MESSAGE);
             }
         }
@@ -204,7 +202,7 @@ public class MainWindow extends JFrame {
         @Override
         public void failedToAddUsedWord(WordsDBEvent event) {
             if(event.player() == _gameModel.activePlayer()) {
-                String htmlFont = GameWidgetUtils.getHtmlFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE);
+                String htmlFont = GameWidgetUtils.htmlFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE);
 
                 if(event.isUsedAlready() && event.isKnown()) {
                     String message = "<html><div style='text-align: center;'>" + htmlFont + "Слово уже было сыграно (см. таблицу справа)." + "</div></html>";
@@ -226,7 +224,7 @@ public class MainWindow extends JFrame {
         @Override
         public void addedNewWordToDictionary(WordsDBEvent event) {
             if(event.player() == _gameModel.activePlayer()) {
-                String message = "<html><div style='text-align: center;'>" + GameWidgetUtils.getHtmlFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE) + "Слово \"" + event.word() + "\" успешно добавлено" + "</div></html>";
+                String message = "<html><div style='text-align: center;'>" + GameWidgetUtils.htmlFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE) + "Слово \"" + event.word() + "\" успешно добавлено" + "</div></html>";
                 JOptionPane.showMessageDialog(null, message, "Новое слово", JOptionPane.PLAIN_MESSAGE);
                 _gameModel.activePlayer().submitWord();
             }

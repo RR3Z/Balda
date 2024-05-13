@@ -19,9 +19,9 @@ public class MainMenu extends JMenu {
         this.add(_startNewGameItem);
         this.add(_exitGameItem);
 
-        this.setFont(GameWidgetUtils.getFont(FONT_SIZE));
-        _startNewGameItem.setFont(GameWidgetUtils.getFont(FONT_SIZE));
-        _exitGameItem.setFont(GameWidgetUtils.getFont(FONT_SIZE));
+        this.setFont(GameWidgetUtils.font(FONT_SIZE));
+        _startNewGameItem.setFont(GameWidgetUtils.font(FONT_SIZE));
+        _exitGameItem.setFont(GameWidgetUtils.font(FONT_SIZE));
     }
 
     public void setStartNewGameAction(AbstractAction action) {
