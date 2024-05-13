@@ -109,10 +109,11 @@ public class MainWindow extends JFrame {
     }
 
     private class StartNewGameAction extends AbstractAction {
+        GameSettingsPanel _gameSettings = new GameSettingsPanel();
+
         public StartNewGameAction() {
             this.putValue(NAME, "Новая игра");
         }
-        GameSettingsPanel _gameSettings = new GameSettingsPanel();
 
         @Override
         public void actionPerformed(ActionEvent e) {
