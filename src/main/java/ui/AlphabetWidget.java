@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 public class AlphabetWidget extends JPanel {
-    private final int KEYBOARD_MAX_ROWS_COUNT = 3;
+    private final int ALPHABET_MAX_ROWS_COUNT = 3;
 
     private GameModel _gameModel;
 
@@ -41,14 +41,14 @@ public class AlphabetWidget extends JPanel {
             player.addPlayerActionListener(new PlayerController());
         }
 
-        int numberOfColumns = Math.ceilDiv(alphabet.availableLetters().size(), KEYBOARD_MAX_ROWS_COUNT);
-        this.setLayout(new GridLayout(KEYBOARD_MAX_ROWS_COUNT, numberOfColumns));
+        int numberOfColumns = Math.ceilDiv(alphabet.availableLetters().size(), ALPHABET_MAX_ROWS_COUNT);
+        this.setLayout(new GridLayout(ALPHABET_MAX_ROWS_COUNT, numberOfColumns));
 
         fillWidget(alphabet.availableLetters());
 
         this.setMaximumSize(new Dimension(
                 numberOfColumns * KeyboardButton.BUTTON_SIZE,
-                KEYBOARD_MAX_ROWS_COUNT * KeyboardButton.BUTTON_SIZE
+                ALPHABET_MAX_ROWS_COUNT * KeyboardButton.BUTTON_SIZE
         ));
     }
 
