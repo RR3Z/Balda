@@ -234,8 +234,9 @@ public class MainWindow extends JFrame {
         @Override
         public void addedNewWordToDictionary(WordsDBEvent event) {
             if(event.player() == _gameModel.activePlayer()) {
-                String message = "<html><div style='text-align: center;'>" + GameWidgetUtils.htmlFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE) + "Слово \"" + event.word() + "\" успешно добавлено" + "</div></html>";
-                JOptionPane.showMessageDialog(null, message, "Новое слово", JOptionPane.PLAIN_MESSAGE);
+                String message = "<html><div style='text-align:center;'>" + GameWidgetUtils.htmlFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE) +
+                        "Слово \"" + event.word() + "\" успешно добавлено" + "</div></html>";
+                JOptionPane.showMessageDialog(null, message, "Новое слово", JOptionPane.INFORMATION_MESSAGE);
                 _gameModel.activePlayer().submitWord();
             }
         }
