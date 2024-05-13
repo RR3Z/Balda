@@ -210,7 +210,7 @@ public class GameModel {
     private class WordsDBObserve implements WordsDBListener {
         @Override
         public void addedUsedWord(WordsDBEvent event) {
-            if(event.player() == _activePlayer) {
+            if(event.player() != null && event.player() == _activePlayer) {
                 _activePlayer.scoreCounter().increaseScore(event.word().length());
             }
         }
