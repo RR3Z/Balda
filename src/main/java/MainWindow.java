@@ -70,15 +70,20 @@ public class MainWindow extends JFrame {
         constraints.gridx = 1;
         constraints.gridy = 0;
         constraints.anchor = GridBagConstraints.CENTER;
-        // Field and keyboard
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-        centerPanel.add(new GameFieldWidget(_gameModel));
-        centerPanel.add(Box.createRigidArea(new Dimension(5, 5)));
-        centerPanel.add(new PlayerActionsWidget(_gameModel));
-        centerPanel.add(Box.createRigidArea(new Dimension(5, 5)));
-        centerPanel.add(new AlphabetWidget(_gameModel));
-        content.add(centerPanel, constraints);
+        // GameField widget
+        content.add(new GameFieldWidget(_gameModel), constraints);
+        content.add(Box.createRigidArea(new Dimension(5, 5)));
+
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        // PlayerActions widget
+        content.add(new PlayerActionsWidget(_gameModel), constraints);
+        content.add(Box.createRigidArea(new Dimension(5, 5)));
+
+        constraints.gridx = 1;
+        constraints.gridy = 2;
+        // Alphabet widget
+        content.add(new AlphabetWidget(_gameModel), constraints);
 
         constraints.gridx = 2;
         constraints.gridy = 0;
