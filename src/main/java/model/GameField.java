@@ -173,10 +173,10 @@ public class GameField {
         firePlacedWord(word);
     }
 
-    public void forgetChangedCell() {
-        fireForgetChangedCell(_changedCell);
+    public void undoChangesOfChangedCell() {
         _changedCell.removeLetter();
-        _changedCell = null;
+        fireUndoChangesOfChangedCell(_changedCell);
+        forgetChangedCell();
     }
 
     public void setChangedCell(@NotNull Cell changedCell) {
@@ -189,12 +189,16 @@ public class GameField {
         }
     }
 
+    public void forgetChangedCell() {
+        if(_changedCell != null) {
+            _changedCell = null;
+        }
+    }
+
     private class GameModelObserve implements GameModelListener {
         @Override
         public void playerExchanged(GameModelEvent event) {
-            if(_changedCell != null) {
-                _changedCell = null;
-            }
+            forgetChangedCell();
         }
 
         @Override
@@ -215,13 +219,13 @@ public class GameField {
         _gameFieldListeners.add(listener);
     }
 
-    private void fireForgetChangedCell(Cell cell) {
+    private void fireUndoChangesOfChangedCell(Cell cell) {
         for (Object listener : _gameFieldListeners) {
             GameFieldEvent event = new GameFieldEvent(this);
             event.setGameField(this);
             event.setCell(cell);
 
-            ((GameFieldListener) listener).forgetChangedCell(event);
+            ((GameFieldListener) listener).undoChangesOfChangedCell(event);
         }
     }
 

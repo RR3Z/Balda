@@ -54,7 +54,7 @@ public class Player {
         }
 
         if (_field.changedCell() != null) {
-            _field.forgetChangedCell();
+            _field.undoChangesOfChangedCell();
         }
 
         _state = PlayerState.SKIPPED_TURN;
@@ -114,7 +114,7 @@ public class Player {
 
         if (_state == PlayerState.FORMS_WORD) {
             if (_word.length() == 0) {
-                _field.forgetChangedCell();
+                _field.undoChangesOfChangedCell();
 
                 _state = PlayerState.PLACES_LETTER;
                 fireChangedState();

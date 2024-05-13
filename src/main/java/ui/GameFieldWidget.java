@@ -169,7 +169,7 @@ public class GameFieldWidget extends JPanel {
 
     private class GameFieldController implements GameFieldListener {
         @Override
-        public void forgetChangedCell(GameFieldEvent event) {
+        public void undoChangesOfChangedCell(GameFieldEvent event) {
             CellButton changedCell = _cells.get(event.cell());
             changedCell.setText("");
         }
