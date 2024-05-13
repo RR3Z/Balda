@@ -53,7 +53,7 @@ public class CustomJTable extends JTable {
         this.setFocusable(false);
     }
 
-    public void highlightRow(int rowIndex, Color highlightColor, Color defaultColor) {
+    public void highlightRow(int rowIndex, Color highlightColor) {
         DefaultTableCellRenderer highlightCellRenderer = new DefaultTableCellRenderer() {
             @Override
             public void paintComponent(Graphics g) {
@@ -82,7 +82,7 @@ public class CustomJTable extends JTable {
                 if (row == rowIndex) {
                     component.setBackground(highlightColor);
                 } else {
-                    component.setBackground(defaultColor);
+                    component.setBackground(GameWidgetUtils.color(ColorType.TRANSPARENT));
                 }
 
                 // Text alignment

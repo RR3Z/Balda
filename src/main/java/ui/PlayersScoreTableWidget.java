@@ -2,62 +2,107 @@ package ui;
 
 import model.GameModel;
 import model.Player;
+import model.ScoreCounter;
 import model.enums.PlayerState;
-import model.events.GameModelEvent;
-import model.events.GameModelListener;
+import model.events.PlayerActionEvent;
+import model.events.PlayerActionListener;
+import model.events.ScoreCounterEvent;
+import model.events.ScoreCounterListener;
+import org.jetbrains.annotations.NotNull;
 import ui.enums.ColorType;
 import ui.tables.CustomJTable;
 import ui.utils.GameWidgetUtils;
 
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class PlayersScoreTableWidget extends CustomJTable {
-    private Map<Integer, Player> _rowIndexToPlayer = new HashMap<>();
+    private Map<ScoreCounter, Integer> _scoreCounterToRowIndex = new HashMap<>();
 
     public PlayersScoreTableWidget(GameModel gameModel, Object[] headers) {
         super(headers);
-        gameModel.addGameModelListener(new GameController());
 
         DefaultTableModel playersScoreTableModel = (DefaultTableModel)this.getModel();
+
         List<Player> players = gameModel.players();
         for(int i = 0; i < players.size(); i++) {
             Player player = players.get(i);
-            playersScoreTableModel.addRow(new Object[]{ player.name(), player.scoreCounter().score() });
-            _rowIndexToPlayer.put(i, player);
+            player.addPlayerActionListener(new PlayerActionController());
+
+            ScoreCounter scoreCounter = player.scoreCounter();
+            scoreCounter.addScoreCounterListener(new ScoreCounterController());
+
+            playersScoreTableModel.addRow(new Object[]{ player.name(), scoreCounter.score() });
+
+            _scoreCounterToRowIndex.put(scoreCounter, i);
         }
+
     }
 
-    private void update() {
+    private void updateRowValue(int rowIndex, int newValue) {
         DefaultTableModel playersScoreTableModel = (DefaultTableModel)this.getModel();
 
-        for (int i = 0; i < playersScoreTableModel.getRowCount(); i++) {
-            Player player = _rowIndexToPlayer.get(i);
+        playersScoreTableModel.setValueAt(newValue, rowIndex, playersScoreTableModel.getColumnCount() - 1);
+    }
 
-            if(player.state() == PlayerState.SELECTING_LETTER) {
-                highlightRow(i, GameWidgetUtils.color(ColorType.ACTIVE_PLAYER), GameWidgetUtils.color(ColorType.TRANSPARENT));
-            }
-
-            playersScoreTableModel.setValueAt(player.scoreCounter().score(), i, playersScoreTableModel.getColumnCount() - 1);
+    private class ScoreCounterController implements ScoreCounterListener {
+        @Override
+        public void scoreChanged(ScoreCounterEvent event) {
+            ScoreCounter scoreCounter = event.scoreCounter();
+            PlayersScoreTableWidget.this.updateRowValue(_scoreCounterToRowIndex.get(scoreCounter), scoreCounter.score());
         }
     }
 
-    private class GameController implements GameModelListener {
+    private class PlayerActionController implements PlayerActionListener {
         @Override
-        public void playerExchanged(GameModelEvent event) {
-            PlayersScoreTableWidget.this.update();
+        public void changedState(@NotNull PlayerActionEvent event) {
+            Player player = event.player();
+
+            if(player.state() == PlayerState.SELECTING_LETTER) {
+                highlightRow(_scoreCounterToRowIndex.get(player.scoreCounter()), GameWidgetUtils.color(ColorType.ACTIVE_PLAYER));
+            }
+
+            if(player.state() == PlayerState.WAITING_TURN) {
+                highlightRow(_scoreCounterToRowIndex.get(player.scoreCounter()), GameWidgetUtils.color(ColorType.TRANSPARENT));
+            }
         }
 
         @Override
-        public void placedStartWord(GameModelEvent event) {
+        public void skippedTurn(@NotNull PlayerActionEvent event) {
             // DON'T NEED IT HERE
         }
 
         @Override
-        public void gameIsFinished(GameModelEvent event) {
-            PlayersScoreTableWidget.this.update();
+        public void finishedTurn(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
+        public void placedLetter(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
+        public void choseLetter(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
+        public void choseCell(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
+        public void submittedWordWithoutChangeableCell(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
+        public void canceledActionOnField(@NotNull PlayerActionEvent event) {
+            // DON'T NEED IT HERE
         }
     }
 }
