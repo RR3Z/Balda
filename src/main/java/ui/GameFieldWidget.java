@@ -11,6 +11,7 @@ import ui.buttons.CellButton;
 import ui.enums.BorderType;
 import ui.enums.ColorType;
 import ui.utils.GameWidgetUtils;
+import ui.utils.MapUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -74,7 +75,7 @@ public class GameFieldWidget extends JPanel {
         @Override
         public void mousePressed(MouseEvent e) {
             if(GameFieldWidget.this.isEnabled()) {
-                _gameModel.activePlayer().chooseCell(GameWidgetUtils.getKeyByValue(_cells, _button));
+                _gameModel.activePlayer().chooseCell(MapUtils.getKeyByValue(_cells, _button));
             }
         }
 
@@ -195,7 +196,7 @@ public class GameFieldWidget extends JPanel {
         }
 
         @Override
-        public void placedStartWord(GameFieldEvent event) {
+        public void placedWord(GameFieldEvent event) {
             GameField gameField = event.gameField();
 
             for(int i = 0; i < gameField.height(); i++) {

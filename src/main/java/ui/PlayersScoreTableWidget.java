@@ -52,7 +52,7 @@ public class PlayersScoreTableWidget extends CustomJTable {
         }
 
         @Override
-        public void definedStartWord(GameModelEvent event) {
+        public void placedStartWord(GameModelEvent event) {
             // DON'T NEED IT HERE
         }
 
