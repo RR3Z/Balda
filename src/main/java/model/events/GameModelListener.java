@@ -1,7 +1,5 @@
 package model.events;
 
-import model.GameModel;
-
 import java.util.EventListener;
 
 public interface GameModelListener extends EventListener {
@@ -9,5 +7,5 @@ public interface GameModelListener extends EventListener {
 
     public void playerExchanged(GameModelEvent event);
 
-    public void definedStartWord(GameModelEvent event);
+    public void placedStartWord(GameModelEvent event);
 }

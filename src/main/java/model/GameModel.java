@@ -106,7 +106,7 @@ public class GameModel {
         _field.placeWord(word, centralRowIndex, direction);
         _wordsDB.addToUsedWords(word, null);
 
-        fireDefinedStartWord(word);
+        firePlacedStartWord(word);
     }
 
     private int numberOfPlayersWhoSkippedTurn() {
@@ -249,12 +249,12 @@ public class GameModel {
         }
     }
 
-    private void fireDefinedStartWord(@NotNull String word) {
+    private void firePlacedStartWord(@NotNull String word) {
         for (Object listener : _gameModelListeners) {
             GameModelEvent event = new GameModelEvent(this);
             event.setWord(word);
 
-            ((GameModelListener) listener).definedStartWord(event);
+            ((GameModelListener) listener).placedStartWord(event);
         }
     }
 }
