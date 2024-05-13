@@ -165,9 +165,12 @@ public class GameField {
                 // If last letter was used already, break cycle
                 break;
             }
+
             row[i].setLetter(word.charAt(letterIndex));
             letterIndex++;
         }
+
+        firePlacedWord(word);
     }
 
     public void forgetChangedCell() {
@@ -195,10 +198,8 @@ public class GameField {
         }
 
         @Override
-        public void definedStartWord(GameModelEvent event) {
-            if(event.word() != null) {
-                firePlacedStartWord(event.word());
-            }
+        public void placedStartWord(GameModelEvent event) {
+            // DON'T NEED IT HERE
         }
 
         @Override
@@ -224,13 +225,13 @@ public class GameField {
         }
     }
 
-    private void firePlacedStartWord(String word) {
+    private void firePlacedWord(String word) {
         for (Object listener : _gameFieldListeners) {
             GameFieldEvent event = new GameFieldEvent(this);
             event.setGameField(this);
             event.setWord(word);
 
-            ((GameFieldListener) listener).placedStartWord(event);
+            ((GameFieldListener) listener).placedWord(event);
         }
     }
 }
