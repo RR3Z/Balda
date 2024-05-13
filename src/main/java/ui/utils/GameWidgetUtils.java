@@ -29,7 +29,7 @@ public class GameWidgetUtils {
             case DEFAULT_BORDER -> Color.BLACK;
             case HIGHLIGHTED_BORDER -> new Color(98, 138, 5);
             case HIGHLIGHTED_SKIP_TURN_BORDER -> new Color(148, 15, 17);
-            case CELL_IN_WORD, CANCEL_ACTION_BUTTON, ACTIVE_KEYBOARD_BUTTON, SUBMIT_WORD_BUTTON, ACTIVE_PLAYER -> new Color(167, 201, 87);
+            case CELL_IN_WORD, CANCEL_ACTION_BUTTON, ACTIVE_ALPHABET_BUTTON, SUBMIT_WORD_BUTTON, ACTIVE_PLAYER -> new Color(167, 201, 87);
             case CHANGED_CELL, SKIP_TURN_BUTTON -> new Color(235, 93, 95);
             case TABLE_HEADER -> new Color(242, 232, 207);
             default -> Color.RED;
