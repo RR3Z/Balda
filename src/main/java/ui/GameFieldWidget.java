@@ -168,22 +168,7 @@ public class GameFieldWidget extends JPanel {
         }
 
         @Override
-        public void addedNewWordToDictionary(@NotNull PlayerActionEvent event) {
-            // DON'T NEED IT HERE
-        }
-
-        @Override
         public void submittedWordWithoutChangeableCell(@NotNull PlayerActionEvent event) {
-            // DON'T NEED IT HERE
-        }
-
-        @Override
-        public void submittedWord(@NotNull PlayerActionEvent event) {
-            // DON'T NEED IT HERE
-        }
-
-        @Override
-        public void failedToSubmitWord(@NotNull PlayerActionEvent event) {
             // DON'T NEED IT HERE
         }
     }
