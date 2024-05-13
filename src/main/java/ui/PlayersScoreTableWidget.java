@@ -58,7 +58,7 @@ public class PlayersScoreTableWidget extends CustomJTable {
 
         @Override
         public void gameIsFinished(GameModelEvent event) {
-            // DON'T NEED IT HERE
+            PlayersScoreTableWidget.this.update();
         }
     }
 }
