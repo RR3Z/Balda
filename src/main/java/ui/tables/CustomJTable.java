@@ -99,6 +99,10 @@ public class CustomJTable extends JTable {
         this.repaint();
     }
 
+    public void scrollTo(int rowIndex) {
+        this.scrollRectToVisible(this.getCellRect(rowIndex, 1, false));
+    }
+
     @Override
     public boolean isCellEditable(int row, int column) {
         return false;
