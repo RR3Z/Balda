@@ -78,7 +78,7 @@ public class AlphabetWidget extends JPanel {
                 // Logic
                 _gameModel.activePlayer().chooseLetter(_button.getText().charAt(0));
                 _button.setBorder(BorderFactory.createLineBorder(
-                        GameWidgetUtils.сolor(ColorType.DEFAULT_BORDER),
+                        GameWidgetUtils.color(ColorType.DEFAULT_BORDER),
                         GameWidgetUtils.borderThickness(BorderType.DEFAULT))
                 );
             }
@@ -88,7 +88,7 @@ public class AlphabetWidget extends JPanel {
         public void mouseEntered(MouseEvent e) {
             if(AlphabetWidget.this.isEnabled()) {
                 _button.setBorder(BorderFactory.createLineBorder(
-                        GameWidgetUtils.сolor(ColorType.DEFAULT_HIGHLIGHTED_BORDER),
+                        GameWidgetUtils.color(ColorType.DEFAULT_HIGHLIGHTED_BORDER),
                         GameWidgetUtils.borderThickness(BorderType.BOLD))
                 );
             }
@@ -98,7 +98,7 @@ public class AlphabetWidget extends JPanel {
         public void mouseExited(MouseEvent e) {
             if(AlphabetWidget.this.isEnabled()) {
                 _button.setBorder(BorderFactory.createLineBorder(
-                        GameWidgetUtils.сolor(ColorType.DEFAULT_BORDER),
+                        GameWidgetUtils.color(ColorType.DEFAULT_BORDER),
                         GameWidgetUtils.borderThickness(BorderType.DEFAULT))
                 );
             }

@@ -14,7 +14,7 @@ public class TableUtils {
             super.paintComponent(g);
 
             // Border color
-            g.setColor(GameWidgetUtils.сolor(ColorType.DEFAULT_BORDER));
+            g.setColor(GameWidgetUtils.color(ColorType.DEFAULT_BORDER));
 
             // Left vertical line
             g.fillRect(0, 0, 1, getHeight());
@@ -33,7 +33,7 @@ public class TableUtils {
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-            component.setBackground(GameWidgetUtils.сolor(ColorType.TABLE_HEADER));
+            component.setBackground(GameWidgetUtils.color(ColorType.TABLE_HEADER));
 
             // Text alignment
             setHorizontalAlignment(SwingConstants.CENTER);
@@ -48,7 +48,7 @@ public class TableUtils {
             super.paintComponent(g);
 
             // Border color
-            g.setColor(GameWidgetUtils.сolor(ColorType.DEFAULT_BORDER));
+            g.setColor(GameWidgetUtils.color(ColorType.DEFAULT_BORDER));
 
             // Left vertical line
             g.fillRect(0, 0, 1, getHeight());

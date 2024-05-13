@@ -23,7 +23,7 @@ public class GameWidgetUtils {
         container.setBounds(screenSize.width/2 - windowSize.width/2, screenSize.height/2 - windowSize.height/2, windowSize.width, windowSize.height);
     }
 
-    public static Color сolor(ColorType type) {
+    public static Color color(ColorType type) {
         return switch (type) {
             case TRANSPARENT -> new Color(0, 0, 0, 0);
             case BACKGROUND -> new Color(250, 237,205, 80);

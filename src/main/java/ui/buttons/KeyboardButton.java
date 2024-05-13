@@ -21,9 +21,9 @@ public class KeyboardButton extends JButton {
 
         this.setOpaque(false);
         this.setContentAreaFilled(false);
-        this.setBackground(GameWidgetUtils.сolor(ColorType.ACTIVE_KEYBOARD_BUTTON));
+        this.setBackground(GameWidgetUtils.color(ColorType.ACTIVE_KEYBOARD_BUTTON));
 
-        this.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.сolor(ColorType.DEFAULT_BORDER)));
+        this.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.color(ColorType.DEFAULT_BORDER)));
         this.setBorderPainted(true);
 
         this.setFont(GameWidgetUtils.font(FONT_SIZE));
