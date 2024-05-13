@@ -2,5 +2,6 @@ package ui.enums;
 
 public enum BorderType {
     DEFAULT,
-    BOLD
+    BOLD,
+    EXTRA_BOLD
 }

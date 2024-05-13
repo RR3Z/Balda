@@ -87,8 +87,8 @@ public class GameFieldWidget extends JPanel {
         public void mouseEntered(MouseEvent e) {
             if(GameFieldWidget.this.isEnabled()) {
                 _button.setBorder(BorderFactory.createLineBorder(
-                        GameWidgetUtils.color(ColorType.DEFAULT_HIGHLIGHTED_BORDER),
-                        GameWidgetUtils.borderThickness(BorderType.BOLD))
+                        GameWidgetUtils.color(ColorType.HIGHLIGHTED_BORDER),
+                        GameWidgetUtils.borderThickness(BorderType.EXTRA_BOLD))
                 );
             }
         }

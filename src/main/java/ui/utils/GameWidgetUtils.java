@@ -40,6 +40,7 @@ public class GameWidgetUtils {
         return switch (type) {
             case DEFAULT -> 1;
             case BOLD -> 2;
+            case EXTRA_BOLD -> 3;
             default -> 1;
         };
     }

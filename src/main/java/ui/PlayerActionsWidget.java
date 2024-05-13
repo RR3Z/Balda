@@ -74,7 +74,7 @@ public class PlayerActionsWidget extends JPanel {
             if(_button.isEnabled()) {
                 _button.setBorder(BorderFactory.createLineBorder(
                         GameWidgetUtils.color(ColorType.HIGHLIGHTED_BORDER),
-                        GameWidgetUtils.borderThickness(BorderType.BOLD))
+                        GameWidgetUtils.borderThickness(BorderType.EXTRA_BOLD))
                 );
             }
         }
@@ -111,7 +111,7 @@ public class PlayerActionsWidget extends JPanel {
             if(_button.isEnabled()) {
                 _button.setBorder(BorderFactory.createLineBorder(
                         GameWidgetUtils.color(ColorType.HIGHLIGHTED_SKIP_TURN_BORDER),
-                        GameWidgetUtils.borderThickness(BorderType.BOLD))
+                        GameWidgetUtils.borderThickness(BorderType.EXTRA_BOLD))
                 );
             }
         }
@@ -149,7 +149,7 @@ public class PlayerActionsWidget extends JPanel {
             if(_button.isEnabled()) {
                 _button.setBorder(BorderFactory.createLineBorder(
                         GameWidgetUtils.color(ColorType.HIGHLIGHTED_BORDER),
-                        GameWidgetUtils.borderThickness(BorderType.BOLD))
+                        GameWidgetUtils.borderThickness(BorderType.EXTRA_BOLD))
                 );
             }
         }

@@ -90,7 +90,7 @@ public class AlphabetWidget extends JPanel {
             if(AlphabetWidget.this.isEnabled()) {
                 _button.setBorder(BorderFactory.createLineBorder(
                         GameWidgetUtils.color(ColorType.HIGHLIGHTED_BORDER),
-                        GameWidgetUtils.borderThickness(BorderType.BOLD))
+                        GameWidgetUtils.borderThickness(BorderType.EXTRA_BOLD))
                 );
             }
         }
