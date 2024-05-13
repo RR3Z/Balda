@@ -28,12 +28,17 @@ public class UsedWordsTableWidget extends CustomJTable {
         }
 
         @Override
-        public void failedToAddUsedWord(WordsDBEvent event) {
+        public void addedNewWordToDictionary(WordsDBEvent event) {
             // DON'T NEED IT HERE
         }
 
         @Override
-        public void addedNewWordToDictionary(WordsDBEvent event) {
+        public void wordAlreadyUsed(WordsDBEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
+        public void wordNotAllowed(WordsDBEvent event) {
             // DON'T NEED IT HERE
         }
     }
