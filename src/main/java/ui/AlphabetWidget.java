@@ -140,7 +140,7 @@ public class AlphabetWidget extends JPanel {
 
     private class AlphabetController implements AlphabetListener {
         @Override
-        public void forgetSelectedLetter(AlphabetEvent event) {
+        public void forgotSelectedLetter(AlphabetEvent event) {
             _letters.get(event.letter()).changeState(LetterButtonState.UNSELECTED);
         }
 

@@ -30,7 +30,7 @@ public class Alphabet {
 
     public void forgetSelectedLetter() {
         if(_selectedLetter != null) {
-            fireForgetSelectedLetter(_selectedLetter);
+            fireForgotSelectedLetter(_selectedLetter);
             _selectedLetter = null;
         }
     }
@@ -94,13 +94,13 @@ public class Alphabet {
         _alphabetListeners.add(listener);
     }
 
-    private void fireForgetSelectedLetter(Character letter) {
+    private void fireForgotSelectedLetter(Character letter) {
         for (Object listener : _alphabetListeners) {
             AlphabetEvent event = new AlphabetEvent(this);
             event.setAlphabet(this);
             event.setLetter(letter);
 
-            ((AlphabetListener) listener).forgetSelectedLetter(event);
+            ((AlphabetListener) listener).forgotSelectedLetter(event);
         }
     }
 
