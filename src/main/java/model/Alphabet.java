@@ -42,6 +42,7 @@ public class Alphabet {
 
         if(isLetterAvailable(letter)) {
             _selectedLetter = letter;
+            fireSelectedLetter(letter);
             return true;
         }
 
@@ -100,6 +101,16 @@ public class Alphabet {
             event.setLetter(letter);
 
             ((AlphabetListener) listener).forgetSelectedLetter(event);
+        }
+    }
+
+    private void fireSelectedLetter(Character letter) {
+        for (Object listener : _alphabetListeners) {
+            AlphabetEvent event = new AlphabetEvent(this);
+            event.setAlphabet(this);
+            event.setLetter(letter);
+
+            ((AlphabetListener) listener).selectedLetter(event);
         }
     }
 }

@@ -102,9 +102,7 @@ public class AlphabetWidget extends JPanel {
 
         @Override
         public void choseLetter(@NotNull PlayerActionEvent event) {
-            if(event.player() == _gameModel.activePlayer()) {
-                _letters.get(event.letter()).changeState(LetterButtonState.SELECTED);
-            }
+            // DON'T NEED IT HERE
         }
 
         @Override
@@ -144,6 +142,11 @@ public class AlphabetWidget extends JPanel {
         @Override
         public void forgetSelectedLetter(AlphabetEvent event) {
             _letters.get(event.letter()).changeState(LetterButtonState.UNSELECTED);
+        }
+
+        @Override
+        public void selectedLetter(AlphabetEvent event) {
+            _letters.get(event.letter()).changeState(LetterButtonState.SELECTED);
         }
     }
 }
