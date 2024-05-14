@@ -56,7 +56,7 @@ public class AlphabetWidget extends JPanel {
             LetterButton letterButton = new LetterButton();
 
             letterButton.setText(String.valueOf(letter));
-            letterButton.addMouseListener(new KeyboardButtonMouseListener(letterButton));
+            letterButton.addMouseListener(new LetterButtonMouseListener(letterButton));
 
             _letters.put(letter, letterButton);
 
@@ -64,10 +64,10 @@ public class AlphabetWidget extends JPanel {
         }
     }
 
-    private class KeyboardButtonMouseListener extends MouseAdapter {
+    private class LetterButtonMouseListener extends MouseAdapter {
         private LetterButton _button;
 
-        public KeyboardButtonMouseListener(@NotNull LetterButton button) {
+        public LetterButtonMouseListener(@NotNull LetterButton button) {
             _button = button;
         }
 
