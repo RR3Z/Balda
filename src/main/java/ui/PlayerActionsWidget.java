@@ -136,7 +136,7 @@ public class PlayerActionsWidget extends JPanel {
     private class PlayerController implements PlayerActionListener {
         @Override
         public void changedState(@NotNull PlayerActionEvent event) {
-            if(PlayerActionsWidget.this.isEnabled()){
+            if(PlayerActionsWidget.this.isEnabled() && event.player() == _gameModel.activePlayer()) {
                 if(event.player().state() == PlayerState.SELECTING_LETTER) {
                     _cancelActionButton.setEnabled(false);
                     _submitWordButton.setEnabled(false);

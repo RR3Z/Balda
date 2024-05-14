@@ -108,14 +108,16 @@ public class GameFieldWidget extends JPanel {
 
         @Override
         public void finishedTurn(@NotNull PlayerActionEvent event) {
-            for(CellButton button: _cells.values()) {
-                button.changeState(CellButtonState.DEFAULT);
+            if(event.player().state() == PlayerState.WAITING_TURN) {
+                for(CellButton button: _cells.values()) {
+                    button.changeState(CellButtonState.DEFAULT);
+                }
             }
         }
 
         @Override
         public void placedLetter(@NotNull PlayerActionEvent event) {
-            if(GameFieldWidget.this.isEnabled()) {
+            if(GameFieldWidget.this.isEnabled() && event.player() == _gameModel.activePlayer()) {
                 Cell changedCell = event.cell();
                 CellButton button = _cells.get(changedCell);
 
@@ -126,7 +128,7 @@ public class GameFieldWidget extends JPanel {
 
         @Override
         public void choseCell(@NotNull PlayerActionEvent event) {
-            if(GameFieldWidget.this.isEnabled()) {
+            if(GameFieldWidget.this.isEnabled()  && event.player() == _gameModel.activePlayer()) {
                 CellButton selectedCell = _cells.get(event.cell());
                 selectedCell.changeState(CellButtonState.IN_WORD);
             }
@@ -134,26 +136,30 @@ public class GameFieldWidget extends JPanel {
 
         @Override
         public void canceledActionOnField(@NotNull PlayerActionEvent event) {
-            for(CellButton button: _cells.values()) {
-                button.changeState(CellButtonState.DEFAULT);
-            }
+            if(event.player() == _gameModel.activePlayer()) {
+                for(CellButton button: _cells.values()) {
+                    button.changeState(CellButtonState.DEFAULT);
+                }
 
-            CellButton selectedCell = _cells.get(event.cell());
-            if(selectedCell != null) {
-                selectedCell.setText(String.valueOf(event.cell().letter()));
-                selectedCell.changeState(CellButtonState.CHANGED);
-            }
+                CellButton selectedCell = _cells.get(event.cell());
+                if(selectedCell != null) {
+                    selectedCell.setText(String.valueOf(event.cell().letter()));
+                    selectedCell.changeState(CellButtonState.CHANGED);
+                }
 
-            GameFieldWidget.this.paintImmediately(getVisibleRect());
+                GameFieldWidget.this.paintImmediately(getVisibleRect());
+            }
         }
 
         @Override
         public void skippedTurn(@NotNull PlayerActionEvent event) {
-            for(CellButton button: _cells.values()) {
-                button.changeState(CellButtonState.DEFAULT);
-            }
+            if(event.player().state() == PlayerState.SKIPPED_TURN) {
+                for(CellButton button: _cells.values()) {
+                    button.changeState(CellButtonState.DEFAULT);
+                }
 
-            GameFieldWidget.this.paintImmediately(getVisibleRect());
+                GameFieldWidget.this.paintImmediately(getVisibleRect());
+            }
         }
 
         @Override
