@@ -176,8 +176,7 @@ public class GameFieldWidget extends JPanel {
     private class GameFieldController implements GameFieldListener {
         @Override
         public void undoChangesOfChangedCell(GameFieldEvent event) {
-            CellButton changedCell = _cells.get(event.cell());
-            changedCell.setText("");
+            _cells.get(event.cell()).setText("");
         }
 
         @Override
