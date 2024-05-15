@@ -33,6 +33,10 @@ public class MainWindow extends JFrame {
         mainMenuBar.add(mainMenu);
         this.setJMenuBar(mainMenuBar);
 
+        JLabel text = new JLabel("Игра \"Балда\"");
+        text.setFont(GameWidgetUtils.font(24));
+        this.add(text);
+
         UIManager.put("OptionPane.messageFont", GameWidgetUtils.font(GameWidgetUtils.OPTION_PANE_FONT_SIZE));
         UIManager.put("OptionPane.buttonFont", GameWidgetUtils.font(GameWidgetUtils.OPTION_PANE_FONT_SIZE));
 
