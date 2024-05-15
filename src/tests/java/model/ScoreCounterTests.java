@@ -9,7 +9,7 @@ public class ScoreCounterTests {
     private ScoreCounter _scoreCounter;
 
     @Test
-    public void test_increaseScore_OnPositiveValue() {
+    public void increaseScore_OnPositiveValue() {
         _scoreCounter = new ScoreCounter();
         int amount = 15;
         _scoreCounter.increaseScore(amount);
@@ -18,7 +18,7 @@ public class ScoreCounterTests {
     }
 
     @Test
-    public void test_increaseScore_OnNegativeValue() {
+    public void increaseScore_OnNegativeValue() {
         _scoreCounter = new ScoreCounter();
         int amount = -15;
 
@@ -26,7 +26,7 @@ public class ScoreCounterTests {
     }
 
     @Test
-    public void test_increaseScore_OnZeroValue() {
+    public void increaseScore_OnZeroValue() {
         _scoreCounter = new ScoreCounter();
         int amount = 0;
         _scoreCounter.increaseScore(amount);
@@ -35,7 +35,7 @@ public class ScoreCounterTests {
     }
 
     @Test
-    public void test_decreaseScore_ByValidValue() {
+    public void decreaseScore_ByValidValue() {
         int startValue = 16;
         _scoreCounter = new ScoreCounter(startValue);
         int decreaseValue = 15;
@@ -47,7 +47,7 @@ public class ScoreCounterTests {
     }
 
     @Test
-    public void test_decreaseScore_ScoreIsZero() {
+    public void decreaseScore_ScoreIsZero() {
         int startValue = 16;
         _scoreCounter = new ScoreCounter(startValue);
         int decreaseValue = 16;
@@ -59,7 +59,7 @@ public class ScoreCounterTests {
     }
 
     @Test
-    public void test_decreaseScore_OnNegativeValue() {
+    public void decreaseScore_OnNegativeValue() {
         _scoreCounter = new ScoreCounter(4);
         int decreaseValue = -15;
 
@@ -67,7 +67,7 @@ public class ScoreCounterTests {
     }
 
     @Test
-    public void test_decreaseScore_OnZeroValue() {
+    public void decreaseScore_OnZeroValue() {
         int startValue = 16;
         _scoreCounter = new ScoreCounter(startValue);
         int decreaseValue = 0;
@@ -79,7 +79,7 @@ public class ScoreCounterTests {
     }
 
     @Test
-    public void test_decreaseScore_MoreThanItContains() {
+    public void decreaseScore_MoreThanItContains() {
         int startValue = 16;
         _scoreCounter = new ScoreCounter(startValue);
         int decreaseValue = 17;

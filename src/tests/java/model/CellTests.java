@@ -20,14 +20,14 @@ public class CellTests {
     }
 
     @Test
-    public void test_setLetter_InEmptyCell() {
+    public void setLetter_InEmptyCell() {
         _cell.setLetter('a');
 
         assertEquals('a', _cell.letter());
     }
 
     @Test
-    public void test_setLetter_InCellWithLetter() {
+    public void setLetter_InCellWithLetter() {
         _cell.setLetter('a');
 
         assertThrows(IllegalArgumentException.class, () -> _cell.setLetter('b'));
@@ -35,12 +35,12 @@ public class CellTests {
     }
 
     @Test
-    public void test_setLetter_Null() {
+    public void setLetter_Null() {
         assertThrows(IllegalArgumentException.class, () -> _cell.setLetter(null));
     }
 
     @Test
-    public void test_setPosition_InEmptyCell() {
+    public void setPosition_InEmptyCell() {
         Point pos = new Point(0, 0);
         _cell.setPosition(pos);
 
@@ -48,7 +48,7 @@ public class CellTests {
     }
 
     @Test
-    public void test_setPosition_InCellWithPosition() {
+    public void setPosition_InCellWithPosition() {
         Point pos = new Point(0, 0);
         _cell.setPosition(pos);
 
@@ -57,12 +57,12 @@ public class CellTests {
     }
 
     @Test
-    public void test_setPosition_Null() {
+    public void setPosition_Null() {
         assertThrows(IllegalArgumentException.class, () -> _cell.setPosition(null));
     }
 
     @Test
-    public void test_removeLetter_FromCellWithLetter() {
+    public void removeLetter_FromCellWithLetter() {
         _cell.setLetter('a');
         _cell.removeLetter();
 
@@ -70,14 +70,14 @@ public class CellTests {
     }
 
     @Test
-    public void test_removeLetter_FromCellWithoutLetter() {
+    public void removeLetter_FromCellWithoutLetter() {
         _cell.removeLetter();
 
         assertNull(_cell.letter());
     }
 
     @Test
-    public void test_setAdjacentCell_AdjacentRight() {
+    public void setAdjacentCell_AdjacentRight() {
         Point pos = new Point(0, 0);
         _cell.setPosition(pos);
 
@@ -90,7 +90,7 @@ public class CellTests {
     }
 
     @Test
-    public void test_setAdjacentCell_AdjacentLeft() {
+    public void setAdjacentCell_AdjacentLeft() {
         Point pos = new Point(1, 1);
         _cell.setPosition(pos);
 
@@ -103,7 +103,7 @@ public class CellTests {
     }
 
     @Test
-    public void test_setAdjacentCell_AdjacentTop() {
+    public void setAdjacentCell_AdjacentTop() {
         Point pos = new Point(0, 0);
         _cell.setPosition(pos);
 
@@ -116,7 +116,7 @@ public class CellTests {
     }
 
     @Test
-    public void test_setAdjacentCell_AdjacentBottom() {
+    public void setAdjacentCell_AdjacentBottom() {
         Point pos = new Point(1, 1);
         _cell.setPosition(pos);
 
@@ -129,7 +129,7 @@ public class CellTests {
     }
 
     @Test
-    public void test_setAdjacentCell_NotAdjacentTopLeftCell() {
+    public void setAdjacentCell_NotAdjacentTopLeftCell() {
         Point pos = new Point(0, 0);
         _cell.setPosition(pos);
 
@@ -142,7 +142,7 @@ public class CellTests {
     }
 
     @Test
-    public void test_setAdjacentCell_NotAdjacentTopRightCell() {
+    public void setAdjacentCell_NotAdjacentTopRightCell() {
         Point pos = new Point(0, 0);
         _cell.setPosition(pos);
 
@@ -155,7 +155,7 @@ public class CellTests {
     }
 
     @Test
-    public void test_setAdjacentCell_NotAdjacentBottomLeftCell() {
+    public void setAdjacentCell_NotAdjacentBottomLeftCell() {
         Point pos = new Point(0, 0);
         _cell.setPosition(pos);
 
@@ -168,7 +168,7 @@ public class CellTests {
     }
 
     @Test
-    public void test_setAdjacentCell_NotAdjacentBottomRightCell() {
+    public void setAdjacentCell_NotAdjacentBottomRightCell() {
         Point pos = new Point(0, 0);
         _cell.setPosition(pos);
 
@@ -181,7 +181,7 @@ public class CellTests {
     }
 
     @Test
-    public void test_setAdjacentCell_NotAdjacentCell() {
+    public void setAdjacentCell_NotAdjacentCell() {
         Point pos = new Point(0, 0);
         _cell.setPosition(pos);
 
@@ -194,7 +194,7 @@ public class CellTests {
     }
 
     @Test
-    public void test_setAdjacentCell_ItSelf() {
+    public void setAdjacentCell_ItSelf() {
         Point pos = new Point(0, 0);
         _cell.setPosition(pos);
 
@@ -204,12 +204,12 @@ public class CellTests {
     }
 
     @Test
-    public void test_setAdjacentCell_Null() {
+    public void setAdjacentCell_Null() {
         assertThrows(IllegalArgumentException.class, () -> _cell.setAdjacentCell(null));
     }
 
     @Test
-    public void test_areNeighborsWithLetter_hasNeighborWithLetter() {
+    public void areNeighborsWithLetter_hasNeighborWithLetter() {
         Point pos = new Point(0, 0);
         _cell.setPosition(pos);
 
@@ -223,7 +223,7 @@ public class CellTests {
     }
 
     @Test
-    public void test_areNeighborsWithLetter_hasNoNeighborWithLetter() {
+    public void areNeighborsWithLetter_hasNoNeighborWithLetter() {
         Point pos = new Point(0, 0);
         _cell.setPosition(pos);
 
