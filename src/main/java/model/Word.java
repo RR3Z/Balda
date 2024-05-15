@@ -16,12 +16,13 @@ public class Word {
     }
 
     public String toString() {
-        StringBuilder wordStringRepresentation = new StringBuilder();
+        String wordStringRepresentation = "";
+
         for (Cell cell : _cells) {
-            wordStringRepresentation.append(cell.letter());
+            wordStringRepresentation += cell.letter();
         }
 
-        return wordStringRepresentation.toString();
+        return wordStringRepresentation;
     }
 
     public int length() {
