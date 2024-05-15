@@ -50,24 +50,20 @@ public class AlphabetTests {
     public void selectLetter_LetterIsNull() {
         Character letter = null;
 
-        List<EVENT> expectedEvents = new ArrayList<>();
-
         assertThrows(IllegalArgumentException.class, () -> _alphabet.selectLetter(letter));
 
         assertEquals(letter, _alphabet.selectedLetter());
-        assertEquals(expectedEvents, _events);
+        assertTrue(_events.isEmpty());
     }
 
     @Test
     public void selectLetter_UnknownLetter() {
         Character letter = 'b';
 
-        List<EVENT> expectedEvents = new ArrayList<>();
-
         assertFalse(_alphabet.selectLetter(letter));
 
         assertNull(_alphabet.selectedLetter());
-        assertEquals(expectedEvents, _events);
+        assertTrue(_events.isEmpty());
     }
 
     @Test
@@ -114,12 +110,10 @@ public class AlphabetTests {
 
     @Test
     public void forgetSelectedLetter_SelectedLetterIsNull() {
-        List<EVENT> expectedEvents = new ArrayList<>();
-
         _alphabet.forgetSelectedLetter();
 
         assertNull(_alphabet.selectedLetter());
-        assertEquals(expectedEvents, _events);
+        assertTrue(_events.isEmpty());
     }
 
     @Test
@@ -152,6 +146,7 @@ public class AlphabetTests {
     @Test
     public void selectedLetter_LetterIsNull() {
         assertNull(_alphabet.selectedLetter());
+        assertTrue(_events.isEmpty());
     }
     
     @Test
@@ -159,6 +154,7 @@ public class AlphabetTests {
         Character letter = 'ф';
 
         assertTrue(_alphabet.isLetterAvailable(letter));
+        assertTrue(_events.isEmpty());
     }
 
     @Test
@@ -166,6 +162,7 @@ public class AlphabetTests {
         Character letter = 'b';
 
         assertFalse(_alphabet.isLetterAvailable(letter));
+        assertTrue(_events.isEmpty());
     }
 
     @Test
@@ -173,10 +170,12 @@ public class AlphabetTests {
         Character letter = 'Ф';
 
         assertFalse(_alphabet.isLetterAvailable(letter));
+        assertTrue(_events.isEmpty());
     }
 
     @Test
     public void isLetterAvailable_Null() {
         assertThrows(IllegalArgumentException.class, () -> _alphabet.isLetterAvailable(null));
+        assertTrue(_events.isEmpty());
     }
 }
