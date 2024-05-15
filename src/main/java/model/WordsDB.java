@@ -13,28 +13,18 @@ public class WordsDB {
     private List<String> _dictionary = new ArrayList<>();
     private Map<Player, String> _usedWords = new HashMap<>();
 
-    public WordsDB(@NotNull List<String> dictionary) {
-        // Translate words to lower case
-        List<String> lowerCaseWords = new ArrayList<>();
-        for (String word : dictionary) {
-            if (!lowerCaseWords.contains(word.toLowerCase())) {
-                lowerCaseWords.add(word.toLowerCase());
-            }
-        }
-
-        _dictionary = lowerCaseWords;
-    }
-
     public WordsDB(@NotNull String filePath) {
         readFromFile(filePath);
     }
 
     public boolean addToDictionary(@NotNull String word, Player player) {
-        if (_dictionary.contains(word.toLowerCase())) {
+        String lowercaseWord = word.toLowerCase();
+
+        if (_dictionary.contains(lowercaseWord)) {
             return false;
         }
 
-        _dictionary.add(word.toLowerCase());
+        _dictionary.add(lowercaseWord);
         fireAddedNewWordToDictionary(player, word);
         return true;
     }
@@ -51,7 +41,7 @@ public class WordsDB {
         }
 
         _usedWords.put(player, word.toLowerCase());
-        fireAddedUsedWord(player, word);
+        fireAddedToUsedWords(player, word);
         return true;
     }
 
@@ -106,8 +96,6 @@ public class WordsDB {
         }
     }
 
-
-
     // Listeners
     private List<EventListener> _wordsDBListeners = new ArrayList<>();
 
@@ -115,13 +103,13 @@ public class WordsDB {
         _wordsDBListeners.add(listener);
     }
 
-    private void fireAddedUsedWord(Player player, @NotNull String word) {
+    private void fireAddedToUsedWords(Player player, @NotNull String word) {
         for (Object listener : _wordsDBListeners) {
             WordsDBEvent event = new WordsDBEvent(this);
             event.setPlayer(player);
             event.setWord(word);
 
-            ((WordsDBListener) listener).addedUsedWord(event);
+            ((WordsDBListener) listener).addedToUsedWords(event);
         }
     }
 

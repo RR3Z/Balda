@@ -19,7 +19,7 @@ public class UsedWordsTableWidget extends CustomJTable {
 
     private class WordsDBController implements WordsDBListener {
         @Override
-        public void addedUsedWord(WordsDBEvent event) {
+        public void addedToUsedWords(WordsDBEvent event) {
             if(event.player() != null) {
                 UsedWordsTableWidget.this.add(event.player().name(), event.word());
             } else {

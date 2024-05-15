@@ -248,7 +248,7 @@ public class MainWindow extends JFrame {
         }
 
         @Override
-        public void addedUsedWord(WordsDBEvent event) {
+        public void addedToUsedWords(WordsDBEvent event) {
             // DON'T NEED IT HERE
         }
     }
