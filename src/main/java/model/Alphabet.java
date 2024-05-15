@@ -68,6 +68,7 @@ public class Alphabet {
         }
     }
 
+    // GameModel observe
     private class GameModelObserve implements GameModelListener {
         @Override
         public void playerExchanged(GameModelEvent event) {
@@ -84,8 +85,6 @@ public class Alphabet {
             // DON'T NEED IT HERE
         }
     }
-
-
 
     // Listeners
     private List<EventListener> _alphabetListeners = new ArrayList<>();
