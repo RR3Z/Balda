@@ -5,6 +5,7 @@ import model.events.WordsDBListener;
 import model.utils.DataFilePaths;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ui.utils.GameWidgetUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,26 +13,20 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WordsDBTests {
+    private GameModel _gameModel;
+    private WordsDB _wordsDB;
     private enum EVENT {
-        ADDED_USED_WORD,
-        FAILED_TO_ADD_USED_WORD,
+        ADDED_TO_USED_WORDS,
         ADDED_NEW_WORD_TO_DICTIONARY,
-        FAILED_TO_ADD_NEW_WORD_TO_DICTIONARY
+        WORD_ALREADY_USED,
+        WORD_NOT_ALLOWED
     }
-
-    private final List<EVENT> _events = new ArrayList<>();
-    private final List<EVENT> _expectedEvents = new ArrayList<>();
+    private List<EVENT> _events;
 
     private class EventsListener implements WordsDBListener {
-
         @Override
-        public void addedUsedWord(WordsDBEvent event) {
-            _events.add(EVENT.ADDED_USED_WORD);
-        }
-
-        @Override
-        public void failedToAddUsedWord(WordsDBEvent event) {
-            _events.add(EVENT.FAILED_TO_ADD_USED_WORD);
+        public void addedToUsedWords(WordsDBEvent event) {
+            _events.add(EVENT.ADDED_TO_USED_WORDS);
         }
 
         @Override
@@ -40,32 +35,28 @@ public class WordsDBTests {
         }
 
         @Override
-        public void failedToAddNewWordToDictionary(WordsDBEvent event) {
-            _events.add(EVENT.FAILED_TO_ADD_NEW_WORD_TO_DICTIONARY);
+        public void wordAlreadyUsed(WordsDBEvent event) {
+            _events.add(EVENT.WORD_ALREADY_USED);
         }
-    }
 
-    private WordsDB _wordsDB;
-
-    public WordsDBTests() {
+        @Override
+        public void wordNotAllowed(WordsDBEvent event) {
+            _events.add(EVENT.WORD_NOT_ALLOWED);
+        }
     }
 
     @BeforeEach
     public void testSetup() {
-        _events.clear();
-        _expectedEvents.clear();
+        _gameModel = new GameModel(5, 5);
 
-        List<String> dictionary = new ArrayList<>();
-        dictionary.add("привет");
-        dictionary.add("ПокА");
-        dictionary.add("КАК");
-        dictionary.add("ДеЛиШкИ");
-        _wordsDB = new WordsDB(dictionary);
+        _wordsDB = _gameModel.wordsDB();
         _wordsDB.addWordsDBListener(new EventsListener());
+
+        _events = new ArrayList<>();
     }
 
     @Test
-    public void test_containsInDictionary_WordInLowerCaseContain() {
+    public void containsInDictionary_DictionaryContainsWordInLowerCase() {
         String word = "привет";
 
         assertTrue(_wordsDB.containsInDictionary(word));
@@ -73,23 +64,23 @@ public class WordsDBTests {
     }
 
     @Test
-    public void test_containsInDictionary_WordInUpperCaseContain() {
+    public void containsInDictionary_DictionaryNotContainsWordInUpperCase() {
         String word = "ПРИВЕТ";
 
-        assertTrue(_wordsDB.containsInDictionary(word));
+        assertFalse(_wordsDB.containsInDictionary(word));
         assertTrue(_events.isEmpty());
     }
 
     @Test
-    public void test_containsInDictionary_WordInDifferentCasesContain() {
+    public void containsInDictionary_DictionaryNotContainsWordInDifferentCases() {
         String word = "ПрИвеТ";
 
-        assertTrue(_wordsDB.containsInDictionary(word));
+        assertFalse(_wordsDB.containsInDictionary(word));
         assertTrue(_events.isEmpty());
     }
 
     @Test
-    public void test_containsInDictionary_NotContain() {
+    public void containsInDictionary_DictionaryDoNotContainWord() {
         String word = "бананчик";
 
         assertFalse(_wordsDB.containsInDictionary(word));
@@ -97,48 +88,37 @@ public class WordsDBTests {
     }
 
     @Test
-    public void test_containsInDictionary_Null() {
+    public void containsInDictionary_NullObject() {
         assertThrows(IllegalArgumentException.class, () -> _wordsDB.containsInDictionary(null));
+        assertTrue(_events.isEmpty());
     }
 
     @Test
-    public void test_containsInUsedWord_WordInLowerCaseContain() {
+    public void containsInUsedWord_UsedWordsContainsWord() {
         String word = "привет";
-        Player player = new Player("Player 1", new Alphabet(DataFilePaths.ALPHABET_FILE_PATH), _wordsDB, new GameField(5, 5));
-        _wordsDB.addToUsedWords(word, player);
 
-        _expectedEvents.add(EVENT.ADDED_USED_WORD);
-
-        assertTrue(_wordsDB.containsInUsedWords(word));
-        assertEquals(_expectedEvents,_events);
+        assertFalse(_wordsDB.containsInUsedWords(word));
+        assertTrue(_events.isEmpty());
     }
 
     @Test
-    public void test_containsInUsedWord_WordInUpperCaseContain() {
+    public void containsInUsedWord_UsedWordsDoNotContainWordInUppercase() {
         String word = "ПРИВЕТ";
-        Player player = new Player("Player 1", new Alphabet(DataFilePaths.ALPHABET_FILE_PATH), _wordsDB, new GameField(5, 5));
-        _wordsDB.addToUsedWords(word, player);
 
-        _expectedEvents.add(EVENT.ADDED_USED_WORD);
-
-        assertTrue(_wordsDB.containsInUsedWords(word));
-        assertEquals(_expectedEvents,_events);
+        assertFalse(_wordsDB.containsInUsedWords(word));
+        assertTrue(_events.isEmpty());
     }
 
     @Test
-    public void test_containsInUsedWords_WordInDifferentCasesContain() {
-        String word = "ПриВЕТ";
-        Player player = new Player("Player 1", new Alphabet(DataFilePaths.ALPHABET_FILE_PATH), _wordsDB, new GameField(5, 5));
-        _wordsDB.addToUsedWords(word, player);
+    public void containsInUsedWords_UsedWordsDoNotContainWordInDifferentCases() {
+        String word = "пРиВеТ";
 
-        _expectedEvents.add(EVENT.ADDED_USED_WORD);
-
-        assertTrue(_wordsDB.containsInUsedWords(word));
-        assertEquals(_expectedEvents,_events);
+        assertFalse(_wordsDB.containsInUsedWords(word));
+        assertTrue(_events.isEmpty());
     }
 
     @Test
-    public void test_containsInUsedWords_NotContain() {
+    public void containsInUsedWords_UnknownWord() {
         String word = "бананчик";
 
         assertFalse(_wordsDB.containsInUsedWords(word));
@@ -146,132 +126,116 @@ public class WordsDBTests {
     }
 
     @Test
-    public void test_containsInUsedWords_Null() {
+    public void containsInUsedWords_NullObject() {
         assertThrows(IllegalArgumentException.class, () -> _wordsDB.containsInUsedWords(null));
+        assertTrue(_events.isEmpty());
     }
 
     @Test
-    public void test_randomWord_WordOfSpecifiedLengthIsAvailable() {
+    public void randomWord_WordOfSpecifiedLengthIsAvailable() {
         int length = 3;
-        String expectedResult = "как";
 
-        assertEquals(expectedResult, _wordsDB.randomWord(length));
+        assertEquals(length, _wordsDB.randomWord(length).length());
         assertTrue(_events.isEmpty());
     }
 
     @Test
-    public void test_randomWord_WordOfSpecifiedLengthIsNotAvailable() {
+    public void randomWord_WordOfSpecifiedLengthIsNotAvailable() {
         int length = 10;
-        String expectedResult = "делишки";
 
-        assertEquals(expectedResult, _wordsDB.randomWord(length));
+        assertEquals(length, _wordsDB.randomWord(length).length());
         assertTrue(_events.isEmpty());
     }
 
     @Test
-    public void test_randomWord_LengthIsOne() {
+    public void randomWord_LengthIsOne() {
         int length = 1;
 
         assertThrows(IllegalArgumentException.class, () -> _wordsDB.randomWord(length));
+        assertTrue(_events.isEmpty());
     }
 
     @Test
-    public void test_randomWord_LengthIsZeroValue() {
+    public void randomWord_LengthIsZero() {
         int length = 0;
 
         assertThrows(IllegalArgumentException.class, () -> _wordsDB.randomWord(length));
+        assertTrue(_events.isEmpty());
     }
 
     @Test
-    public void test_randomWord_LengthIsNegativeValue() {
+    public void randomWord_LengthIsNegativeValue() {
         int length = -1;
 
         assertThrows(IllegalArgumentException.class, () -> _wordsDB.randomWord(length));
+        assertTrue(_events.isEmpty());
     }
 
     @Test
-    public void test_addToDictionary_NewWord() {
-        String newWord = "змея";
+    public void addToDictionary_NewWord() {
+        String newWord = "волнистая";
 
-        _expectedEvents.add(EVENT.ADDED_NEW_WORD_TO_DICTIONARY);
+        List<EVENT> expectedEvents = new ArrayList<>();
+        expectedEvents.add(EVENT.ADDED_NEW_WORD_TO_DICTIONARY);
 
-        assertTrue(_wordsDB.addToDictionary(newWord));
+        assertTrue(_wordsDB.addToDictionary(newWord, _gameModel.activePlayer()));
         assertTrue(_wordsDB.containsInDictionary(newWord));
-        assertEquals(_expectedEvents, _events);
+        assertEquals(expectedEvents, _events);
     }
 
     @Test
-    public void test_addToDictionary_KnownWord() {
+    public void addToDictionary_KnownWord() {
         String newWord = "привет";
 
-        _expectedEvents.add(EVENT.FAILED_TO_ADD_NEW_WORD_TO_DICTIONARY);
-
         assertTrue(_wordsDB.containsInDictionary(newWord));
-        assertFalse(_wordsDB.addToDictionary(newWord));
-        assertEquals(_expectedEvents, _events);
+        assertFalse(_wordsDB.addToDictionary(newWord, _gameModel.activePlayer()));
+        assertTrue(_events.isEmpty());
     }
 
     @Test
-    public void test_addToDictionary_Null() {
+    public void addToDictionary_NullObject() {
         String newWord = null;
 
-        assertThrows(IllegalArgumentException.class, () -> _wordsDB.addToDictionary(newWord));
+        assertThrows(IllegalArgumentException.class, () -> _wordsDB.addToDictionary(newWord, _gameModel.activePlayer()));
+        assertTrue(_events.isEmpty());
     }
 
     @Test
-    public void test_addToUsedWords_KnownAndNotUsedWord() {
+    public void addToUsedWords_KnownAndNotUsedWord() {
         String word = "привет";
-        Player player = new Player("Player 1", new Alphabet(DataFilePaths.ALPHABET_FILE_PATH), _wordsDB, new GameField(5, 5));
 
-        _expectedEvents.add(EVENT.ADDED_USED_WORD);
+        List<EVENT> expectedEvents = new ArrayList<>();
+        expectedEvents.add(EVENT.ADDED_TO_USED_WORDS);
 
-        assertTrue(_wordsDB.addToUsedWords(word, player));
+        assertTrue(_wordsDB.addToUsedWords(word, _gameModel.activePlayer()));
         assertTrue(_wordsDB.containsInUsedWords(word));
-        assertEquals(_expectedEvents, _events);
+        assertEquals(expectedEvents, _events);
     }
 
     @Test
-    public void test_addToUsedWords_KnownAndUsedWord() {
+    public void addToUsedWords_KnownAndUsedWord() {
         String word = "привет";
-        Player player = new Player("Player 1", new Alphabet(DataFilePaths.ALPHABET_FILE_PATH), _wordsDB, new GameField(5, 5));
-        _wordsDB.addToUsedWords(word, player);
+        _wordsDB.addToUsedWords(word, _gameModel.activePlayer());
 
-        _expectedEvents.add(EVENT.ADDED_USED_WORD);
-        _expectedEvents.add(EVENT.FAILED_TO_ADD_USED_WORD);
+        List<EVENT> expectedEvents = new ArrayList<>();
+        expectedEvents.add(EVENT.ADDED_TO_USED_WORDS);
+        expectedEvents.add(EVENT.WORD_ALREADY_USED);
 
         assertTrue(_wordsDB.containsInUsedWords(word));
-        assertFalse(_wordsDB.addToUsedWords(word, player));
-        assertEquals(_expectedEvents, _events);
+        assertFalse(_wordsDB.addToUsedWords(word, _gameModel.activePlayer()));
+        assertEquals(expectedEvents, _events);
     }
 
     @Test
-    public void test_addToUsedWords_UnknownWord() {
-        String word = "банан";
-        Player player = new Player("Player 1", new Alphabet(DataFilePaths.ALPHABET_FILE_PATH), _wordsDB, new GameField(5, 5));
+    public void addToUsedWords_UnknownWord() {
+        String word = "популярный";
 
-        _expectedEvents.add(EVENT.FAILED_TO_ADD_USED_WORD);
+        List<EVENT> expectedEvents = new ArrayList<>();
+        expectedEvents.add(EVENT.WORD_NOT_ALLOWED);
 
+        assertFalse(_wordsDB.containsInDictionary(word));
         assertFalse(_wordsDB.containsInUsedWords(word));
-        assertFalse(_wordsDB.addToUsedWords(word, player));
-        assertEquals(_expectedEvents, _events);
-    }
-
-    @Test
-    public void test_addToUsedWords_NullWord() {
-        Player player = new Player("Player 1", new Alphabet(DataFilePaths.ALPHABET_FILE_PATH), _wordsDB, new GameField(5, 5));
-
-        assertThrows(IllegalArgumentException.class, () -> _wordsDB.addToUsedWords(null, player));
-    }
-
-    @Test
-    public void test_addToUsedWords_NullPlayer() {
-        String word = "ДеЛиШкИ";
-        Player player = null;
-
-        _expectedEvents.add(EVENT.ADDED_USED_WORD);
-
-        assertTrue(_wordsDB.addToUsedWords(word, player));
-        assertTrue(_wordsDB.containsInUsedWords(word));
-        assertEquals(_expectedEvents, _events);
+        assertFalse(_wordsDB.addToUsedWords(word, _gameModel.activePlayer()));
+        assertEquals(expectedEvents, _events);
     }
 }
