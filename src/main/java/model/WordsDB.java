@@ -18,13 +18,11 @@ public class WordsDB {
     }
 
     public boolean addToDictionary(@NotNull String word, Player player) {
-        String lowercaseWord = word.toLowerCase();
-
-        if (_dictionary.contains(lowercaseWord)) {
+        if (_dictionary.contains(word)) {
             return false;
         }
 
-        _dictionary.add(lowercaseWord);
+        _dictionary.add(word);
         fireAddedNewWordToDictionary(player, word);
         return true;
     }
@@ -40,7 +38,7 @@ public class WordsDB {
             return false;
         }
 
-        _usedWords.put(player, word.toLowerCase());
+        _usedWords.put(player, word);
         fireAddedToUsedWords(player, word);
         return true;
     }
@@ -72,11 +70,11 @@ public class WordsDB {
     }
 
     public boolean containsInDictionary(@NotNull String word) {
-        return _dictionary.contains(word.toLowerCase());
+        return _dictionary.contains(word);
     }
 
     public boolean containsInUsedWords(@NotNull String word) {
-        return _usedWords.containsValue(word.toLowerCase());
+        return _usedWords.containsValue(word);
     }
 
     private void readFromFile(@NotNull String filePath) {
