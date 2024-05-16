@@ -174,9 +174,11 @@ public class GameField {
     }
 
     public void undoChangesOfChangedCell() {
-        _changedCell.removeLetter();
-        fireUndoChangesOfChangedCell(_changedCell);
-        forgetChangedCell();
+        if(_changedCell != null) {
+            _changedCell.removeLetter();
+            fireUndoChangesOfChangedCell(_changedCell);
+            forgetChangedCell();
+        }
     }
 
     public void setChangedCell(@NotNull Cell changedCell) {
