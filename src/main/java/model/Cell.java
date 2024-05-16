@@ -80,7 +80,7 @@ public class Cell {
         return _adjacentCells.contains(cell);
     }
 
-    public boolean areNeighborsWithLetter() {
+    public boolean isNeighborWithLetter() {
         for (Cell cell: _adjacentCells){
             if(cell.letter() != null){
                 return true;

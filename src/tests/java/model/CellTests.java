@@ -1,6 +1,5 @@
 package model;
 
-import model.enums.Direction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -216,7 +215,7 @@ public class CellTests {
 
         _cell.setAdjacentCell(adjacentCell);
 
-        assertTrue(_cell.areNeighborsWithLetter());
+        assertTrue(_cell.isNeighborWithLetter());
     }
 
     @Test
@@ -224,6 +223,6 @@ public class CellTests {
         Point pos = new Point(0, 0);
         _cell.setPosition(pos);
 
-        assertFalse(_cell.areNeighborsWithLetter());
+        assertFalse(_cell.isNeighborWithLetter());
     }
 }
