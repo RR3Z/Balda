@@ -6,13 +6,15 @@ import java.awt.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WordTests {
+    private GameModel _gameModel;
     private Word _word;
-
-    private GameField _field = new GameModel(5, 5).gameField();
+    private GameField _field;
 
     @BeforeEach
     public void testSetup() {
+        _gameModel = new GameModel(5 ,5);
         _word = new Word();
+        _field = _gameModel.gameField();
 
         Cell cell1 = _field.cell(new Point(0, 0));
         cell1.setLetter('д');

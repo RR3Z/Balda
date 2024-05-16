@@ -47,12 +47,12 @@ public class WordsDBTests {
 
     @BeforeEach
     public void testSetup() {
+        _events = new ArrayList<>();
+
         _gameModel = new GameModel(5, 5);
 
         _wordsDB = _gameModel.wordsDB();
         _wordsDB.addWordsDBListener(new EventsListener());
-
-        _events = new ArrayList<>();
     }
 
     @Test

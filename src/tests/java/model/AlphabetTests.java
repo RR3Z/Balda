@@ -37,13 +37,13 @@ public class AlphabetTests {
 
     @BeforeEach
     public void testSetup() {
+        _events = new ArrayList<>();
+
         _gameModel = new GameModel(5, 5);
         _gameModel.startGame();
 
         _alphabet = _gameModel.alphabet();
         _alphabet.addAlphabetListener(new EventsListener());
-
-        _events = new ArrayList<>();
     }
 
     @Test

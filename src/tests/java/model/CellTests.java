@@ -11,9 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CellTests {
     private Cell _cell;
 
-    public CellTests() {
-    }
-
     @BeforeEach
     public void testSetup() {
         _cell = new Cell();
