@@ -73,7 +73,7 @@ public class Player {
         }
     }
 
-    public void placeLetter(@NotNull Character letter) {
+    private void placeLetter(@NotNull Character letter) {
         if (_state != PlayerState.PLACES_LETTER) {
             throw new IllegalArgumentException("Wrong \"placeLetter\" function call (incorrect state) for player: " + this._name);
         }
@@ -150,7 +150,7 @@ public class Player {
                 return;
             }
 
-            if (!selectedCell.areNeighborsWithLetter()){
+            if (!selectedCell.isNeighborWithLetter()){
                 return;
             }
 
@@ -158,7 +158,6 @@ public class Player {
                 return;
             }
 
-            // Set _changedCell
             _field.setChangedCell(selectedCell);
             placeLetter(_alphabet.selectedLetter());
             fireChangedState();
@@ -196,8 +195,6 @@ public class Player {
     public boolean isSkippedTurn() {
         return _state == PlayerState.SKIPPED_TURN;
     }
-
-
 
     // Listeners
     private List<EventListener> _playerListeners = new ArrayList<>();
