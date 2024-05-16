@@ -83,6 +83,19 @@ public class GameFieldTests {
     }
 
     @Test
+    public void constructor_ChangedCellIsNullObject() {
+        _events.clear();
+
+        int width = 3;
+        int height = 3;
+        _gameField = new GameField(_gameModel, width, height);
+        _gameField.addGameFieldListener(new EventsListener());
+
+        assertNull(_gameField.changedCell());
+        assertTrue(_events.isEmpty());
+    }
+
+    @Test
     public void constructor_CheckLeftNeighbors() {
         _events.clear();
 
@@ -1040,9 +1053,164 @@ public class GameFieldTests {
     @Test
     public void placeWord_DirectionIsNull() {
         String word = "яд";
-        int rowIndex = 15;
+        int rowIndex = 0;
 
         assertThrows(IllegalArgumentException.class, () -> _gameField.placeWord(word, rowIndex, null));
         assertTrue(_events.isEmpty());
+    }
+
+    @Test
+    public void setChangedCell_CellBelongsToGameField() {
+        Point cellPosition = new Point(0, 0);
+        Cell cell = _gameField.cell(cellPosition);
+        _gameField.setChangedCell(cell);
+
+        assertNotNull(cell);
+        assertEquals(cell, _gameField.changedCell());
+        assertTrue(_events.isEmpty());
+    }
+
+    @Test
+    public void setChangedCell_CellDoesNotBelongToGameField() {
+        Point cellPosition = new Point(100, 100);
+        Cell cell = _gameField.cell(cellPosition);
+
+        assertThrows(IllegalArgumentException.class, () -> _gameField.setChangedCell(cell));
+        assertNull(cell);
+        assertNull(_gameField.changedCell());
+        assertTrue(_events.isEmpty());
+    }
+
+    @Test
+    public void setChangedCell_CellAlreadyHasBeenSet() {
+        Point cellPosition = new Point(0, 0);
+        Cell firstCell = _gameField.cell(cellPosition);
+
+        cellPosition = new Point(3, 3);
+        Cell secondCell = _gameField.cell(cellPosition);
+
+        _gameField.setChangedCell(firstCell);
+
+        assertThrows(IllegalArgumentException.class, () -> _gameField.setChangedCell(secondCell));
+        assertNotNull(firstCell);
+        assertEquals(firstCell, _gameField.changedCell());
+        assertTrue(_events.isEmpty());
+    }
+
+    @Test
+    public void setChangedCell_CellIsNullObject() {
+        assertThrows(IllegalArgumentException.class, () -> _gameField.setChangedCell(null));
+    }
+
+    @Test
+    public void forgetChangedCell_ChangedCellIsNullObject() {
+        _events.clear();
+
+        _gameField = new GameField(_gameModel, 5, 5);
+        _gameField.addGameFieldListener(new EventsListener());
+
+        _gameField.forgetChangedCell();
+
+        assertNull(_gameField.changedCell());
+        assertTrue(_events.isEmpty());
+    }
+
+    @Test
+    public void forgetChangedCell_ChangedCellIsNotNullObject() {
+        Point cellPosition = new Point(0, 0);
+        Cell cell = _gameField.cell(cellPosition);
+        _gameField.setChangedCell(cell);
+
+        assertNotNull(cell);
+        assertEquals(cell, _gameField.changedCell());
+
+        _gameField.forgetChangedCell();
+
+        assertNull(_gameField.changedCell());
+        assertTrue(_events.isEmpty());
+    }
+
+    @Test
+    public void forgetChangedCell_WhenPlayerExchanged() {
+        assertNull(_gameField.changedCell());
+
+        _gameModel.activePlayer().chooseLetter('б');
+        _gameModel.activePlayer().chooseCell(_gameField.cell(new Point(0, 1)));
+        _gameModel.activePlayer().chooseCell(_gameField.cell(new Point(0, 1)));
+        _gameModel.activePlayer().chooseCell(_gameField.cell(new Point(0, 2)));
+        _gameModel.activePlayer().chooseCell(_gameField.cell(new Point(1, 2)));
+        _gameModel.activePlayer().addNewWordToDictionary();
+
+        assertNotNull(_gameField.changedCell());
+
+        _gameModel.activePlayer().submitWord();
+
+        assertNull(_gameField.changedCell());
+        assertTrue(_events.isEmpty());
+    }
+
+    @Test
+    public void undoChangesOfChangedCell_ChangedCellIsNullObject() {
+        _events.clear();
+
+        _gameField = new GameField(_gameModel, 5, 5);
+        _gameField.addGameFieldListener(new EventsListener());
+
+        Cell cell = _gameField.changedCell();
+        _gameField.undoChangesOfChangedCell();
+
+        assertNull(cell);
+        assertNull(_gameField.changedCell());
+        assertTrue(_events.isEmpty());
+    }
+
+    @Test
+    public void undoChangesOfChangedCell_ChangedCellIsNotNullObject() {
+        _gameField.setChangedCell(_gameField.cell(new Point(0, 0)));
+
+        assertNotNull(_gameField.changedCell());
+
+        _gameField.undoChangesOfChangedCell();
+
+        List<EVENT> expectedEvents = new ArrayList<>();
+        expectedEvents.add(EVENT.UNDO_CHANGES_OF_CHANGED_CELL);
+
+        assertNull(_gameField.changedCell());
+        assertEquals(expectedEvents, _events);
+    }
+
+    @Test
+    public void undoChangesOfChangedCell_LetterIsSpecifiedInChangedCell() {
+        Cell changedCell = _gameField.cell(new Point(0, 0));
+        changedCell.setLetter('а');
+        _gameField.setChangedCell(_gameField.cell(new Point(0, 0)));
+
+        assertNotNull(_gameField.changedCell());
+        assertNotNull(_gameField.changedCell().letter());
+
+        _gameField.undoChangesOfChangedCell();
+
+        List<EVENT> expectedEvents = new ArrayList<>();
+        expectedEvents.add(EVENT.UNDO_CHANGES_OF_CHANGED_CELL);
+
+        assertNull(changedCell.letter());
+        assertNull(_gameField.changedCell());
+        assertEquals(expectedEvents, _events);
+    }
+
+    @Test
+    public void undoChangesOfChangedCell_LetterIsNotSpecifiedInChangedCell() {
+        _gameField.setChangedCell(_gameField.cell(new Point(0, 0)));
+
+        assertNotNull(_gameField.changedCell());
+        assertNull(_gameField.changedCell().letter());
+
+        _gameField.undoChangesOfChangedCell();
+
+        List<EVENT> expectedEvents = new ArrayList<>();
+        expectedEvents.add(EVENT.UNDO_CHANGES_OF_CHANGED_CELL);
+
+        assertNull(_gameField.changedCell());
+        assertEquals(expectedEvents, _events);
     }
 }
