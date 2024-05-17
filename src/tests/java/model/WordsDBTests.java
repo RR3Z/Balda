@@ -236,6 +236,54 @@ public class WordsDBTests {
         assertFalse(_wordsDB.containsInDictionary(word));
         assertFalse(_wordsDB.containsInUsedWords(word));
         assertFalse(_wordsDB.addToUsedWords(word, _gameModel.activePlayer()));
+        assertFalse(_wordsDB.containsInUsedWords(word));
+        assertEquals(expectedEvents, _events);
+    }
+
+    @Test
+    public void addToUsedWords_SameWordTwoTimesWithDifferentPlayers() {
+        _gameModel.startGame();
+
+        String word = "игра";
+
+        List<EVENT> expectedEvents = new ArrayList<>();
+        expectedEvents.add(EVENT.ADDED_TO_USED_WORDS);
+        expectedEvents.add(EVENT.ADDED_TO_USED_WORDS);
+        expectedEvents.add(EVENT.WORD_ALREADY_USED);
+
+        assertTrue(_wordsDB.containsInDictionary(word));
+        assertFalse(_wordsDB.containsInUsedWords(word));
+
+        assertTrue(_wordsDB.addToUsedWords(word, _gameModel.activePlayer()));
+        assertTrue(_wordsDB.containsInUsedWords(word));
+
+        _gameModel.activePlayer().skipTurn();
+        assertFalse(_wordsDB.addToUsedWords(word, _gameModel.activePlayer()));
+        assertTrue(_wordsDB.containsInUsedWords(word));
+
+        assertEquals(expectedEvents, _events);
+    }
+
+    @Test
+    public void addToUsedWords_SameWordTwoTimesWithSamePlayer() {
+        _gameModel.startGame();
+
+        String word = "игра";
+
+        List<EVENT> expectedEvents = new ArrayList<>();
+        expectedEvents.add(EVENT.ADDED_TO_USED_WORDS);
+        expectedEvents.add(EVENT.ADDED_TO_USED_WORDS);
+        expectedEvents.add(EVENT.WORD_ALREADY_USED);
+
+        assertTrue(_wordsDB.containsInDictionary(word));
+        assertFalse(_wordsDB.containsInUsedWords(word));
+
+        assertTrue(_wordsDB.addToUsedWords(word, _gameModel.activePlayer()));
+        assertTrue(_wordsDB.containsInUsedWords(word));
+        
+        assertFalse(_wordsDB.addToUsedWords(word, _gameModel.activePlayer()));
+        assertTrue(_wordsDB.containsInUsedWords(word));
+
         assertEquals(expectedEvents, _events);
     }
 }

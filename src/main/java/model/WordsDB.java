@@ -11,7 +11,7 @@ import java.util.*;
 
 public class WordsDB {
     private List<String> _dictionary = new ArrayList<>();
-    private Map<Player, String> _usedWords = new HashMap<>();
+    private Map<String, Player> _usedWords = new HashMap<>();
 
     public WordsDB(@NotNull String filePath) {
         readFromFile(filePath);
@@ -38,7 +38,7 @@ public class WordsDB {
             return false;
         }
 
-        _usedWords.put(player, word);
+        _usedWords.put(word, player);
         fireAddedToUsedWords(player, word);
         return true;
     }
@@ -74,7 +74,7 @@ public class WordsDB {
     }
 
     public boolean containsInUsedWords(@NotNull String word) {
-        return _usedWords.containsValue(word);
+        return _usedWords.containsKey(word);
     }
 
     private void readFromFile(@NotNull String filePath) {
