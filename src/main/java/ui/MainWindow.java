@@ -1,19 +1,16 @@
+package ui;
+
 import model.GameModel;
 import model.Player;
 import model.enums.GameState;
 import model.events.*;
 import org.jetbrains.annotations.NotNull;
-import ui.*;
 import ui.menus.MainMenu;
 import ui.panels.GameOverPanel;
-import ui.panels.GameSettingsPanel;
-import ui.PlayersScoreTableWidget;
-import ui.UsedWordsTableWidget;
 import ui.utils.GameWidgetUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 public class MainWindow extends JFrame {
     private GameModel _gameModel;
@@ -27,9 +24,7 @@ public class MainWindow extends JFrame {
         this.getContentPane().setLayout(new GridBagLayout());
 
         JMenuBar mainMenuBar = new JMenuBar();
-        MainMenu mainMenu = new MainMenu();
-        mainMenu.setStartNewGameAction(new StartNewGameAction());
-        mainMenu.setExitGameAction(new ExitGameAction());
+        MainMenu mainMenu = new MainMenu(this);
         mainMenuBar.add(mainMenu);
         this.setJMenuBar(mainMenuBar);
 
@@ -45,7 +40,7 @@ public class MainWindow extends JFrame {
         GameWidgetUtils.placeContainerInCenter(this);
     }
 
-    private void startNewGame(int width, int height) {
+    public void startNewGame(int width, int height) {
         _gameModel = new GameModel(width, height);
         _gameModel.addGameModelListener(new GameModelController());
 
@@ -55,7 +50,7 @@ public class MainWindow extends JFrame {
             player.addPlayerActionListener(new PlayerController());
         }
 
-        // Clear MainWindow
+        // Clear ui.MainWindow
         JPanel content = (JPanel) this.getContentPane();
         content.removeAll();
 
@@ -104,45 +99,16 @@ public class MainWindow extends JFrame {
         this.pack();
 
         GameWidgetUtils.placeContainerInCenter(this);
-
-        content.paintImmediately(content.getVisibleRect());
     }
 
-    private void disableGameWidgets(@NotNull Container container) {
+    private void disableAllGameWidgets(@NotNull Container container) {
         Component[] components = container.getComponents();
         for (Component component : components) {
             component.setEnabled(false);
 
             if (!(component instanceof JMenuBar || component instanceof JMenu || component instanceof JMenuItem) && component instanceof Container) {
-                disableGameWidgets((Container) component);
+                disableAllGameWidgets((Container) component);
             }
-        }
-    }
-
-    private class StartNewGameAction extends AbstractAction {
-        GameSettingsPanel _gameSettings = new GameSettingsPanel();
-
-        public StartNewGameAction() {
-            this.putValue(NAME, "Новая игра");
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            int result = JOptionPane.showConfirmDialog(null, _gameSettings, "Настройки игры", JOptionPane.OK_CANCEL_OPTION);
-            if(result == JOptionPane.OK_OPTION) {
-                MainWindow.this.startNewGame(_gameSettings.widthSpinnerValue(), _gameSettings.heightSpinnerValue());
-            }
-        }
-    }
-
-    private class ExitGameAction extends AbstractAction {
-        public ExitGameAction() {
-            this.putValue(NAME, "Выход");
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            System.exit(0);
         }
     }
 
@@ -150,7 +116,7 @@ public class MainWindow extends JFrame {
         @Override
         public void gameIsFinished(GameModelEvent event) {
             if(_gameModel.state() == GameState.FINISHED) {
-                MainWindow.this.disableGameWidgets(MainWindow.this);
+                MainWindow.this.disableAllGameWidgets(MainWindow.this);
 
                 JOptionPane.showMessageDialog(null, new GameOverPanel(event.winners()), "Конец игры", JOptionPane.PLAIN_MESSAGE);
             }
