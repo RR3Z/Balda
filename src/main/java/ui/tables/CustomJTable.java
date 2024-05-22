@@ -99,8 +99,8 @@ public class CustomJTable extends JTable {
         this.repaint();
     }
 
-    public void scrollTo(int rowIndex) {
-        this.scrollRectToVisible(this.getCellRect(rowIndex, 1, false));
+    public void scrollToRow(int rowIndex) {
+        this.changeSelection(rowIndex, 0, false, false);
     }
 
     @Override
