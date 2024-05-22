@@ -1,6 +1,6 @@
 package ui.enums;
 
-public enum LetterButtonState {
+public enum LetterButtonVisualState {
     SELECTED,
     UNSELECTED
 }

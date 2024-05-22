@@ -1,40 +1,44 @@
 package ui.buttons;
 
+import model.GameModel;
+import org.jetbrains.annotations.NotNull;
 import ui.enums.BorderType;
 import ui.enums.ColorType;
-import ui.enums.LetterButtonState;
+import ui.enums.LetterButtonVisualState;
 import ui.utils.ButtonUtils;
 import ui.utils.GameWidgetUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class LetterButton extends JButton {
     public static final int BUTTON_SIZE = 50;
-
     private final int FONT_SIZE = 28;
 
-    private LetterButtonState _state;
+    private LetterButtonVisualState _visualState;
 
-    public LetterButton() {
+    public LetterButton(@NotNull GameModel gameModel) {
         super();
 
-        this.setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));
+        this.addMouseListener(new LetterButtonMouseListener(gameModel));
 
         this.setModel(new ButtonUtils.FixedStateButtonModel());
 
-        changeState(LetterButtonState.UNSELECTED);
+        this.setEnabled(true);
+        this.setFocusable(false);
 
+        this.setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));
         this.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.color(ColorType.DEFAULT_BORDER)));
         this.setBorderPainted(true);
-
         this.setFont(GameWidgetUtils.font(FONT_SIZE));
 
-        this.setFocusable(false);
+        changeVisualState(LetterButtonVisualState.UNSELECTED);
     }
 
-    public void highlight(boolean isHighlighted) {
-        if(isHighlighted) {
+    private void highlight(boolean isHighlightActive) {
+        if(isHighlightActive) {
             this.setBorder(BorderFactory.createLineBorder(
                     GameWidgetUtils.color(ColorType.HIGHLIGHTED_BORDER),
                     GameWidgetUtils.borderThickness(BorderType.EXTRA_BOLD))
@@ -47,20 +51,48 @@ public class LetterButton extends JButton {
         }
     }
 
-    public void changeState(LetterButtonState state) {
+    public void changeVisualState(LetterButtonVisualState state) {
         switch (state) {
             case UNSELECTED -> {
                 this.setOpaque(false);
                 this.setContentAreaFilled(false);
                 this.setBackground(GameWidgetUtils.color(ColorType.TRANSPARENT));
-                _state = LetterButtonState.UNSELECTED;
+                _visualState = LetterButtonVisualState.UNSELECTED;
             }
             case SELECTED -> {
                 this.setOpaque(true);
                 this.setContentAreaFilled(true);
                 this.setBackground(GameWidgetUtils.color(ColorType.ACTIVE_ALPHABET_BUTTON));
-                _state = LetterButtonState.SELECTED;
+                _visualState = LetterButtonVisualState.SELECTED;
             }
+        }
+    }
+
+    private class LetterButtonMouseListener extends MouseAdapter {
+        private GameModel _gameModel;
+
+        public LetterButtonMouseListener(@NotNull GameModel gameModel) {
+            _gameModel = gameModel;
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            if(LetterButton.this.isEnabled()) {
+                _gameModel.activePlayer().chooseLetter(LetterButton.this.getText().charAt(0));
+                LetterButton.this.highlight(false);
+            }
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            if(LetterButton.this.isEnabled()) {
+                LetterButton.this.highlight(true);
+            }
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+            LetterButton.this.highlight(false);
         }
     }
 }

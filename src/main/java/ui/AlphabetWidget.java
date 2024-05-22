@@ -10,12 +10,10 @@ import model.events.PlayerActionEvent;
 import model.events.PlayerActionListener;
 import org.jetbrains.annotations.NotNull;
 import ui.buttons.LetterButton;
-import ui.enums.LetterButtonState;
+import ui.enums.LetterButtonVisualState;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,40 +21,34 @@ import java.util.Map;
 public class AlphabetWidget extends JPanel {
     private final int ALPHABET_MAX_ROWS_COUNT = 3;
 
-    private GameModel _gameModel;
-
     private Map<Character, LetterButton> _letters = new HashMap<>();
 
-    public AlphabetWidget(GameModel gameModel) {
+    public AlphabetWidget(@NotNull GameModel gameModel) {
         super();
         this.setEnabled(true);
 
-        _gameModel = gameModel;
-
-        Alphabet alphabet = _gameModel.alphabet();
+        Alphabet alphabet = gameModel.alphabet();
         alphabet.addAlphabetListener(new AlphabetController());
 
         for(Player player: gameModel.players()) {
             player.addPlayerActionListener(new PlayerController());
         }
 
+        fillWidget(gameModel, alphabet.availableLetters());
+
         int numberOfColumns = Math.ceilDiv(alphabet.availableLetters().size(), ALPHABET_MAX_ROWS_COUNT);
         this.setLayout(new GridLayout(ALPHABET_MAX_ROWS_COUNT, numberOfColumns));
-
-        fillWidget(alphabet.availableLetters());
-
         this.setMaximumSize(new Dimension(
                 numberOfColumns * LetterButton.BUTTON_SIZE,
                 ALPHABET_MAX_ROWS_COUNT * LetterButton.BUTTON_SIZE
         ));
     }
 
-    private void fillWidget(@NotNull List<Character> letters) {
+    private void fillWidget(@NotNull GameModel gameModel, @NotNull List<Character> letters) {
         for(Character letter: letters) {
-            LetterButton letterButton = new LetterButton();
+            LetterButton letterButton = new LetterButton(gameModel);
 
             letterButton.setText(String.valueOf(letter));
-            letterButton.addMouseListener(new LetterButtonMouseListener(letterButton));
 
             _letters.put(letter, letterButton);
 
@@ -64,40 +56,24 @@ public class AlphabetWidget extends JPanel {
         }
     }
 
-    private class LetterButtonMouseListener extends MouseAdapter {
-        private LetterButton _button;
+    private void changeActivity(boolean widgetActivity) {
+        AlphabetWidget.this.setEnabled(widgetActivity);
 
-        public LetterButtonMouseListener(@NotNull LetterButton button) {
-            _button = button;
+        for(LetterButton letterButton: _letters.values()) {
+            letterButton.setEnabled(widgetActivity);
         }
+    }
 
-        @Override
-        public void mousePressed(MouseEvent e) {
-            if(AlphabetWidget.this.isEnabled()) {
-                _gameModel.activePlayer().chooseLetter(_button.getText().charAt(0));
-                _button.highlight(false);
-            }
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-            if(AlphabetWidget.this.isEnabled()) {
-                _button.highlight(true);
-            }
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-            if(AlphabetWidget.this.isEnabled()) {
-                _button.highlight(false);
-            }
+    private void clearAllHighlights() {
+        for(LetterButton letterButton: _letters.values()) {
+            letterButton.changeVisualState(LetterButtonVisualState.UNSELECTED);
         }
     }
 
     private class PlayerController implements PlayerActionListener {
         @Override
         public void changedState(@NotNull PlayerActionEvent event) {
-            AlphabetWidget.this.setEnabled(event.player().state() == PlayerState.SELECTING_LETTER);
+            AlphabetWidget.this.changeActivity(event.player().state() == PlayerState.SELECTING_LETTER);
         }
 
         @Override
@@ -141,12 +117,12 @@ public class AlphabetWidget extends JPanel {
     private class AlphabetController implements AlphabetListener {
         @Override
         public void forgotSelectedLetter(AlphabetEvent event) {
-            _letters.get(event.letter()).changeState(LetterButtonState.UNSELECTED);
+            AlphabetWidget.this.clearAllHighlights();
         }
 
         @Override
         public void selectedLetter(AlphabetEvent event) {
-            _letters.get(event.letter()).changeState(LetterButtonState.SELECTED);
+            _letters.get(event.letter()).changeVisualState(LetterButtonVisualState.SELECTED);
         }
     }
 }
