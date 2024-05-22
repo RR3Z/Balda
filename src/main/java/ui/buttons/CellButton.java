@@ -2,6 +2,7 @@ package ui.buttons;
 
 import model.Cell;
 import model.GameModel;
+import org.jetbrains.annotations.NotNull;
 import ui.enums.BorderType;
 import ui.enums.CellButtonVisualState;
 import ui.enums.ColorType;
@@ -19,7 +20,7 @@ public class CellButton extends JButton {
 
     private CellButtonVisualState _visualState;
 
-    public CellButton(GameModel gameModel, Cell cell) {
+    public CellButton(@NotNull GameModel gameModel, @NotNull Cell cell) {
         super();
 
         this.addMouseListener(new CellButtonMouseListener(gameModel, cell));
@@ -78,7 +79,7 @@ public class CellButton extends JButton {
         private GameModel _gameModel;
         private Cell _cell;
 
-        public CellButtonMouseListener(GameModel gameModel, Cell cell) {
+        public CellButtonMouseListener(@NotNull GameModel gameModel, @NotNull Cell cell) {
             _gameModel = gameModel;
             _cell = cell;
         }

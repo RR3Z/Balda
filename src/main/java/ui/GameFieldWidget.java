@@ -18,7 +18,7 @@ import java.util.Map;
 public class GameFieldWidget extends JPanel {
     private Map<Cell, CellButton> _cells = new HashMap<>();
 
-    public GameFieldWidget(GameModel gameModel) {
+    public GameFieldWidget(@NotNull GameModel gameModel) {
         super();
 
         GameField gameField = gameModel.gameField();
@@ -40,7 +40,7 @@ public class GameFieldWidget extends JPanel {
         );
     }
 
-    private void fillWidget(GameModel gameModel) {
+    private void fillWidget(@NotNull GameModel gameModel) {
         GameField gameField = gameModel.gameField();
 
         for(int i = 0; i < gameField.height(); i++) {
