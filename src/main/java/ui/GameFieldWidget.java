@@ -8,40 +8,31 @@ import model.enums.PlayerState;
 import model.events.*;
 import org.jetbrains.annotations.NotNull;
 import ui.buttons.CellButton;
-import ui.enums.BorderType;
-import ui.enums.CellButtonState;
-import ui.enums.ColorType;
-import ui.utils.GameWidgetUtils;
-import ui.utils.MapUtils;
+import ui.enums.CellButtonVisualState;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 
 public class GameFieldWidget extends JPanel {
-    private GameModel _gameModel;
     private Map<Cell, CellButton> _cells = new HashMap<>();
 
     public GameFieldWidget(GameModel gameModel) {
         super();
-        this.setEnabled(false);
 
-        _gameModel = gameModel;
-
-        GameField gameField = _gameModel.gameField();
+        GameField gameField = gameModel.gameField();
         gameField.addGameFieldListener(new GameFieldController());
 
-        for(Player player: _gameModel.players()) {
+        for(Player player: gameModel.players()) {
             player.addPlayerActionListener(new PlayerController());
         }
 
-        fillWidget();
+        fillWidget(gameModel);
+
+        changeActivity(false);
 
         this.setLayout(new GridLayout(gameField.height(), gameField.width()));
-
         this.setMaximumSize(new Dimension(
                 gameField.width() * CellButton.CELL_SIZE,
                 gameField.height() * CellButton.CELL_SIZE
@@ -49,15 +40,14 @@ public class GameFieldWidget extends JPanel {
         );
     }
 
-    private void fillWidget() {
-        GameField gameField = _gameModel.gameField();
+    private void fillWidget(GameModel gameModel) {
+        GameField gameField = gameModel.gameField();
 
         for(int i = 0; i < gameField.height(); i++) {
             for(int j = 0; j < gameField.width(); j++){
                 Cell cell = gameField.cell(new Point(j, i));
 
-                CellButton cellButton = new CellButton();
-                cellButton.addMouseListener(new CellButtonMouseListener(cellButton));
+                CellButton cellButton = new CellButton(gameModel, cell);
 
                 if(cell.letter() != null) {
                     cellButton.setText(String.valueOf(cell.letter()));
@@ -70,84 +60,62 @@ public class GameFieldWidget extends JPanel {
         }
     }
 
-    private class CellButtonMouseListener extends MouseAdapter {
-        private CellButton _button;
+    private void changeActivity(boolean widgetActivity) {
+        GameFieldWidget.this.setEnabled(widgetActivity);
 
-        public CellButtonMouseListener(CellButton button) {
-            _button = button;
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-            if(GameFieldWidget.this.isEnabled()) {
-                _gameModel.activePlayer().chooseCell(MapUtils.getKeyByValue(_cells, _button));
-            }
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-            if(GameFieldWidget.this.isEnabled()) {
-                _button.highlight(true);
-            }
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-            _button.highlight(false);
+        for(CellButton cellButton: _cells.values()) {
+            cellButton.setEnabled(widgetActivity);
         }
     }
 
     private class PlayerController implements PlayerActionListener {
-
         @Override
         public void changedState(@NotNull PlayerActionEvent event) {
-            GameFieldWidget.this.setEnabled(
-                    event.player().state() == PlayerState.PLACES_LETTER || event.player().state() == PlayerState.FORMS_WORD
-            );
+            changeActivity(event.player().state() == PlayerState.PLACES_LETTER || event.player().state() == PlayerState.FORMS_WORD);
         }
 
         @Override
         public void finishedTurn(@NotNull PlayerActionEvent event) {
             if(event.player().state() == PlayerState.WAITING_TURN) {
                 for(CellButton button: _cells.values()) {
-                    button.changeState(CellButtonState.DEFAULT);
+                    button.changeVisualState(CellButtonVisualState.DEFAULT);
                 }
             }
         }
 
         @Override
         public void placedLetter(@NotNull PlayerActionEvent event) {
-            if(GameFieldWidget.this.isEnabled() && event.player() == _gameModel.activePlayer()) {
+            if(GameFieldWidget.this.isEnabled() && event.player().state() == PlayerState.PLACES_LETTER) {
                 Cell changedCell = event.cell();
                 CellButton button = _cells.get(changedCell);
 
                 button.setText(String.valueOf(changedCell.letter()));
-                button.changeState(CellButtonState.CHANGED);
+                button.changeVisualState(CellButtonVisualState.CHANGED);
             }
         }
 
         @Override
         public void choseCell(@NotNull PlayerActionEvent event) {
-            if(GameFieldWidget.this.isEnabled()  && event.player() == _gameModel.activePlayer()) {
+            if(GameFieldWidget.this.isEnabled()  && (event.player().state() == PlayerState.PLACES_LETTER || event.player().state() == PlayerState.FORMS_WORD)) {
                 CellButton selectedCell = _cells.get(event.cell());
-                selectedCell.changeState(CellButtonState.IN_WORD);
+                selectedCell.changeVisualState(CellButtonVisualState.IN_WORD);
             }
         }
 
         @Override
         public void canceledActionOnField(@NotNull PlayerActionEvent event) {
-            if(event.player() == _gameModel.activePlayer()) {
+            if(event.player().state() != PlayerState.SKIPPED_TURN && event.player().state() != PlayerState.WAITING_TURN) {
                 for(CellButton button: _cells.values()) {
-                    button.changeState(CellButtonState.DEFAULT);
+                    button.changeVisualState(CellButtonVisualState.DEFAULT);
                 }
 
                 CellButton selectedCell = _cells.get(event.cell());
                 if(selectedCell != null) {
                     selectedCell.setText(String.valueOf(event.cell().letter()));
-                    selectedCell.changeState(CellButtonState.CHANGED);
+                    selectedCell.changeVisualState(CellButtonVisualState.CHANGED);
                 }
 
-                GameFieldWidget.this.paintImmediately(getVisibleRect());
+                //GameFieldWidget.this.paintImmediately(getVisibleRect());
             }
         }
 
@@ -155,10 +123,9 @@ public class GameFieldWidget extends JPanel {
         public void skippedTurn(@NotNull PlayerActionEvent event) {
             if(event.player().state() == PlayerState.SKIPPED_TURN) {
                 for(CellButton button: _cells.values()) {
-                    button.changeState(CellButtonState.DEFAULT);
+                    button.changeVisualState(CellButtonVisualState.DEFAULT);
                 }
-
-                GameFieldWidget.this.paintImmediately(getVisibleRect());
+                //GameFieldWidget.this.paintImmediately(getVisibleRect());
             }
         }
 
@@ -178,7 +145,7 @@ public class GameFieldWidget extends JPanel {
         public void undoChangesOfChangedCell(GameFieldEvent event) {
             if(GameFieldWidget.this.isEnabled()) {
                 _cells.get(event.cell()).setText("");
-                _cells.get(event.cell()).changeState(CellButtonState.DEFAULT);
+                _cells.get(event.cell()).changeVisualState(CellButtonVisualState.DEFAULT);
             }
         }
 

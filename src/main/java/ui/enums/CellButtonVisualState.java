@@ -1,6 +1,6 @@
 package ui.enums;
 
-public enum CellButtonState {
+public enum CellButtonVisualState {
     DEFAULT,
     IN_WORD,
     CHANGED
