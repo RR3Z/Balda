@@ -62,6 +62,7 @@ public class PlayersScoreTableWidget extends CustomJTable {
 
             if(player.state() == PlayerState.SELECTING_LETTER) {
                 highlightRow(_scoreCounterToRowIndex.get(player.scoreCounter()), GameWidgetUtils.color(ColorType.ACTIVE_PLAYER));
+                scrollToRow(_scoreCounterToRowIndex.get(player.scoreCounter()));
             }
 
             if(player.state() == PlayerState.WAITING_TURN) {
