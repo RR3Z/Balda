@@ -34,6 +34,24 @@ public class GameModel {
         _state = GameState.WAITING_START;
     }
 
+    public Player activePlayer() {
+        return _activePlayer;
+    }
+
+    public GameField gameField() { return _field; }
+
+    public Alphabet alphabet() { return _alphabet; }
+
+    public WordsDB wordsDB() { return _wordsDB; }
+
+    public List<Player> players() {
+        return Collections.unmodifiableList(_players);
+    }
+
+    public GameState state() {
+        return _state;
+    }
+
     public void startGame() {
         if (_state != GameState.WAITING_START) {
             throw new IllegalArgumentException("GameModel: wrong \"startGame\" function call (incorrect state)");
@@ -130,24 +148,6 @@ public class GameModel {
         // Get the player's next turn in order
         int nextPlayerIndex = (activePlayerIndex + 1) % _players.size();
         return _players.get(nextPlayerIndex);
-    }
-
-    public Player activePlayer() {
-        return _activePlayer;
-    }
-
-    public GameField gameField() { return _field; }
-
-    public Alphabet alphabet() { return _alphabet; }
-
-    public WordsDB wordsDB() { return _wordsDB; }
-
-    public List<Player> players() {
-        return Collections.unmodifiableList(_players);
-    }
-
-    public GameState state() {
-        return _state;
     }
 
     /* ============================================================================================================== */
