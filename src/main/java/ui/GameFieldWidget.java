@@ -68,6 +68,12 @@ public class GameFieldWidget extends JPanel {
         }
     }
 
+    private void clearAllHighlights() {
+        for(CellButton button: _cells.values()) {
+            button.changeVisualState(CellButtonVisualState.DEFAULT);
+        }
+    }
+
     private class PlayerController implements PlayerActionListener {
         @Override
         public void changedState(@NotNull PlayerActionEvent event) {
@@ -77,9 +83,7 @@ public class GameFieldWidget extends JPanel {
         @Override
         public void finishedTurn(@NotNull PlayerActionEvent event) {
             if(event.player().state() == PlayerState.WAITING_TURN) {
-                for(CellButton button: _cells.values()) {
-                    button.changeVisualState(CellButtonVisualState.DEFAULT);
-                }
+                GameFieldWidget.this.clearAllHighlights();
             }
         }
 
@@ -105,9 +109,7 @@ public class GameFieldWidget extends JPanel {
         @Override
         public void canceledActionOnField(@NotNull PlayerActionEvent event) {
             if(event.player().state() != PlayerState.SKIPPED_TURN && event.player().state() != PlayerState.WAITING_TURN) {
-                for(CellButton button: _cells.values()) {
-                    button.changeVisualState(CellButtonVisualState.DEFAULT);
-                }
+                GameFieldWidget.this.clearAllHighlights();
 
                 CellButton selectedCell = _cells.get(event.cell());
                 if(selectedCell != null) {
@@ -115,17 +117,16 @@ public class GameFieldWidget extends JPanel {
                     selectedCell.changeVisualState(CellButtonVisualState.CHANGED);
                 }
 
-                //GameFieldWidget.this.paintImmediately(getVisibleRect());
+                GameFieldWidget.this.paintImmediately(getVisibleRect());
             }
         }
 
         @Override
         public void skippedTurn(@NotNull PlayerActionEvent event) {
             if(event.player().state() == PlayerState.SKIPPED_TURN) {
-                for(CellButton button: _cells.values()) {
-                    button.changeVisualState(CellButtonVisualState.DEFAULT);
-                }
-                //GameFieldWidget.this.paintImmediately(getVisibleRect());
+                GameFieldWidget.this.clearAllHighlights();
+
+                GameFieldWidget.this.paintImmediately(getVisibleRect());
             }
         }
 
