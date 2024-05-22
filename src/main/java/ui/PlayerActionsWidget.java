@@ -6,137 +6,44 @@ import model.enums.PlayerState;
 import model.events.PlayerActionEvent;
 import model.events.PlayerActionListener;
 import org.jetbrains.annotations.NotNull;
-import ui.buttons.PlayerActionButton;
-import ui.enums.BorderType;
-import ui.enums.ColorType;
-import ui.utils.GameWidgetUtils;
-
+import ui.buttons.CancelActionButton;
+import ui.buttons.SkipTurnButton;
+import ui.buttons.SubmitWordButton;
 import javax.swing.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class PlayerActionsWidget extends JPanel {
-    private GameModel _gameModel;
+    private CancelActionButton _cancelActionButton;
+    private SkipTurnButton _skipTurnButton;
+    private SubmitWordButton _submitWordButton;
 
-    private PlayerActionButton _cancelActionButton;
-    private PlayerActionButton _skipTurnButton;
-    private PlayerActionButton _submitWordButton;
-
-    public PlayerActionsWidget(GameModel gameModel) {
+    public PlayerActionsWidget(@NotNull GameModel gameModel) {
         super();
-        _gameModel = gameModel;
 
-        for(Player player: _gameModel.players()) {
+        for(Player player: gameModel.players()) {
             player.addPlayerActionListener(new PlayerController());
         }
 
-        fillWidget();
+        fillWidget(gameModel);
     }
 
-    private void fillWidget() {
-        _cancelActionButton = new PlayerActionButton("Отменить действие", GameWidgetUtils.color(ColorType.CANCEL_ACTION_BUTTON));
-        _cancelActionButton.addMouseListener(new CancelActionButtonMouseListener(_cancelActionButton));
+    private void fillWidget(GameModel gameModel) {
+        _cancelActionButton = new CancelActionButton(gameModel, "Отменить действие");
         _cancelActionButton.setEnabled(false);
         this.add(_cancelActionButton);
 
-        _skipTurnButton = new PlayerActionButton("Пропустить ход", GameWidgetUtils.color(ColorType.SKIP_TURN_BUTTON));
-        _skipTurnButton.addMouseListener(new SkipTurnButtonMouseListener(_skipTurnButton));
+        _skipTurnButton = new SkipTurnButton(gameModel, "Пропустить ход");
         _skipTurnButton.setEnabled(true);
         this.add(_skipTurnButton);
 
-        _submitWordButton = new PlayerActionButton("Подтвердить слово", GameWidgetUtils.color(ColorType.SUBMIT_WORD_BUTTON));
+        _submitWordButton = new SubmitWordButton(gameModel, "Подтвердить слово");
         _submitWordButton.setEnabled(false);
-        _submitWordButton.addMouseListener(new SubmitWordButtonMouseListener(_submitWordButton));
         this.add(_submitWordButton);
-    }
-
-    private class CancelActionButtonMouseListener extends MouseAdapter {
-        private PlayerActionButton _button;
-
-        public CancelActionButtonMouseListener(PlayerActionButton button) {
-            _button = button;
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-            if(_button.isEnabled()) {
-                // Logic
-                _gameModel.activePlayer().cancelActionOnField();
-            }
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-            if(_button.isEnabled()) {
-                _button.highlight(true);
-            }
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-            _button.highlight(false);
-        }
-    }
-
-    private class SkipTurnButtonMouseListener extends MouseAdapter {
-        private PlayerActionButton _button;
-
-        public SkipTurnButtonMouseListener(PlayerActionButton button) {
-            _button = button;
-        }
-        @Override
-        public void mousePressed(MouseEvent e) {
-            if(_button.isEnabled()) {
-                // Logic
-                _gameModel.activePlayer().skipTurn();
-            }
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-            if(_button.isEnabled()) {
-                _button.highlight(true);
-            }
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-            _button.highlight(false);
-        }
-    }
-
-    private class SubmitWordButtonMouseListener extends MouseAdapter {
-        private PlayerActionButton _button;
-
-        public SubmitWordButtonMouseListener(PlayerActionButton button) {
-            _button = button;
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-            if(_button.isEnabled()) {
-                // Logic
-                _gameModel.activePlayer().submitWord();
-            }
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-            if(_button.isEnabled()) {
-                _button.highlight(true);
-            }
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-            _button.highlight(false);
-        }
     }
 
     private class PlayerController implements PlayerActionListener {
         @Override
         public void changedState(@NotNull PlayerActionEvent event) {
-            if(PlayerActionsWidget.this.isEnabled() && event.player() == _gameModel.activePlayer()) {
+            if(PlayerActionsWidget.this.isEnabled()) {
                 if(event.player().state() == PlayerState.SELECTING_LETTER) {
                     _cancelActionButton.setEnabled(false);
                     _submitWordButton.setEnabled(false);
