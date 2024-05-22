@@ -12,8 +12,8 @@ import java.io.IOException;
 public class GameWidgetUtils {
     private final static String RESOURCES_FOLDER = "Resources/";
 
-    public final static int MIN_FIELD_SIZE_SPINNER_VALUE = 2;
-    public final static int MAX_FIELD_SIZE_SPINNER_VALUE = 14;
+    public final static int MIN_SPINNER_VALUE_FOR_FIELD_SIZE = 2;
+    public final static int MAX_SPINNER_VALUE_FOR_FIELD_SIZE = 14;
 
     public final static int OPTION_PANE_FONT_SIZE = 16;
 
