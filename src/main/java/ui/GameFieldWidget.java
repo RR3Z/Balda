@@ -178,6 +178,7 @@ public class GameFieldWidget extends JPanel {
         public void undoChangesOfChangedCell(GameFieldEvent event) {
             if(GameFieldWidget.this.isEnabled()) {
                 _cells.get(event.cell()).setText("");
+                _cells.get(event.cell()).changeState(CellButtonState.DEFAULT);
             }
         }
 
