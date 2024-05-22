@@ -151,6 +151,7 @@ public class GameModel {
     }
 
     /* ============================================================================================================== */
+    // Player observe
     private class PlayerObserve implements PlayerActionListener {
         @Override
         public void skippedTurn(@NotNull PlayerActionEvent event) {
@@ -206,7 +207,7 @@ public class GameModel {
     }
 
     /* ============================================================================================================== */
-
+    // WordsDB observe
     private class WordsDBObserve implements WordsDBListener {
         @Override
         public void addedToUsedWords(WordsDBEvent event) {
