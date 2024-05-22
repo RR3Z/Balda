@@ -1,15 +1,16 @@
 package model;
 
+import model.enums.Direction;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Cell {
     private Character _letter;
     private Point _position;
-    private List<Cell> _adjacentCells = new ArrayList<>();
+    private Map<Direction, Cell> _adjacentCells = new HashMap<>();
 
     public Cell() {
         _position = null;
@@ -24,12 +25,6 @@ public class Cell {
     public Cell(@NotNull Point position, @NotNull Character letter) {
         _position = position;
         _letter = letter;
-    }
-
-    public Cell(@NotNull Point position, @NotNull Character letter, @NotNull ArrayList<Cell> adjacentCells) {
-        _position = position;
-        _letter = letter;
-        _adjacentCells = adjacentCells;
     }
 
     public Character letter() {
@@ -61,27 +56,38 @@ public class Cell {
     }
 
     public void setAdjacentCell(@NotNull Cell cell) {
-        if (_adjacentCells.contains(cell) || cell == this) {
+        if (_adjacentCells.containsValue(cell) || cell == this) {
             return;
         }
 
+        // Check diagonal cells
         if (Math.abs(_position.getX() - cell.position().getX()) == 1 && Math.abs(_position.getY() - cell.position().getY()) == 1) {
             return;
         }
 
-        if (Math.abs(_position.getX() - cell.position().getX()) != 1 && Math.abs(_position.getY() - cell.position().getY()) != 1) {
-            return;
+        if(cell.position().getY() - _position.getY() == 1 && cell.position().getX() - _position.getX() == 0) {
+            _adjacentCells.put(Direction.UP, cell);
         }
 
-        _adjacentCells.add(cell);
+        if(_position.getY() - cell.position().getY() == 1 && cell.position().getX() - _position.getX() == 0) {
+            _adjacentCells.put(Direction.DOWN, cell);
+        }
+
+        if(cell.position().getY() - _position.getY() == 0 && cell.position().getX() - _position.getX() == 1) {
+            _adjacentCells.put(Direction.RIGHT, cell);
+        }
+
+        if(cell.position().getY() - _position.getY() == 0 && _position.getX() - cell.position().getX() == 1) {
+            _adjacentCells.put(Direction.LEFT, cell);
+        }
     }
 
     public boolean isAdjacent(Cell cell) {
-        return _adjacentCells.contains(cell);
+        return _adjacentCells.containsValue(cell);
     }
 
     public boolean isNeighborWithLetter() {
-        for (Cell cell: _adjacentCells){
+        for (Cell cell: _adjacentCells.values()){
             if(cell.letter() != null){
                 return true;
             }
