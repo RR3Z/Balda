@@ -197,8 +197,8 @@ public class PlayerTests {
         _player.skipTurn();
 
         List<EVENT> expectedEvents = new ArrayList<>();
-        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CHOSE_LETTER);
+        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.SKIPPED_TURN);
 
         assertNull(_field.changedCell());
@@ -221,7 +221,6 @@ public class PlayerTests {
         _player.skipTurn();
 
         List<EVENT> expectedEvents = new ArrayList<>();
-        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CHOSE_LETTER);
         expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.PLACED_LETTER);
@@ -252,7 +251,6 @@ public class PlayerTests {
         _player.skipTurn();
 
         List<EVENT> expectedEvents = new ArrayList<>();
-        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CHOSE_LETTER);
         expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.PLACED_LETTER);
@@ -274,8 +272,8 @@ public class PlayerTests {
         _player.chooseLetter(letter);
 
         List<EVENT> expectedEvents = new ArrayList<>();
-        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CHOSE_LETTER);
+        expectedEvents.add(EVENT.CHANGED_STATE);
 
         assertEquals(letter, _alphabet.selectedLetter());
         assertEquals(PlayerState.PLACES_LETTER, _player.state());
@@ -302,8 +300,8 @@ public class PlayerTests {
         _player.chooseLetter(letter);
 
         List<EVENT> expectedEvents = new ArrayList<>();
-        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CHOSE_LETTER);
+        expectedEvents.add(EVENT.CHANGED_STATE);
 
         assertThrows(IllegalArgumentException.class, () -> _player.chooseLetter('ф'));
         assertEquals(letter, _alphabet.selectedLetter());
@@ -320,7 +318,6 @@ public class PlayerTests {
         _player.chooseCell(changedCell);
 
         List<EVENT> expectedEvents = new ArrayList<>();
-        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CHOSE_LETTER);
         expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.PLACED_LETTER);
@@ -389,7 +386,6 @@ public class PlayerTests {
         assertEquals(letter, _field.changedCell().letter());
 
         List<EVENT> expectedEvents = new ArrayList<>();
-        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CHOSE_LETTER);
         expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.PLACED_LETTER);
@@ -408,8 +404,8 @@ public class PlayerTests {
         _player.chooseCell(cellWithoutNegihborsWithLetter);
 
         List<EVENT> expectedEvents = new ArrayList<>();
-        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CHOSE_LETTER);
+        expectedEvents.add(EVENT.CHANGED_STATE);
 
         assertEquals(letter, _alphabet.selectedLetter());
         assertNull(_field.changedCell());
@@ -428,8 +424,8 @@ public class PlayerTests {
         _player.chooseCell(cellWithLetter);
 
         List<EVENT> expectedEvents = new ArrayList<>();
-        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CHOSE_LETTER);
+        expectedEvents.add(EVENT.CHANGED_STATE);
 
         assertEquals(letter, _alphabet.selectedLetter());
         assertNull(_field.changedCell());
@@ -449,7 +445,6 @@ public class PlayerTests {
         _player.chooseCell(changedCell);
 
         List<EVENT> expectedEvents = new ArrayList<>();
-        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CHOSE_LETTER);
         expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.PLACED_LETTER);
@@ -474,7 +469,6 @@ public class PlayerTests {
         _player.chooseCell(changedCell);
 
         List<EVENT> expectedEvents = new ArrayList<>();
-        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CHOSE_LETTER);
         expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.PLACED_LETTER);
@@ -501,7 +495,6 @@ public class PlayerTests {
         _player.chooseCell(cellWithoutLetter);
 
         List<EVENT> expectedEvents = new ArrayList<>();
-        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CHOSE_LETTER);
         expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.PLACED_LETTER);
@@ -538,7 +531,6 @@ public class PlayerTests {
         _player.submitWord();
 
         List<EVENT> expectedEvents = new ArrayList<>();
-        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CHOSE_LETTER);
         expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.PLACED_LETTER);
@@ -586,7 +578,6 @@ public class PlayerTests {
         _player.submitWord();
 
         List<EVENT> expectedEvents = new ArrayList<>();
-        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CHOSE_LETTER);
         expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.PLACED_LETTER);
@@ -594,7 +585,6 @@ public class PlayerTests {
         expectedEvents.add(EVENT.CHOSE_CELL);
         expectedEvents.add(EVENT.CHOSE_CELL);
         expectedEvents.add(EVENT.FINISHED_TURN);
-        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CHOSE_LETTER);
         expectedEvents.add(EVENT.CHANGED_STATE);
@@ -629,7 +619,6 @@ public class PlayerTests {
         assertEquals(2, _player.scoreCounter().score());
 
         List<EVENT> expectedEvents = new ArrayList<>();
-        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CHOSE_LETTER);
         expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.PLACED_LETTER);
@@ -662,7 +651,6 @@ public class PlayerTests {
         _player.addNewWordToDictionary();
 
         List<EVENT> expectedEvents = new ArrayList<>();
-        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CHOSE_LETTER);
         expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.PLACED_LETTER);
@@ -702,7 +690,6 @@ public class PlayerTests {
         _player.addNewWordToDictionary();
 
         List<EVENT> expectedEvents = new ArrayList<>();
-        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CHOSE_LETTER);
         expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.PLACED_LETTER);
@@ -730,11 +717,8 @@ public class PlayerTests {
     public void cancelActionOnField_PlaceLetter_ForgetAboutNothing() {
         _player.cancelActionOnField();
 
-        List<EVENT> expectedEvents = new ArrayList<>();
-        expectedEvents.add(EVENT.CANCELED_ACTION_ON_FIELD);
-
         assertEquals(PlayerState.SELECTING_LETTER, _player.state());
-        assertEquals(expectedEvents, _events);
+        assertTrue(_events.isEmpty());
     }
 
     @Test
@@ -746,10 +730,10 @@ public class PlayerTests {
         _player.cancelActionOnField();
 
         List<EVENT> expectedEvents = new ArrayList<>();
-        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CHOSE_LETTER);
         expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CANCELED_ACTION_ON_FIELD);
+        expectedEvents.add(EVENT.CHANGED_STATE);
 
         assertNull(_alphabet.selectedLetter());
         assertNull(_field.changedCell());
@@ -770,13 +754,12 @@ public class PlayerTests {
         _player.cancelActionOnField();
 
         List<EVENT> expectedEvents = new ArrayList<>();
-        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CHOSE_LETTER);
         expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.PLACED_LETTER);
         expectedEvents.add(EVENT.CHANGED_STATE);
-        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CANCELED_ACTION_ON_FIELD);
+        expectedEvents.add(EVENT.CHANGED_STATE);
 
         assertEquals(letter, _alphabet.selectedLetter());
         assertNull(_field.changedCell());
@@ -802,7 +785,6 @@ public class PlayerTests {
         _player.cancelActionOnField();
 
         List<EVENT> expectedEvents = new ArrayList<>();
-        expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.CHOSE_LETTER);
         expectedEvents.add(EVENT.CHANGED_STATE);
         expectedEvents.add(EVENT.PLACED_LETTER);

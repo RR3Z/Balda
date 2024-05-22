@@ -67,9 +67,10 @@ public class Player {
         }
 
         if(_alphabet.selectLetter(letter)) {
+            fireChoseLetter(letter);
+
             _state = PlayerState.PLACES_LETTER;
             fireChangedState();
-            fireChoseLetter(letter);
         }
     }
 
@@ -84,9 +85,10 @@ public class Player {
         }
 
         changedCell.setLetter(letter);
+        firePlacedLetter(_alphabet.selectedLetter(), changedCell);
+
         _state = PlayerState.FORMS_WORD;
         fireChangedState();
-        firePlacedLetter(_alphabet.selectedLetter(), changedCell);
     }
 
     public void addNewWordToDictionary() {
@@ -94,8 +96,7 @@ public class Player {
             throw new IllegalArgumentException("Wrong \"addNewWord\" function call (incorrect state) for player: " + this._name);
         }
 
-        String wordStringRepresentation = _word.toString();
-        _wordsDB.addToDictionary(wordStringRepresentation, this);
+        _wordsDB.addToDictionary(_word.toString(), this); // TODO: по хорошему надо запретить добавлять слово из одной буквы
     }
 
     public void cancelActionOnField() {
@@ -104,6 +105,8 @@ public class Player {
         }
 
         if (_state == PlayerState.PLACES_LETTER) {
+            fireCanceledActionOnField();
+
             if(_alphabet.selectedLetter() != null) {
                 _alphabet.forgetSelectedLetter();
             }
@@ -113,6 +116,8 @@ public class Player {
         }
 
         if (_state == PlayerState.FORMS_WORD) {
+            fireCanceledActionOnField();
+
             if (_word.length() == 0) {
                 _field.undoChangesOfChangedCell();
 
@@ -124,8 +129,6 @@ public class Player {
                 _word.clear();
             }
         }
-
-        fireCanceledActionOnField();
     }
 
     public void chooseCell(@NotNull Cell selectedCell) {
@@ -160,7 +163,6 @@ public class Player {
 
             _field.setChangedCell(selectedCell);
             placeLetter(_alphabet.selectedLetter());
-            fireChangedState();
         }
     }
 
@@ -171,7 +173,7 @@ public class Player {
 
         Cell changedCell = _field.changedCell();
         if (!_word.containCell(changedCell)) {
-            fireSubmittedWordDoesNotContainChangeableCell(changedCell);
+            fireSubmittedWordDoesNotContainChangeableCell(changedCell); // TODO: вот это сообщать должно само слово (но мне не нравится делать геттер для слова, чтобы на него могли подписаться)
             return;
         }
 
@@ -189,7 +191,7 @@ public class Player {
         }
 
         _state = PlayerState.WAITING_TURN;
-        fireFinishedTurn();
+        fireFinishedTurn(); // TODO: странное разделение на завершение хода и смену состояния (у меня есть ивент changedState - либо добавить суда его вызов, либо заменить на этот ивент)
     }
 
     public boolean isSkippedTurn() {
