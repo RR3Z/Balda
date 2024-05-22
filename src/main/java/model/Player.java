@@ -96,7 +96,7 @@ public class Player {
             throw new IllegalArgumentException("Wrong \"addNewWord\" function call (incorrect state) for player: " + this._name);
         }
 
-        _wordsDB.addToDictionary(_word.toString(), this); // TODO: по хорошему надо запретить добавлять слово из одной буквы
+        _wordsDB.addToDictionary(_word.toString(), this);
     }
 
     public void cancelActionOnField() {
@@ -173,7 +173,7 @@ public class Player {
 
         Cell changedCell = _field.changedCell();
         if (!_word.containCell(changedCell)) {
-            fireSubmittedWordDoesNotContainChangeableCell(changedCell); // TODO: вот это сообщать должно само слово (но мне не нравится делать геттер для слова, чтобы на него могли подписаться)
+            fireSubmittedWordDoesNotContainChangeableCell(changedCell); // TODO: вот это сообщать должно само слово
             return;
         }
 
@@ -191,7 +191,7 @@ public class Player {
         }
 
         _state = PlayerState.WAITING_TURN;
-        fireFinishedTurn(); // TODO: странное разделение на завершение хода и смену состояния (у меня есть ивент changedState - либо добавить суда его вызов, либо заменить на этот ивент)
+        fireFinishedTurn();
     }
 
     public boolean isSkippedTurn() {
