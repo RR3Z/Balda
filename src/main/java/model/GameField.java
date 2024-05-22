@@ -36,21 +36,6 @@ public class GameField {
         return _height;
     }
 
-    public Cell changedCell() { return _changedCell; }
-
-    public Cell cell(@NotNull Point position) {
-        for (int i = 0; i < _height; i++) {
-            for (int j = 0; j < _width; j++) {
-                Point cellPosition = _cells[j][i].position();
-                if (cellPosition.getX() == position.getX() && cellPosition.getY() == position.getY()) {
-                    return _cells[j][i];
-                }
-            }
-        }
-
-        return null;
-    }
-
     public int centralLineIndex(@NotNull Direction direction) {
         int centralRowIndex = -1;
 
@@ -85,6 +70,45 @@ public class GameField {
         }
 
         return row;
+    }
+
+    public Cell cell(@NotNull Point position) {
+        for (int i = 0; i < _height; i++) {
+            for (int j = 0; j < _width; j++) {
+                Point cellPosition = _cells[j][i].position();
+                if (cellPosition.getX() == position.getX() && cellPosition.getY() == position.getY()) {
+                    return _cells[j][i];
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public Cell changedCell() { return _changedCell; }
+
+    public void setChangedCell(@NotNull Cell changedCell) {
+        if(_changedCell != null) {
+            throw new IllegalArgumentException("GameField -> selectChangedCell: trying to select a changed cell when it has already been selected");
+        }
+
+        if(cell(changedCell.position()) != null) {
+            _changedCell = changedCell;
+        }
+    }
+
+    public void forgetChangedCell() {
+        if(_changedCell != null) {
+            _changedCell = null;
+        }
+    } // TODO: неправильный уровень доступа (заменить на private)
+
+    public void undoChangesOfChangedCell() {
+        if(_changedCell != null) {
+            _changedCell.removeLetter();
+            fireUndoChangesOfChangedCell(_changedCell);
+            forgetChangedCell();
+        }
     }
 
     public int cellsCountWithoutLetter() {
@@ -171,30 +195,6 @@ public class GameField {
         }
 
         firePlacedWord(word);
-    }
-
-    public void undoChangesOfChangedCell() {
-        if(_changedCell != null) {
-            _changedCell.removeLetter();
-            fireUndoChangesOfChangedCell(_changedCell);
-            forgetChangedCell();
-        }
-    }
-
-    public void setChangedCell(@NotNull Cell changedCell) {
-        if(_changedCell != null) {
-            throw new IllegalArgumentException("GameField -> selectChangedCell: trying to select a changed cell when it has already been selected");
-        }
-
-        if(cell(changedCell.position()) != null) {
-            _changedCell = changedCell;
-        }
-    }
-
-    public void forgetChangedCell() {
-        if(_changedCell != null) {
-            _changedCell = null;
-        }
     }
 
     private class GameModelObserve implements GameModelListener {
