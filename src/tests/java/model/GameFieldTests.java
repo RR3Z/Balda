@@ -1103,34 +1103,6 @@ public class GameFieldTests {
     }
 
     @Test
-    public void forgetChangedCell_ChangedCellIsNullObject() {
-        _events.clear();
-
-        _gameField = new GameField(_gameModel, 5, 5);
-        _gameField.addGameFieldListener(new EventsListener());
-
-        _gameField.forgetChangedCell();
-
-        assertNull(_gameField.changedCell());
-        assertTrue(_events.isEmpty());
-    }
-
-    @Test
-    public void forgetChangedCell_ChangedCellIsNotNullObject() {
-        Point cellPosition = new Point(0, 0);
-        Cell cell = _gameField.cell(cellPosition);
-        _gameField.setChangedCell(cell);
-
-        assertNotNull(cell);
-        assertEquals(cell, _gameField.changedCell());
-
-        _gameField.forgetChangedCell();
-
-        assertNull(_gameField.changedCell());
-        assertTrue(_events.isEmpty());
-    }
-
-    @Test
     public void forgetChangedCell_WhenPlayerExchanged() {
         assertNull(_gameField.changedCell());
 

@@ -97,11 +97,11 @@ public class GameField {
         }
     }
 
-    public void forgetChangedCell() {
+    private void forgetChangedCell() {
         if(_changedCell != null) {
             _changedCell = null;
         }
-    } // TODO: неправильный уровень доступа (заменить на private)
+    }
 
     public void undoChangesOfChangedCell() {
         if(_changedCell != null) {
@@ -139,8 +139,8 @@ public class GameField {
     }
 
     private void setNeighborsForCells() {
-        for (int i = 0; i < _height; i++) {
-            for (int j = 0; j < _width; j++) {
+        for (int i = 0; i < _height; i++) { // y coord
+            for (int j = 0; j < _width; j++) { // x coord
                 // Left cell
                 if (j - 1 >= 0) {
                     _cells[j][i].setAdjacentCell(_cells[j - 1][i]);
@@ -197,6 +197,7 @@ public class GameField {
         firePlacedWord(word);
     }
 
+    // GameModel observe
     private class GameModelObserve implements GameModelListener {
         @Override
         public void playerExchanged(GameModelEvent event) {
