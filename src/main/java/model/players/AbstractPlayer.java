@@ -20,8 +20,6 @@ public abstract class AbstractPlayer {
     protected Word _word;
     protected ScoreCounter _scoreCounter;
 
-
-
     // Getters
     public String name() { return _name; }
 
