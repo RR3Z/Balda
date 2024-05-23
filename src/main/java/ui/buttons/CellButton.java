@@ -10,6 +10,7 @@ import ui.utils.ButtonUtils;
 import ui.utils.GameWidgetUtils;
 
 import javax.swing.*;
+import javax.swing.plaf.metal.MetalButtonUI;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -29,6 +30,12 @@ public class CellButton extends JButton {
 
         this.setEnabled(false);
         this.setFocusable(false);
+
+        setUI(new MetalButtonUI() {
+            protected Color getDisabledTextColor() {
+                return GameWidgetUtils.color(ColorType.TEXT_COLOR);
+            }
+        });
 
         this.setPreferredSize(new Dimension(CELL_SIZE, CELL_SIZE));
         this.setBorder(BorderFactory.createLineBorder(GameWidgetUtils.color(ColorType.DEFAULT_BORDER)));

@@ -26,7 +26,7 @@ public class GameWidgetUtils {
     public static Color color(ColorType type) {
         return switch (type) {
             case TRANSPARENT -> new Color(0, 0, 0, 0);
-            case DEFAULT_BORDER -> Color.BLACK;
+            case DEFAULT_BORDER, TEXT_COLOR -> Color.BLACK;
             case HIGHLIGHTED_BORDER -> new Color(98, 138, 5);
             case HIGHLIGHTED_SKIP_TURN_BORDER -> new Color(148, 15, 17);
             case CELL_IN_WORD, CANCEL_ACTION_BUTTON, ACTIVE_ALPHABET_BUTTON, SUBMIT_WORD_BUTTON, ACTIVE_PLAYER -> new Color(167, 201, 87);
