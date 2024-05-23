@@ -1,7 +1,8 @@
 package model.events;
 
 import model.Cell;
-import model.Player;
+import model.players.AbstractPlayer;
+
 import java.util.EventObject;
 
 public class PlayerActionEvent extends EventObject {
@@ -9,13 +10,13 @@ public class PlayerActionEvent extends EventObject {
         super(source);
     }
 
-    private Player _player;
+    private AbstractPlayer _player;
 
-    public void setPlayer(Player player) {
+    public void setPlayer(AbstractPlayer player) {
         _player = player;
     }
 
-    public Player player() {
+    public AbstractPlayer player() {
         return _player;
     }
 
@@ -47,55 +48,5 @@ public class PlayerActionEvent extends EventObject {
 
     public Character letter() {
         return _letter;
-    }
-
-    private boolean _isKnown;
-
-    public void setIsKnown(boolean status) {
-        _isKnown = status;
-    }
-
-    public boolean isKnown() {
-        return _isKnown;
-    }
-
-    private boolean _isUsedAlready;
-
-    public void setIsUsedAlready(boolean status) {
-        _isUsedAlready = status;
-    }
-
-    public boolean isUsedAlready() {
-        return _isUsedAlready;
-    }
-
-    private boolean _isNotNeighborOfLastCell;
-
-    public void setIsNotNeighborOfLastCell(boolean status) {
-        _isNotNeighborOfLastCell = status;
-    }
-
-    public boolean isNotNeighborOfLastCell() {
-        return _isNotNeighborOfLastCell;
-    }
-
-    private boolean _isContainCellAlready;
-
-    public void setIsContainCellAlready(boolean status) {
-        _isContainCellAlready = status;
-    }
-
-    public boolean isContainCellAlready() {
-        return _isContainCellAlready;
-    }
-
-    private boolean _isCellWithoutLetter;
-
-    public void setIsCellWithoutLetter(boolean status) {
-        _isCellWithoutLetter = status;
-    }
-
-    public boolean isCellWithoutLetter() {
-        return _isCellWithoutLetter;
     }
 }

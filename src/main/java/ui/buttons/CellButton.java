@@ -2,6 +2,7 @@ package ui.buttons;
 
 import model.Cell;
 import model.GameModel;
+import model.players.UserPlayer;
 import org.jetbrains.annotations.NotNull;
 import ui.enums.BorderType;
 import ui.enums.CellButtonVisualState;
@@ -87,7 +88,9 @@ public class CellButton extends JButton {
         @Override
         public void mousePressed(MouseEvent e) {
             if(CellButton.this.isEnabled()) {
-                _gameModel.activePlayer().chooseCell(_cell);
+                if(_gameModel.activePlayer() instanceof UserPlayer) {
+                    ((UserPlayer)_gameModel.activePlayer()).selectCell(_cell);
+                }
             }
         }
 

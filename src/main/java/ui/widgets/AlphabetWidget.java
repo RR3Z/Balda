@@ -2,12 +2,12 @@ package ui.widgets;
 
 import model.Alphabet;
 import model.GameModel;
-import model.Player;
 import model.enums.PlayerState;
 import model.events.AlphabetEvent;
 import model.events.AlphabetListener;
 import model.events.PlayerActionEvent;
 import model.events.PlayerActionListener;
+import model.players.AbstractPlayer;
 import org.jetbrains.annotations.NotNull;
 import ui.buttons.LetterButton;
 import ui.enums.LetterButtonVisualState;
@@ -30,7 +30,7 @@ public class AlphabetWidget extends JPanel {
         Alphabet alphabet = gameModel.alphabet();
         alphabet.addAlphabetListener(new AlphabetController());
 
-        for(Player player: gameModel.players()) {
+        for(AbstractPlayer player: gameModel.players()) {
             player.addPlayerActionListener(new PlayerController());
         }
 

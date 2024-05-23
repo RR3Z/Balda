@@ -1,13 +1,13 @@
 package ui.widgets;
 
 import model.GameModel;
-import model.Player;
 import model.ScoreCounter;
 import model.enums.PlayerState;
 import model.events.PlayerActionEvent;
 import model.events.PlayerActionListener;
 import model.events.ScoreCounterEvent;
 import model.events.ScoreCounterListener;
+import model.players.AbstractPlayer;
 import org.jetbrains.annotations.NotNull;
 import ui.enums.ColorType;
 import ui.tables.CustomJTable;
@@ -26,9 +26,9 @@ public class PlayersScoreTableWidget extends CustomJTable {
 
         DefaultTableModel playersScoreTableModel = (DefaultTableModel)this.getModel();
 
-        List<Player> players = gameModel.players();
+        List<AbstractPlayer> players = gameModel.players();
         for(int i = 0; i < players.size(); i++) {
-            Player player = players.get(i);
+            AbstractPlayer player = players.get(i);
             player.addPlayerActionListener(new PlayerActionController());
 
             ScoreCounter scoreCounter = player.scoreCounter();
@@ -58,7 +58,7 @@ public class PlayersScoreTableWidget extends CustomJTable {
     private class PlayerActionController implements PlayerActionListener {
         @Override
         public void changedState(@NotNull PlayerActionEvent event) {
-            Player player = event.player();
+            AbstractPlayer player = event.player();
 
             if(player.state() == PlayerState.SELECTING_LETTER) {
                 highlightRow(_scoreCounterToRowIndex.get(player.scoreCounter()), GameWidgetUtils.color(ColorType.ACTIVE_PLAYER));

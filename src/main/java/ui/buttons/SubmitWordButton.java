@@ -1,6 +1,7 @@
 package ui.buttons;
 
 import model.GameModel;
+import model.players.UserPlayer;
 import org.jetbrains.annotations.NotNull;
 import ui.enums.BorderType;
 import ui.enums.ColorType;
@@ -55,7 +56,9 @@ public class SubmitWordButton extends JButton {
         @Override
         public void mousePressed(MouseEvent e) {
             if(SubmitWordButton.this.isEnabled()) {
-                _gameModel.activePlayer().submitWord();
+                if(_gameModel.activePlayer() instanceof UserPlayer) {
+                    ((UserPlayer)_gameModel.activePlayer()).submitWord();
+                }
             }
         }
 

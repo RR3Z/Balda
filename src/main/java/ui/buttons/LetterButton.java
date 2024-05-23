@@ -1,6 +1,8 @@
 package ui.buttons;
 
 import model.GameModel;
+import model.players.AbstractPlayer;
+import model.players.UserPlayer;
 import org.jetbrains.annotations.NotNull;
 import ui.enums.BorderType;
 import ui.enums.ColorType;
@@ -78,7 +80,9 @@ public class LetterButton extends JButton {
         @Override
         public void mousePressed(MouseEvent e) {
             if(LetterButton.this.isEnabled()) {
-                _gameModel.activePlayer().chooseLetter(LetterButton.this.getText().charAt(0));
+                if(_gameModel.activePlayer() instanceof UserPlayer) {
+                    ((UserPlayer)_gameModel.activePlayer()).selectLetter(LetterButton.this.getText().charAt(0));
+                }
                 LetterButton.this.highlight(false);
             }
         }

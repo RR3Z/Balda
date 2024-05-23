@@ -2,6 +2,7 @@ package model;
 
 import model.events.WordsDBEvent;
 import model.events.WordsDBListener;
+import model.players.AbstractPlayer;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -11,13 +12,13 @@ import java.util.*;
 
 public class WordsDB {
     private List<String> _dictionary = new ArrayList<>();
-    private Map<String, Player> _usedWords = new HashMap<>();
+    private Map<String, AbstractPlayer> _usedWords = new HashMap<>();
 
     public WordsDB(@NotNull String filePath) {
         readFromFile(filePath);
     }
 
-    public boolean addToDictionary(@NotNull String word, Player player) {
+    public boolean addToDictionary(@NotNull String word, AbstractPlayer player) {
         if (_dictionary.contains(word)) {
             return false;
         }
@@ -27,7 +28,7 @@ public class WordsDB {
         return true;
     }
 
-    public boolean addToUsedWords(@NotNull String word, Player player) {
+    public boolean addToUsedWords(@NotNull String word, AbstractPlayer player) {
         if (!containsInDictionary(word)) {
             fireWordNotAllowed(player, word);
             return false;
@@ -101,7 +102,7 @@ public class WordsDB {
         _wordsDBListeners.add(listener);
     }
 
-    private void fireAddedToUsedWords(Player player, @NotNull String word) {
+    private void fireAddedToUsedWords(AbstractPlayer player, @NotNull String word) {
         for (Object listener : _wordsDBListeners) {
             WordsDBEvent event = new WordsDBEvent(this);
             event.setPlayer(player);
@@ -111,7 +112,7 @@ public class WordsDB {
         }
     }
 
-    private void fireWordAlreadyUsed(Player player, @NotNull String word) {
+    private void fireWordAlreadyUsed(AbstractPlayer player, @NotNull String word) {
         for (Object listener : _wordsDBListeners) {
             WordsDBEvent event = new WordsDBEvent(this);
             event.setPlayer(player);
@@ -121,7 +122,7 @@ public class WordsDB {
         }
     }
 
-    private void fireWordNotAllowed(Player player, @NotNull String word) {
+    private void fireWordNotAllowed(AbstractPlayer player, @NotNull String word) {
         for (Object listener : _wordsDBListeners) {
             WordsDBEvent event = new WordsDBEvent(this);
             event.setPlayer(player);
@@ -131,7 +132,7 @@ public class WordsDB {
         }
     }
 
-    private void fireAddedNewWordToDictionary(Player player, @NotNull String word) {
+    private void fireAddedNewWordToDictionary(AbstractPlayer player, @NotNull String word) {
         for (Object listener : _wordsDBListeners) {
             WordsDBEvent event = new WordsDBEvent(this);
             event.setPlayer(player);

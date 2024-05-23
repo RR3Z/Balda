@@ -1,9 +1,10 @@
 package ui;
 
 import model.GameModel;
-import model.Player;
 import model.enums.GameState;
 import model.events.*;
+import model.players.AbstractPlayer;
+import model.players.UserPlayer;
 import org.jetbrains.annotations.NotNull;
 import ui.menus.MainMenu;
 import ui.panels.GameOverPanel;
@@ -47,11 +48,11 @@ public class MainWindow extends JFrame {
 
         _gameModel.wordsDB().addWordsDBListener(new WordsDBController());
 
-        for(Player player: _gameModel.players()) {
+        for(AbstractPlayer player: _gameModel.players()) {
             player.addPlayerActionListener(new PlayerController());
         }
 
-        // Clear ui.MainWindow
+        // Clear MainWindow
         JPanel content = (JPanel) this.getContentPane();
         content.removeAll();
 
@@ -182,11 +183,26 @@ public class MainWindow extends JFrame {
     private class WordsDBController implements WordsDBListener {
         @Override
         public void addedNewWordToDictionary(WordsDBEvent event) {
-            if(event.player() == _gameModel.activePlayer()) {
+            if(event.player() == _gameModel.activePlayer() && _gameModel.activePlayer() instanceof UserPlayer) {
                 String message = "<html><div style='text-align:center;'>" + GameWidgetUtils.htmlFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE) +
                         "Слово \"" + event.word() + "\" успешно добавлено" + "</div></html>";
                 JOptionPane.showMessageDialog(null, message, "Новое слово", JOptionPane.INFORMATION_MESSAGE);
-                _gameModel.activePlayer().submitWord();
+                ((UserPlayer)_gameModel.activePlayer()).submitWord();
+            }
+        }
+
+        @Override
+        public void wordNotAllowed(WordsDBEvent event) {
+            if(event.player() == _gameModel.activePlayer() && _gameModel.activePlayer() instanceof UserPlayer) {
+                String htmlFont = GameWidgetUtils.htmlFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE);
+                String message = "<html><div style='text-align: center;'>" + htmlFont + "Было составлено неизвестное слово \"" + event.word() + "\". <br>Добавить в словарь?</div></html>";
+
+                int result = JOptionPane.showConfirmDialog(null, message, "Неизвестное слово", JOptionPane.OK_CANCEL_OPTION);
+                if(result == JOptionPane.OK_OPTION) {
+                    ((UserPlayer)_gameModel.activePlayer()).addNewWordToDictionary();
+                } else {
+                    ((UserPlayer)_gameModel.activePlayer()).cancelActionOnField();
+                }
             }
         }
 
@@ -196,21 +212,6 @@ public class MainWindow extends JFrame {
                 String htmlFont = GameWidgetUtils.htmlFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE);
                 String message = "<html><div style='text-align: center;'>" + htmlFont + "Слово уже было использовано.</div></html>";
                     JOptionPane.showMessageDialog(null, message, "Ошибка", JOptionPane.WARNING_MESSAGE);
-            }
-        }
-
-        @Override
-        public void wordNotAllowed(WordsDBEvent event) {
-            if(event.player() == _gameModel.activePlayer()) {
-                String htmlFont = GameWidgetUtils.htmlFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE);
-                String message = "<html><div style='text-align: center;'>" + htmlFont + "Было составлено неизвестное слово \"" + event.word() + "\". <br>Добавить в словарь?</div></html>";
-
-                int result = JOptionPane.showConfirmDialog(null, message, "Неизвестное слово", JOptionPane.OK_CANCEL_OPTION);
-                if(result == JOptionPane.OK_OPTION) {
-                    _gameModel.activePlayer().addNewWordToDictionary();
-                } else {
-                    _gameModel.activePlayer().cancelActionOnField();
-                }
             }
         }
 
