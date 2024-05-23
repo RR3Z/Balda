@@ -1,4 +1,4 @@
-package ui;
+package ui.widgets;
 
 import model.Alphabet;
 import model.GameModel;

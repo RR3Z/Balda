@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import ui.menus.MainMenu;
 import ui.panels.GameOverPanel;
 import ui.utils.GameWidgetUtils;
+import ui.widgets.*;
 
 import javax.swing.*;
 import java.awt.*;
