@@ -13,10 +13,12 @@ import java.util.*;
 public class WordsDB {
     private HashSet<String> _dictionary;
     private HashMap<String, AbstractPlayer> _usedWords;
+    private HashMap<String, String> _maskToWord; // It should be understood that masks are set once when reading a dictionary from a file
 
     public WordsDB(@NotNull String filePath) {
         _dictionary = new HashSet<>();
         _usedWords = new HashMap<>();
+        _maskToWord = new HashMap<>();
 
         readFromFile(filePath);
     }
@@ -90,11 +92,21 @@ public class WordsDB {
             HashSet<String> lowerCaseWords = new HashSet<>();
             for (String word : fileInput) {
                 lowerCaseWords.add(word.toLowerCase());
+                formMasksForWord(word.toLowerCase());
             }
 
             _dictionary = lowerCaseWords;
         } catch (IOException e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    private void formMasksForWord(@NotNull String word) {
+        for (int i = 0; i < word.length(); i++) {
+            StringBuilder mask = new StringBuilder(word);
+            mask.setCharAt(i, '*');
+
+            _maskToWord.put(mask.toString(), word);
         }
     }
 
