@@ -12,17 +12,15 @@ public class PlayableWord {
     private Pair<Cell, Character> _letterToPlace;
     private List<Cell> _cellsToSelect;
 
-    public PlayableWord() {
-        _cellsToSelect = new ArrayList<>();
-    }
-
-    public PlayableWord(Pair<Cell, Character> letterToPlace, List<Cell> cellsToSelect) {
-        _letterToPlace = letterToPlace;
+    public PlayableWord(Character letter, Cell cellForLetter, List<Cell> cellsToSelect) {
+        _letterToPlace = new Pair<>(cellForLetter, letter);
         _cellsToSelect = cellsToSelect;
     }
 
     // Getters
-    public Pair<Cell, Character> letterToPlace() { return _letterToPlace; }
+    public Character letter() { return _letterToPlace.getValue(); }
+
+    public Cell cellForLetter() { return _letterToPlace.getKey(); }
 
     public List<Cell> cellsToSelect() { return Collections.unmodifiableList(_cellsToSelect); }
 }
