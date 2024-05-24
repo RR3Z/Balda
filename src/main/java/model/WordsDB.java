@@ -83,6 +83,14 @@ public class WordsDB {
         return _usedWords.containsKey(word);
     }
 
+    public boolean isMaskExist(@NotNull String mask) {
+        return _maskToWord.containsKey(mask);
+    }
+
+    public String wordByMask(@NotNull String mask) {
+        return _maskToWord.get(mask);
+    }
+
     private void readFromFile(@NotNull String filePath) {
         try {
             List<String> fileInput;
