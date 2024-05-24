@@ -11,10 +11,13 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class WordsDB {
-    private List<String> _dictionary = new ArrayList<>();
-    private Map<String, AbstractPlayer> _usedWords = new HashMap<>();
+    private HashSet<String> _dictionary;
+    private HashMap<String, AbstractPlayer> _usedWords;
 
     public WordsDB(@NotNull String filePath) {
+        _dictionary = new HashSet<>();
+        _usedWords = new HashMap<>();
+
         readFromFile(filePath);
     }
 
@@ -84,7 +87,7 @@ public class WordsDB {
             fileInput = Files.readAllLines(Paths.get(filePath));
 
             // Translate all words to lowercase
-            List<String> lowerCaseWords = new ArrayList<>();
+            HashSet<String> lowerCaseWords = new HashSet<>();
             for (String word : fileInput) {
                 lowerCaseWords.add(word.toLowerCase());
             }
