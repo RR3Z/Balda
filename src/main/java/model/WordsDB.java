@@ -13,7 +13,7 @@ import java.util.*;
 public class WordsDB {
     private HashSet<String> _dictionary;
     private HashMap<String, AbstractPlayer> _usedWords;
-    private HashMap<String, String> _maskToWord; // It should be understood that masks are set once when reading a dictionary from a file
+    private HashMap<String, HashSet<String>> _maskToWord; // It should be understood that masks are set once when reading a dictionary from a file
 
     public WordsDB(@NotNull String filePath) {
         _dictionary = new HashSet<>();
@@ -87,7 +87,7 @@ public class WordsDB {
         return _maskToWord.containsKey(mask);
     }
 
-    public String wordByMask(@NotNull String mask) {
+    public HashSet<String> wordsByMask(@NotNull String mask) {
         return _maskToWord.get(mask);
     }
 
@@ -114,7 +114,13 @@ public class WordsDB {
             StringBuilder mask = new StringBuilder(word);
             mask.setCharAt(i, '*');
 
-            _maskToWord.put(mask.toString(), word);
+            if(_maskToWord.containsKey(mask.toString())) {
+                _maskToWord.get(mask.toString()).add(word);
+            } else {
+                HashSet<String> words = new HashSet<>();
+                words.add(word);
+                _maskToWord.put(mask.toString(), words);
+            }
         }
     }
 
