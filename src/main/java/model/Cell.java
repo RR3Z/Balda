@@ -4,8 +4,7 @@ import model.enums.Direction;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.Point;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Cell {
     private Character _letter;
@@ -29,6 +28,23 @@ public class Cell {
 
     public Character letter() {
         return _letter;
+    }
+
+    public List<Cell> adjacentCells() {
+        return List.copyOf(_adjacentCells.values());
+    }
+
+    public Cell adjacentCellWithoutLetter() {
+        // It should be understood that it returns the first available free cell adjacent to this one
+        if(haveAdjacentCellWithoutLetter()) {
+            for(Cell cell: _adjacentCells.values()) {
+                if(cell.letter() == null) {
+                    return cell;
+                }
+            }
+        }
+
+        return null;
     }
 
     public void setLetter(@NotNull Character letter) {
@@ -87,8 +103,18 @@ public class Cell {
     }
 
     public boolean isNeighborWithLetter() {
+        for (Cell cell: _adjacentCells.values()) {
+            if(cell.letter() != null) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean haveAdjacentCellWithoutLetter() {
         for (Cell cell: _adjacentCells.values()){
-            if(cell.letter() != null){
+            if(cell.letter() == null) {
                 return true;
             }
         }
