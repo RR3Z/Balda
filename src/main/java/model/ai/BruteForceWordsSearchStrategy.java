@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class BruteForceWordSearchStrategy extends AbstractWordSearchStrategy {
+public class BruteForceWordsSearchStrategy extends AbstractWordsSearchStrategy {
     private List<PlayableWord> _availablePlayableWords;
 
-    public BruteForceWordSearchStrategy(@NotNull GameField gameField, @NotNull WordsDB wordsDB) {
+    public BruteForceWordsSearchStrategy(@NotNull GameField gameField, @NotNull WordsDB wordsDB) {
         _gameField = gameField;
         _wordsDB = wordsDB;
     }
@@ -59,7 +59,7 @@ public class BruteForceWordSearchStrategy extends AbstractWordSearchStrategy {
 
     private void formAvailablePlayableWordsFromCells(@NotNull List<Cell> cells) {
         if(cells.isEmpty()) {
-            throw new IllegalArgumentException("BruteForceWordSearchStrategy: formAvailablePlayableWordsFromCells -> cells is empty");
+            throw new IllegalArgumentException("BruteForceWordsSearchStrategy: formAvailablePlayableWordsFromCells -> cells is empty");
         }
 
         // Формирую маску

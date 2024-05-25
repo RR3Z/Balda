@@ -1,13 +1,12 @@
 package model;
 
-import model.ai.BruteForceWordSearchStrategy;
+import model.ai.BruteForceWordsSearchStrategy;
 import model.ai.LongestWordSelectionStrategy;
 import model.enums.Direction;
 import model.enums.GameState;
 import model.events.*;
 import model.players.AIPlayer;
 import model.players.AbstractPlayer;
-import model.players.UserPlayer;
 import model.utils.DataFilePaths;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,15 +27,15 @@ public class GameModel {
         _wordsDB = new WordsDB(DataFilePaths.DICTIONARY_FILE_PATH);
         _wordsDB.addWordsDBListener(new WordsDBObserve());
 
-        BruteForceWordSearchStrategy wordSearchStrategy = new BruteForceWordSearchStrategy(_field, _wordsDB);
+        BruteForceWordsSearchStrategy wordsSearchStrategy = new BruteForceWordsSearchStrategy(_field, _wordsDB);
         LongestWordSelectionStrategy wordSelectionStrategy = new LongestWordSelectionStrategy(_wordsDB);
 //        UserPlayer firstPlayer = new UserPlayer("Игрок 1", _field, _wordsDB, _alphabet);
-        AIPlayer firstPlayer = new AIPlayer("Бот 1",_field, _wordsDB, _alphabet, wordSelectionStrategy, wordSearchStrategy);
+        AIPlayer firstPlayer = new AIPlayer("Бот 1",_field, _wordsDB, _alphabet, wordSelectionStrategy, wordsSearchStrategy);
         firstPlayer.addPlayerActionListener(new PlayerObserve());
         _players.add(firstPlayer);
 
 //        UserPlayer secondPlayer = new UserPlayer("Игрок 2", _field, _wordsDB, _alphabet);
-        AIPlayer secondPlayer = new AIPlayer("Бот 2", _field, _wordsDB, _alphabet, wordSelectionStrategy, wordSearchStrategy);
+        AIPlayer secondPlayer = new AIPlayer("Бот 2", _field, _wordsDB, _alphabet, wordSelectionStrategy, wordsSearchStrategy);
         secondPlayer.addPlayerActionListener(new PlayerObserve());
         _players.add(secondPlayer);
 

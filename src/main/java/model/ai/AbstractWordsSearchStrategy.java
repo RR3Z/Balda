@@ -5,7 +5,7 @@ import model.WordsDB;
 
 import java.util.List;
 
-public abstract class AbstractWordSearchStrategy {
+public abstract class AbstractWordsSearchStrategy {
     protected GameField _gameField;
     protected WordsDB _wordsDB;
 

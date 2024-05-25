@@ -1,7 +1,7 @@
 package model.players;
 
 import model.*;
-import model.ai.AbstractWordSearchStrategy;
+import model.ai.AbstractWordsSearchStrategy;
 import model.ai.AbstractWordSelectionStrategy;
 import model.ai.PlayableWord;
 import model.enums.PlayerState;
@@ -14,10 +14,10 @@ import java.util.TimerTask;
 public class AIPlayer extends AbstractPlayer {
     private final int DELAY_STEP = 10;
 
-    private AbstractWordSearchStrategy _wordSearchStrategy;
+    private AbstractWordsSearchStrategy _wordsSearchStrategy;
     private AbstractWordSelectionStrategy _wordSelectionStrategy;
 
-    public AIPlayer(@NotNull String name, @NotNull GameField field, @NotNull WordsDB wordsDB, @NotNull Alphabet alphabet, @NotNull AbstractWordSelectionStrategy wordSelectionStrategy, @NotNull AbstractWordSearchStrategy wordSearchStrategy) {
+    public AIPlayer(@NotNull String name, @NotNull GameField field, @NotNull WordsDB wordsDB, @NotNull Alphabet alphabet, @NotNull AbstractWordSelectionStrategy wordSelectionStrategy, @NotNull AbstractWordsSearchStrategy wordsSearchStrategy) {
         _wordsDB = wordsDB;
         _alphabet = alphabet;
         _field = field;
@@ -26,7 +26,7 @@ public class AIPlayer extends AbstractPlayer {
         _scoreCounter = new ScoreCounter();
 
         _wordSelectionStrategy = wordSelectionStrategy;
-        _wordSearchStrategy = wordSearchStrategy;
+        _wordsSearchStrategy = wordsSearchStrategy;
 
         _state = PlayerState.WAITING_TURN;
     }
@@ -35,7 +35,7 @@ public class AIPlayer extends AbstractPlayer {
     public void startTurn() {
         super.startTurn();
 
-        PlayableWord playableWord = _wordSelectionStrategy.selectPlayableWord(_wordSearchStrategy.findAvailablePlayableWords());
+        PlayableWord playableWord = _wordSelectionStrategy.selectPlayableWord(_wordsSearchStrategy.findAvailablePlayableWords());
         if(playableWord == null) {
             skipTurn();
         } else {
