@@ -42,6 +42,8 @@ public abstract class AbstractPlayer {
         }
 
         _word.clear();
+        _field.forgetChangedCell();
+        _alphabet.forgetSelectedLetter();
         _state = PlayerState.SELECTING_LETTER;
         fireChangedState();
     }

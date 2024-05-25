@@ -1,8 +1,11 @@
 package model;
 
+import model.ai.BruteForceWordSearchStrategy;
+import model.ai.LongestWordSelectionStrategy;
 import model.enums.Direction;
 import model.enums.GameState;
 import model.events.*;
+import model.players.AIPlayer;
 import model.players.AbstractPlayer;
 import model.players.UserPlayer;
 import model.utils.DataFilePaths;
@@ -19,17 +22,21 @@ public class GameModel {
     private GameState _state;
 
     public GameModel(int width, int height) {
-        _field = new GameField(this, width, height);
-        _alphabet = new Alphabet(this, DataFilePaths.ALPHABET_FILE_PATH);
+        _field = new GameField(width, height);
+        _alphabet = new Alphabet(DataFilePaths.ALPHABET_FILE_PATH);
 
         _wordsDB = new WordsDB(DataFilePaths.DICTIONARY_FILE_PATH);
         _wordsDB.addWordsDBListener(new WordsDBObserve());
 
-        UserPlayer firstPlayer = new UserPlayer("Игрок 1", _field, _wordsDB, _alphabet);
+        BruteForceWordSearchStrategy wordSearchStrategy = new BruteForceWordSearchStrategy(_field, _wordsDB);
+        LongestWordSelectionStrategy wordSelectionStrategy = new LongestWordSelectionStrategy(_wordsDB, wordSearchStrategy);
+//        UserPlayer firstPlayer = new UserPlayer("Игрок 1", _field, _wordsDB, _alphabet);
+        AIPlayer firstPlayer = new AIPlayer("Бот 1",_field, _wordsDB, _alphabet, wordSelectionStrategy);
         firstPlayer.addPlayerActionListener(new PlayerObserve());
         _players.add(firstPlayer);
 
-        UserPlayer secondPlayer = new UserPlayer("Игрок 2", _field, _wordsDB, _alphabet);
+//        UserPlayer secondPlayer = new UserPlayer("Игрок 2", _field, _wordsDB, _alphabet);
+        AIPlayer secondPlayer = new AIPlayer("Бот 2", _field, _wordsDB, _alphabet, wordSelectionStrategy);
         secondPlayer.addPlayerActionListener(new PlayerObserve());
         _players.add(secondPlayer);
 
@@ -158,10 +165,10 @@ public class GameModel {
         @Override
         public void skippedTurn(@NotNull PlayerActionEvent event) {
             if (event.player() == _activePlayer) {
-                if (numberOfPlayersWhoSkippedTurn() == _players.size()) {
-                    determineWinner();
-                } else {
+                if (numberOfPlayersWhoSkippedTurn() != _players.size()) {
                     switchTurn();
+                } else {
+                    determineWinner();
                 }
             }
         }
