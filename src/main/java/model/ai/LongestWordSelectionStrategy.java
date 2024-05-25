@@ -19,15 +19,12 @@ public class LongestWordSelectionStrategy extends AbstractWordSelectionStrategy 
             return null;
         }
 
-        System.out.println("Find " + availablePlayableWords.size() + " words");
-
         PlayableWord longestWord = availablePlayableWords.get(0);
         for(PlayableWord word: availablePlayableWords) {
-            if (word.length() > longestWord.length()) {
+            if (word.toString().length() > longestWord.toString().length()) {
                 longestWord = word;
             }
         }
-
         return longestWord;
     }
 }
