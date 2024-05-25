@@ -6,15 +6,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class LongestWordSelectionStrategy extends AbstractWordSelectionStrategy {
-    public LongestWordSelectionStrategy(WordsDB wordsDB, @NotNull AbstractWordSearchStrategy wordSearchStrategy) {
-        _wordSearchStrategy = wordSearchStrategy;
+    public LongestWordSelectionStrategy(@NotNull WordsDB wordsDB) {
         _wordsDB = wordsDB;
     }
 
     @Override
-    public PlayableWord selectPlayableWord() {
-        List<PlayableWord> availablePlayableWords = _wordSearchStrategy.findAvailablePlayableWords();
-
+    public PlayableWord selectPlayableWord(@NotNull List<PlayableWord> availablePlayableWords) {
         if(availablePlayableWords.isEmpty()) {
             return null;
         }
