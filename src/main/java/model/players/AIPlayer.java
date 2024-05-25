@@ -35,8 +35,6 @@ public class AIPlayer extends AbstractPlayer {
         PlayableWord playableWord = _wordSelectionStrategy.selectPlayableWord();
         if(playableWord == null) {
             skipTurn();
-            System.out.println("\nPlayer: " + _name + " skipped turn");
-            System.out.println(_wordSelectionStrategy.);
         } else {
             playWord(playableWord);
         }
@@ -44,7 +42,7 @@ public class AIPlayer extends AbstractPlayer {
 
     private void playWord(@NotNull PlayableWord word) {
         Timer timer = new Timer();
-        int delay = 200;
+        int delay = DELAY_STEP;
 
         timer.schedule(new TimerTask() {
             @Override
