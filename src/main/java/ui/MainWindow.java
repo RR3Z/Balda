@@ -193,16 +193,22 @@ public class MainWindow extends JFrame {
 
         @Override
         public void wordNotAllowed(WordsDBEvent event) {
-            if(event.player() == _gameModel.activePlayer() && _gameModel.activePlayer() instanceof UserPlayer) {
+            if(event.player() == _gameModel.activePlayer()) {
                 String htmlFont = GameWidgetUtils.htmlFont(GameWidgetUtils.OPTION_PANE_FONT_SIZE);
-                String message = "<html><div style='text-align: center;'>" + htmlFont + "Было составлено неизвестное слово \"" + event.word() + "\". <br>Добавить в словарь?</div></html>";
 
-                int result = JOptionPane.showConfirmDialog(null, message, "Неизвестное слово", JOptionPane.OK_CANCEL_OPTION);
-                if(result == JOptionPane.OK_OPTION) {
-                    ((UserPlayer)_gameModel.activePlayer()).addNewWordToDictionary();
+                if(_gameModel.activePlayer() instanceof UserPlayer) {
+                    String message = "<html><div style='text-align: center;'>" + htmlFont + "Было составлено неизвестное слово \"" + event.word() + "\". <br>Добавить в словарь?</div></html>";
+                    int result = JOptionPane.showConfirmDialog(null, message, "Неизвестное слово", JOptionPane.OK_CANCEL_OPTION);
+                    if(result == JOptionPane.OK_OPTION) {
+                        ((UserPlayer)_gameModel.activePlayer()).addNewWordToDictionary();
+                    } else {
+                        ((UserPlayer)_gameModel.activePlayer()).cancelActionOnField();
+                    }
                 } else {
-                    ((UserPlayer)_gameModel.activePlayer()).cancelActionOnField();
+                    String message = "<html><div style='text-align: center;'>" + htmlFont + "Было составлено неизвестное слово \"" + event.word() + "\".";
+                    JOptionPane.showMessageDialog(null, message, "Неизвестное слово", JOptionPane.WARNING_MESSAGE);
                 }
+
             }
         }
 
