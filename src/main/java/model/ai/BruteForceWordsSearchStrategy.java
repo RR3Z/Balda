@@ -6,40 +6,45 @@ import model.WordsDB;
 
 import org.jetbrains.annotations.NotNull;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class BruteForceWordsSearchStrategy extends AbstractWordsSearchStrategy {
-    private List<PlayableWord> _availablePlayableWords;
+    private HashSet<PlayableWord> _availablePlayableWords;
 
     public BruteForceWordsSearchStrategy(@NotNull GameField gameField, @NotNull WordsDB wordsDB) {
         _gameField = gameField;
         _wordsDB = wordsDB;
+
+        _availablePlayableWords = new HashSet<>();
     }
 
     @Override
-    public List<PlayableWord> findAvailablePlayableWords() {
-        _availablePlayableWords = new ArrayList<>();
+    public HashSet<PlayableWord> findAvailablePlayableWords() {
+        long startTime = System.currentTimeMillis();
+
+        _availablePlayableWords.clear();
 
         for(int i = 0; i < _gameField.height(); i++) {
             for(int j = 0; j < _gameField.width(); j++) {
                 Cell cell = _gameField.cell(new Point(j, i));
-
                 findAvailablePlayableWordsForCell(cell, new ArrayList<>());
             }
         }
 
-        return Collections.unmodifiableList(_availablePlayableWords);
+        long endTime = System.currentTimeMillis();
+        System.out.println("Find " + _availablePlayableWords.size() + " words!" + "\nWordsSearchStrategy time: " + (endTime - startTime) + " ms");
+
+        return _availablePlayableWords;
     }
 
     private void findAvailablePlayableWordsForCell(@NotNull Cell cell, @NotNull List<Cell> cellsToSelect) {
         if(cellsToSelect.contains(cell)) {
            return;
-        }
-
-        if(!cellsToSelect.isEmpty() && !cell.isAdjacent(cellsToSelect.get(cellsToSelect.size() - 1))) {
-            return;
         }
 
         if(isContainCellWithoutLetter(cellsToSelect) && cell.letter() == null) {
@@ -65,11 +70,7 @@ public class BruteForceWordsSearchStrategy extends AbstractWordsSearchStrategy {
         // Формирую маску
         StringBuilder mask = new StringBuilder();
         for (Cell cell : cells) {
-            if (cell.letter() != null) {
-                mask.append(cell.letter());
-            } else {
-                mask.append("*");
-            }
+            mask.append(cell.letter() != null ? cell.letter() : "*");
         }
 
         // Формирую доступные для розыгрыша слова на основе маски

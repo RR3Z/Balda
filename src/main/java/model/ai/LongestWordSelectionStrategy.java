@@ -3,6 +3,7 @@ package model.ai;
 import model.WordsDB;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashSet;
 import java.util.List;
 
 public class LongestWordSelectionStrategy extends AbstractWordSelectionStrategy {
@@ -11,14 +12,16 @@ public class LongestWordSelectionStrategy extends AbstractWordSelectionStrategy 
     }
 
     @Override
-    public PlayableWord selectPlayableWord(@NotNull List<PlayableWord> availablePlayableWords) {
+    public PlayableWord selectPlayableWord(@NotNull HashSet<PlayableWord> availablePlayableWords) {
         if(availablePlayableWords.isEmpty()) {
             return null;
         }
 
-        PlayableWord longestWord = availablePlayableWords.get(0);
+        PlayableWord longestWord = null;
         for(PlayableWord word: availablePlayableWords) {
-            if (word.toString().length() > longestWord.toString().length()) {
+            if (longestWord == null) {
+                longestWord = word;
+            } else if(word.toString().length() > longestWord.toString().length()) {
                 longestWord = word;
             }
         }
