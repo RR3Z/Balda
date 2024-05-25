@@ -14,7 +14,7 @@ public class PlayableWord {
 
     public PlayableWord(Character letter, Cell cellForLetter, List<Cell> cellsToSelect) {
         _letterToPlace = new Pair<>(cellForLetter, letter);
-        _cellsToSelect = cellsToSelect;
+        _cellsToSelect = new ArrayList<>(cellsToSelect);
     }
 
     // Getters
@@ -23,4 +23,17 @@ public class PlayableWord {
     public Cell cellForLetter() { return _letterToPlace.getKey(); }
 
     public List<Cell> cellsToSelect() { return Collections.unmodifiableList(_cellsToSelect); }
+
+    public String toString() {
+        StringBuilder word = new StringBuilder();
+        for(Cell cell: _cellsToSelect) {
+            if(cell.letter() != null) {
+                word.append(cell.letter());
+            } else {
+                word.append(letter());
+            }
+        }
+
+        return word.toString();
+    }
 }
