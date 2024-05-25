@@ -53,7 +53,7 @@ public class BruteForceWordsSearchStrategy extends AbstractWordsSearchStrategy {
         }
 
         for(Cell adjacentCell: cell.adjacentCells()) {
-            findAvailablePlayableWordsForCell(adjacentCell, cellsToSelect);
+            findAvailablePlayableWordsForCell(adjacentCell, new ArrayList<>(cellsToSelect));
         }
     }
 
@@ -71,7 +71,6 @@ public class BruteForceWordsSearchStrategy extends AbstractWordsSearchStrategy {
                 mask.append("*");
             }
         }
-
 
         // Формирую доступные для розыгрыша слова на основе маски
         if(_wordsDB.isMaskExist(mask.toString())) {
