@@ -29,14 +29,14 @@ public class GameModel {
         _wordsDB.addWordsDBListener(new WordsDBObserve());
 
         BruteForceWordSearchStrategy wordSearchStrategy = new BruteForceWordSearchStrategy(_field, _wordsDB);
-        LongestWordSelectionStrategy wordSelectionStrategy = new LongestWordSelectionStrategy(_wordsDB, wordSearchStrategy);
+        LongestWordSelectionStrategy wordSelectionStrategy = new LongestWordSelectionStrategy(_wordsDB);
 //        UserPlayer firstPlayer = new UserPlayer("Игрок 1", _field, _wordsDB, _alphabet);
-        AIPlayer firstPlayer = new AIPlayer("Бот 1",_field, _wordsDB, _alphabet, wordSelectionStrategy);
+        AIPlayer firstPlayer = new AIPlayer("Бот 1",_field, _wordsDB, _alphabet, wordSelectionStrategy, wordSearchStrategy);
         firstPlayer.addPlayerActionListener(new PlayerObserve());
         _players.add(firstPlayer);
 
 //        UserPlayer secondPlayer = new UserPlayer("Игрок 2", _field, _wordsDB, _alphabet);
-        AIPlayer secondPlayer = new AIPlayer("Бот 2", _field, _wordsDB, _alphabet, wordSelectionStrategy);
+        AIPlayer secondPlayer = new AIPlayer("Бот 2", _field, _wordsDB, _alphabet, wordSelectionStrategy, wordSearchStrategy);
         secondPlayer.addPlayerActionListener(new PlayerObserve());
         _players.add(secondPlayer);
 
