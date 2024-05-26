@@ -9,7 +9,7 @@ import java.util.*;
 public class Cell {
     private Character _letter;
     private Point _position;
-    private Map<Direction, Cell> _adjacentCells = new HashMap<>();
+    private HashMap<Direction, Cell> _adjacentCells = new HashMap<>();
 
     public Cell() {
         _position = null;
@@ -32,19 +32,6 @@ public class Cell {
 
     public List<Cell> adjacentCells() {
         return List.copyOf(_adjacentCells.values());
-    }
-
-    public Cell adjacentCellWithoutLetter() {
-        // It should be understood that it returns the first available free cell adjacent to this one
-        if(haveAdjacentCellWithoutLetter()) {
-            for(Cell cell: _adjacentCells.values()) {
-                if(cell.letter() == null) {
-                    return cell;
-                }
-            }
-        }
-
-        return null;
     }
 
     public void setLetter(@NotNull Character letter) {
@@ -102,6 +89,10 @@ public class Cell {
         return _adjacentCells.containsValue(cell);
     }
 
+    public boolean isAdjacent(Cell cell, Direction direction) {
+        return _adjacentCells.get(direction) == cell;
+    }
+
     public boolean isNeighborWithLetter() {
         for (Cell cell: _adjacentCells.values()) {
             if(cell.letter() != null) {
@@ -112,7 +103,7 @@ public class Cell {
         return false;
     }
 
-    public boolean haveAdjacentCellWithoutLetter() {
+    public boolean isNeighborWithoutLetter() {
         for (Cell cell: _adjacentCells.values()){
             if(cell.letter() == null) {
                 return true;
