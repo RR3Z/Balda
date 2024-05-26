@@ -91,6 +91,18 @@ public class WordsDB {
         return _maskToWord.get(mask);
     }
 
+    public int dictionaryLongestWordLength() {
+        int maxLength = -1;
+
+        for(String word: _dictionary) {
+            if(word.length() > maxLength) {
+                maxLength = word.length();
+            }
+        }
+
+        return maxLength;
+    }
+
     private void readFromFile(@NotNull String filePath) {
         try {
             List<String> fileInput;
