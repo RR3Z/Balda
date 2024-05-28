@@ -13,12 +13,12 @@ import java.util.*;
 public class WordsDB {
     private HashSet<String> _dictionary;
     private HashMap<String, AbstractPlayer> _usedWords;
-    private HashMap<String, HashSet<String>> _maskToWord; // It should be understood that masks are set once when reading a dictionary from a file
+    private HashSet<String> _wordsPrefixes;
 
     public WordsDB(@NotNull String filePath) {
         _dictionary = new HashSet<>();
         _usedWords = new HashMap<>();
-        _maskToWord = new HashMap<>();
+        _wordsPrefixes = new HashSet<>();
 
         readFromFile(filePath);
     }
@@ -83,15 +83,7 @@ public class WordsDB {
         return _usedWords.containsKey(word);
     }
 
-    public boolean isMaskExist(@NotNull String mask) {
-        return _maskToWord.containsKey(mask);
-    }
-
-    public HashSet<String> wordsByMask(@NotNull String mask) {
-        return _maskToWord.get(mask);
-    }
-
-    public int dictionaryLongestWordLength() {
+    public int maximumDictionaryWordLength() {
         int maxLength = -1;
 
         for(String word: _dictionary) {
@@ -103,6 +95,10 @@ public class WordsDB {
         return maxLength;
     }
 
+    public boolean isPrefixMakesSense(@NotNull String prefix) {
+        return _wordsPrefixes.contains(prefix);
+    }
+
     private void readFromFile(@NotNull String filePath) {
         try {
             List<String> fileInput;
@@ -112,7 +108,7 @@ public class WordsDB {
             HashSet<String> lowerCaseWords = new HashSet<>();
             for (String word : fileInput) {
                 lowerCaseWords.add(word.toLowerCase());
-                formMasksForWord(word.toLowerCase());
+                formWordPrefixes(word.toLowerCase());
             }
 
             _dictionary = lowerCaseWords;
@@ -121,18 +117,15 @@ public class WordsDB {
         }
     }
 
-    private void formMasksForWord(@NotNull String word) {
-        for (int i = 0; i < word.length(); i++) {
-            StringBuilder mask = new StringBuilder(word);
-            mask.setCharAt(i, '*');
+    private void formWordPrefixes(@NotNull String word) {
+        if(word.isEmpty()) {
+            return;
+        }
 
-            if(_maskToWord.containsKey(mask.toString())) {
-                _maskToWord.get(mask.toString()).add(word);
-            } else {
-                HashSet<String> words = new HashSet<>();
-                words.add(word);
-                _maskToWord.put(mask.toString(), words);
-            }
+        StringBuilder wordPrefix = new StringBuilder();
+        for(int i = 0; i < word.length(); i++) {
+            wordPrefix.append(word.charAt(i));
+            _wordsPrefixes.add(wordPrefix.toString());
         }
     }
 
