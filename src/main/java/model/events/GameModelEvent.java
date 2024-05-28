@@ -1,7 +1,7 @@
 package model.events;
 
 import model.Cell;
-import model.Player;
+import model.players.AbstractPlayer;
 
 import java.util.EventObject;
 import java.util.List;
@@ -11,23 +11,23 @@ public class GameModelEvent extends EventObject {
         super(source);
     }
 
-    private Player _player;
+    private AbstractPlayer _player;
 
-    public void setPlayer(Player player) {
+    public void setPlayer(AbstractPlayer player) {
         _player = player;
     }
 
-    public Player player() {
+    public AbstractPlayer player() {
         return _player;
     }
 
-    private List<Player> _winners;
+    private List<AbstractPlayer> _winners;
 
-    public void setWinners(List<Player> winners) {
+    public void setWinners(List<AbstractPlayer> winners) {
         _winners = winners;
     }
 
-    public List<Player> winners() {
+    public List<AbstractPlayer> winners() {
         return _winners;
     }
 

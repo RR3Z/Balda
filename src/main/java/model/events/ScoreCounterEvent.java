@@ -1,6 +1,5 @@
 package model.events;
 
-import model.Player;
 import model.ScoreCounter;
 
 import java.util.EventObject;

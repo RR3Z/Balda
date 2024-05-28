@@ -1,6 +1,6 @@
 package model.events;
 
-import model.Player;
+import model.players.AbstractPlayer;
 
 import java.util.EventObject;
 
@@ -9,13 +9,13 @@ public class WordsDBEvent extends EventObject {
         super(source);
     }
 
-    private Player _player;
+    private AbstractPlayer _player;
 
-    public void setPlayer(Player player) {
+    public void setPlayer(AbstractPlayer player) {
         _player = player;
     }
 
-    public Player player() {
+    public AbstractPlayer player() {
         return _player;
     }
 

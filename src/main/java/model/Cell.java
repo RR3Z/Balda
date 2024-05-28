@@ -4,13 +4,12 @@ import model.enums.Direction;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.Point;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Cell {
     private Character _letter;
     private Point _position;
-    private Map<Direction, Cell> _adjacentCells = new HashMap<>();
+    private HashMap<Direction, Cell> _adjacentCells = new HashMap<>();
 
     public Cell() {
         _position = null;
@@ -29,6 +28,10 @@ public class Cell {
 
     public Character letter() {
         return _letter;
+    }
+
+    public List<Cell> adjacentCells() {
+        return List.copyOf(_adjacentCells.values());
     }
 
     public void setLetter(@NotNull Character letter) {
@@ -86,9 +89,23 @@ public class Cell {
         return _adjacentCells.containsValue(cell);
     }
 
+    public boolean isAdjacent(Cell cell, Direction direction) {
+        return _adjacentCells.get(direction) == cell;
+    }
+
     public boolean isNeighborWithLetter() {
+        for (Cell cell: _adjacentCells.values()) {
+            if(cell.letter() != null) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isNeighborWithoutLetter() {
         for (Cell cell: _adjacentCells.values()){
-            if(cell.letter() != null){
+            if(cell.letter() == null) {
                 return true;
             }
         }

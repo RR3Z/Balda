@@ -2,12 +2,9 @@ package ui.widgets;
 
 import model.Alphabet;
 import model.GameModel;
-import model.Player;
 import model.enums.PlayerState;
-import model.events.AlphabetEvent;
-import model.events.AlphabetListener;
-import model.events.PlayerActionEvent;
-import model.events.PlayerActionListener;
+import model.events.*;
+import model.players.AbstractPlayer;
 import org.jetbrains.annotations.NotNull;
 import ui.buttons.LetterButton;
 import ui.enums.LetterButtonVisualState;
@@ -25,14 +22,19 @@ public class AlphabetWidget extends JPanel {
 
     public AlphabetWidget(@NotNull GameModel gameModel) {
         super();
-        this.setEnabled(true);
+
+        // Listeners
+        gameModel.addGameModelListener(new GameModelController());
 
         Alphabet alphabet = gameModel.alphabet();
         alphabet.addAlphabetListener(new AlphabetController());
 
-        for(Player player: gameModel.players()) {
+        for(AbstractPlayer player: gameModel.players()) {
             player.addPlayerActionListener(new PlayerController());
         }
+
+        // Visual
+        this.setEnabled(true);
 
         fillWidget(gameModel, alphabet.availableLetters());
 
@@ -123,6 +125,24 @@ public class AlphabetWidget extends JPanel {
         @Override
         public void selectedLetter(AlphabetEvent event) {
             _letters.get(event.letter()).changeVisualState(LetterButtonVisualState.SELECTED);
+        }
+    }
+
+    private class GameModelController implements GameModelListener {
+
+        @Override
+        public void gameIsFinished(GameModelEvent event) {
+            AlphabetWidget.this.clearAllHighlights();
+        }
+
+        @Override
+        public void playerExchanged(GameModelEvent event) {
+            // DON'T NEED IT HERE
+        }
+
+        @Override
+        public void placedStartWord(GameModelEvent event) {
+            // DON'T NEED IT HERE
         }
     }
 }

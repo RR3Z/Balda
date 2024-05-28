@@ -16,9 +16,7 @@ public class Alphabet {
 
     private Character _selectedLetter;
 
-    public Alphabet(@NotNull GameModel gameModel, @NotNull String filePath) {
-        gameModel.addGameModelListener(new GameModelObserve());
-
+    public Alphabet(@NotNull String filePath) {
         readFromFile(filePath);
     }
 
@@ -65,24 +63,6 @@ public class Alphabet {
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
-        }
-    }
-
-    // GameModel observe
-    private class GameModelObserve implements GameModelListener {
-        @Override
-        public void playerExchanged(GameModelEvent event) {
-            forgetSelectedLetter();
-        }
-
-        @Override
-        public void placedStartWord(GameModelEvent event) {
-            // DON'T NEED IT HERE
-        }
-
-        @Override
-        public void gameIsFinished(GameModelEvent event) {
-            // DON'T NEED IT HERE
         }
     }
 

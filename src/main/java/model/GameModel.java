@@ -1,8 +1,12 @@
 package model;
 
+import model.ai.BruteForceWordsSearchStrategy;
+import model.ai.LongestWordSelectionStrategy;
 import model.enums.Direction;
 import model.enums.GameState;
 import model.events.*;
+import model.players.AIPlayer;
+import model.players.AbstractPlayer;
 import model.utils.DataFilePaths;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,29 +16,33 @@ public class GameModel {
     private GameField _field;
     private WordsDB _wordsDB;
     private Alphabet _alphabet;
-    private List<Player> _players = new ArrayList<>();
-    private Player _activePlayer;
+    private List<AbstractPlayer> _players = new ArrayList<>();
+    private AbstractPlayer _activePlayer;
     private GameState _state;
 
     public GameModel(int width, int height) {
-        _field = new GameField(this, width, height);
-        _alphabet = new Alphabet(this, DataFilePaths.ALPHABET_FILE_PATH);
+        _field = new GameField(width, height);
+        _alphabet = new Alphabet(DataFilePaths.ALPHABET_FILE_PATH);
 
         _wordsDB = new WordsDB(DataFilePaths.DICTIONARY_FILE_PATH);
         _wordsDB.addWordsDBListener(new WordsDBObserve());
 
-        Player firstPlayer = new Player("Игрок 1", _alphabet, _wordsDB, _field);
+        BruteForceWordsSearchStrategy wordsSearchStrategy = new BruteForceWordsSearchStrategy(_field, _wordsDB, _alphabet);
+        LongestWordSelectionStrategy wordSelectionStrategy = new LongestWordSelectionStrategy(_wordsDB);
+//        UserPlayer firstPlayer = new UserPlayer("Игрок 1", _field, _wordsDB, _alphabet);
+        AIPlayer firstPlayer = new AIPlayer("Бот 1",_field, _wordsDB, _alphabet, wordSelectionStrategy, wordsSearchStrategy);
         firstPlayer.addPlayerActionListener(new PlayerObserve());
         _players.add(firstPlayer);
 
-        Player secondPlayer = new Player("Игрок 2", _alphabet, _wordsDB, _field);
+//        UserPlayer secondPlayer = new UserPlayer("Игрок 2", _field, _wordsDB, _alphabet);
+        AIPlayer secondPlayer = new AIPlayer("Бот 2", _field, _wordsDB, _alphabet, wordSelectionStrategy, wordsSearchStrategy);
         secondPlayer.addPlayerActionListener(new PlayerObserve());
         _players.add(secondPlayer);
 
         _state = GameState.WAITING_START;
     }
 
-    public Player activePlayer() {
+    public AbstractPlayer activePlayer() {
         return _activePlayer;
     }
 
@@ -44,7 +52,7 @@ public class GameModel {
 
     public WordsDB wordsDB() { return _wordsDB; }
 
-    public List<Player> players() {
+    public List<AbstractPlayer> players() {
         return Collections.unmodifiableList(_players);
     }
 
@@ -82,10 +90,10 @@ public class GameModel {
             throw new IllegalArgumentException("GameModel: wrong \"determineWinner\" function call (incorrect state)");
         }
 
-        List<Player> winners = new ArrayList<>();
+        List<AbstractPlayer> winners = new ArrayList<>();
 
         // Find the player with the most points
-        Player playerWithMostScore = _players.get(0);
+        AbstractPlayer playerWithMostScore = _players.get(0);
         for (int i = 1; i < _players.size(); i++) {
             if (playerWithMostScore.scoreCounter().score() < _players.get(i).scoreCounter().score()) {
                 playerWithMostScore = _players.get(i);
@@ -95,7 +103,7 @@ public class GameModel {
         winners.add(playerWithMostScore);
 
         // Looking to see if there are any other players with the same number of points, and if there are,  also consider them the winner
-        for (Player player : _players) {
+        for (AbstractPlayer player : _players) {
             if (!winners.contains(player) && player.scoreCounter().score() == playerWithMostScore.scoreCounter().score()) {
                 winners.add(player);
             }
@@ -129,7 +137,7 @@ public class GameModel {
     private int numberOfPlayersWhoSkippedTurn() {
         int counter = 0;
 
-        for (Player player : _players) {
+        for (AbstractPlayer player : _players) {
             if (player.isSkippedTurn()) {
                 counter++;
             }
@@ -138,7 +146,7 @@ public class GameModel {
         return counter;
     }
 
-    private Player nextPlayer() {
+    private AbstractPlayer nextPlayer() {
         // Find the index of the active player in the list of players
         int activePlayerIndex = _players.indexOf(_activePlayer);
         if (activePlayerIndex < 0) {
@@ -151,15 +159,15 @@ public class GameModel {
     }
 
     /* ============================================================================================================== */
-    // Player observe
+    // AbstractPlayer observe
     private class PlayerObserve implements PlayerActionListener {
         @Override
         public void skippedTurn(@NotNull PlayerActionEvent event) {
             if (event.player() == _activePlayer) {
-                if (numberOfPlayersWhoSkippedTurn() == _players.size()) {
-                    determineWinner();
-                } else {
+                if (numberOfPlayersWhoSkippedTurn() != _players.size()) {
                     switchTurn();
+                } else {
+                    determineWinner();
                 }
             }
         }
@@ -240,7 +248,7 @@ public class GameModel {
         _gameModelListeners.add(listener);
     }
 
-    private void firePlayerExchanged(@NotNull Player player) {
+    private void firePlayerExchanged(@NotNull AbstractPlayer player) {
         for (Object listener : _gameModelListeners) {
             GameModelEvent event = new GameModelEvent(this);
             event.setPlayer(player);
@@ -249,7 +257,7 @@ public class GameModel {
         }
     }
 
-    private void fireGameIsFinished(@NotNull List<Player> winners) {
+    private void fireGameIsFinished(@NotNull List<AbstractPlayer> winners) {
         for (Object listener : _gameModelListeners) {
             GameModelEvent event = new GameModelEvent(this);
             event.setWinners(winners);

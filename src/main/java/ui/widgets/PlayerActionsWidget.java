@@ -1,10 +1,10 @@
 package ui.widgets;
 
 import model.GameModel;
-import model.Player;
 import model.enums.PlayerState;
 import model.events.PlayerActionEvent;
 import model.events.PlayerActionListener;
+import model.players.AbstractPlayer;
 import org.jetbrains.annotations.NotNull;
 import ui.buttons.CancelActionButton;
 import ui.buttons.SkipTurnButton;
@@ -19,7 +19,7 @@ public class PlayerActionsWidget extends JPanel {
     public PlayerActionsWidget(@NotNull GameModel gameModel) {
         super();
 
-        for(Player player: gameModel.players()) {
+        for(AbstractPlayer player: gameModel.players()) {
             player.addPlayerActionListener(new PlayerController());
         }
 

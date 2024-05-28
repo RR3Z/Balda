@@ -15,7 +15,7 @@ public class GameField {
     private Cell[][] _cells;
     private Cell _changedCell;
 
-    public GameField(@NotNull GameModel gameModel, int width, int height) {
+    public GameField(int width, int height) {
         if (width < 1 || height < 1) {
             throw new IllegalArgumentException("GameField -> constructor: wrong field sizes");
         }
@@ -24,8 +24,6 @@ public class GameField {
         _height = height;
         createCells();
         _changedCell = null;
-
-        gameModel.addGameModelListener(new GameModelObserve());
     }
 
     public int width() {
@@ -97,7 +95,7 @@ public class GameField {
         }
     }
 
-    private void forgetChangedCell() {
+    public void forgetChangedCell() {
         if(_changedCell != null) {
             _changedCell = null;
         }
@@ -107,7 +105,6 @@ public class GameField {
         if(_changedCell != null) {
             _changedCell.removeLetter();
             fireUndoChangesOfChangedCell(_changedCell);
-            forgetChangedCell();
         }
     }
 
@@ -195,24 +192,6 @@ public class GameField {
         }
 
         firePlacedWord(word);
-    }
-
-    // GameModel observe
-    private class GameModelObserve implements GameModelListener {
-        @Override
-        public void playerExchanged(GameModelEvent event) {
-            forgetChangedCell();
-        }
-
-        @Override
-        public void placedStartWord(GameModelEvent event) {
-            // DON'T NEED IT HERE
-        }
-
-        @Override
-        public void gameIsFinished(GameModelEvent event) {
-            // DON'T NEED IT HERE
-        }
     }
 
     // Listeners

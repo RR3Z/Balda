@@ -3,9 +3,9 @@ package ui.widgets;
 import model.Cell;
 import model.GameField;
 import model.GameModel;
-import model.Player;
 import model.enums.PlayerState;
 import model.events.*;
+import model.players.AbstractPlayer;
 import org.jetbrains.annotations.NotNull;
 import ui.buttons.CellButton;
 import ui.enums.CellButtonVisualState;
@@ -24,7 +24,7 @@ public class GameFieldWidget extends JPanel {
         GameField gameField = gameModel.gameField();
         gameField.addGameFieldListener(new GameFieldController());
 
-        for(Player player: gameModel.players()) {
+        for(AbstractPlayer player: gameModel.players()) {
             player.addPlayerActionListener(new PlayerController());
         }
 

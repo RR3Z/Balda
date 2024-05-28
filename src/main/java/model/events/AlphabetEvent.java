@@ -1,7 +1,6 @@
 package model.events;
 
 import model.Alphabet;
-import model.Player;
 
 import java.util.EventObject;
 

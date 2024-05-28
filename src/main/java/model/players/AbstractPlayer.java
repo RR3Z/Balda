@@ -1,54 +1,54 @@
-package model;
+package model.players;
 
+import model.*;
 import model.enums.PlayerState;
-import model.events.*;
+import model.events.PlayerActionEvent;
+import model.events.PlayerActionListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.List;
 
-public class Player {
-    private String _name;
-    private Alphabet _alphabet;
-    private WordsDB _wordsDB;
-    private GameField _field;
-    private Word _word;
-    private ScoreCounter _scoreCounter;
-    private PlayerState _state;
+public abstract class AbstractPlayer {
+    protected String _name;
+    protected PlayerState _state;
 
-    public Player(@NotNull String name, @NotNull Alphabet alphabet, @NotNull WordsDB wordsDB, @NotNull GameField field) {
-        _wordsDB = wordsDB;
-        _alphabet = alphabet;
-        _field = field;
-        _word = new Word();
-        _name = name;
-        _scoreCounter = new ScoreCounter();
+    protected Alphabet _alphabet;
+    protected WordsDB _wordsDB;
+    protected GameField _field;
+    protected Word _word;
+    protected ScoreCounter _scoreCounter;
 
-        _state = PlayerState.WAITING_TURN;
+    // Getters
+    public String name() { return _name; }
+
+    public PlayerState state() {
+        return _state;
     }
 
     public ScoreCounter scoreCounter() {
         return _scoreCounter;
     }
 
-    public PlayerState state() {
-        return _state;
+    public boolean isSkippedTurn() {
+        return _state == PlayerState.SKIPPED_TURN;
     }
 
-    public String name() { return _name; }
-
+    // Logic
     public void startTurn() {
         if (_state != PlayerState.WAITING_TURN && _state != PlayerState.SKIPPED_TURN) {
             throw new IllegalArgumentException("Wrong \"startTurn\" function call (incorrect state) for player: " + this._name);
         }
 
         _word.clear();
+        _field.forgetChangedCell();
+        _alphabet.forgetSelectedLetter();
         _state = PlayerState.SELECTING_LETTER;
         fireChangedState();
     }
 
-    public void skipTurn() {
+    protected void skipTurn() {
         if (_state == PlayerState.WAITING_TURN || _state == PlayerState.SKIPPED_TURN) {
             throw new IllegalArgumentException("Wrong \"skipTurn\" function call (incorrect state) for player: " + this._name);
         }
@@ -61,37 +61,20 @@ public class Player {
         fireSkippedTurn();
     }
 
-    public void chooseLetter(@NotNull Character letter) {
+    protected void selectLetter(@NotNull Character selectedLetter) {
         if (_state != PlayerState.SELECTING_LETTER) {
             throw new IllegalArgumentException("Wrong \"selectLetter\" function call (incorrect state) for player: " + this._name);
         }
 
-        if(_alphabet.selectLetter(letter)) {
-            fireChoseLetter(letter);
+        if(_alphabet.selectLetter(selectedLetter)) {
+            fireSelectedLetter(selectedLetter);
 
             _state = PlayerState.PLACES_LETTER;
             fireChangedState();
         }
     }
 
-    private void placeLetter(@NotNull Character letter) {
-        if (_state != PlayerState.PLACES_LETTER) {
-            throw new IllegalArgumentException("Wrong \"placeLetter\" function call (incorrect state) for player: " + this._name);
-        }
-
-        Cell changedCell = _field.changedCell();
-        if (changedCell == null) {
-            throw new IllegalArgumentException("Wrong \"placeLetter\" function call (changedCell is null for some reason) for player: " + this._name);
-        }
-
-        changedCell.setLetter(letter);
-        firePlacedLetter(_alphabet.selectedLetter(), changedCell);
-
-        _state = PlayerState.FORMS_WORD;
-        fireChangedState();
-    }
-
-    public void addNewWordToDictionary() {
+    protected void addNewWordToDictionary() {
         if (_state != PlayerState.FORMS_WORD) {
             throw new IllegalArgumentException("Wrong \"addNewWord\" function call (incorrect state) for player: " + this._name);
         }
@@ -99,7 +82,7 @@ public class Player {
         _wordsDB.addToDictionary(_word.toString(), this);
     }
 
-    public void cancelActionOnField() {
+    protected void cancelActionOnField() {
         if (_state != PlayerState.FORMS_WORD && _state != PlayerState.PLACES_LETTER && _state != PlayerState.SELECTING_LETTER) {
             throw new IllegalArgumentException("Wrong \"cancelActionOnField\" function call (incorrect state) for player: " + this._name);
         }
@@ -131,7 +114,7 @@ public class Player {
         }
     }
 
-    public void chooseCell(@NotNull Cell selectedCell) {
+    protected void selectCell(@NotNull Cell selectedCell) {
         if (_state != PlayerState.PLACES_LETTER && _state != PlayerState.FORMS_WORD) {
             throw new IllegalArgumentException("Wrong \"chooseCell\" function call (incorrect state) for player: " + this._name);
         }
@@ -141,7 +124,7 @@ public class Player {
                 return;
             }
 
-            fireChoseCell(selectedCell);
+            fireSelectedCell(selectedCell);
         }
 
         if (_state == PlayerState.PLACES_LETTER) {
@@ -162,11 +145,11 @@ public class Player {
             }
 
             _field.setChangedCell(selectedCell);
-            placeLetter(_alphabet.selectedLetter());
+            placeLetterInCell(_alphabet.selectedLetter());
         }
     }
 
-    public void submitWord() {
+    protected void submitWord() {
         if (_state != PlayerState.FORMS_WORD) {
             throw new IllegalArgumentException("Wrong \"submitWord\" function call (incorrect state) for player: " + this._name);
         }
@@ -185,6 +168,23 @@ public class Player {
         finishTurn();
     }
 
+    private void placeLetterInCell(@NotNull Character letter) {
+        if (_state != PlayerState.PLACES_LETTER) {
+            throw new IllegalArgumentException("Wrong \"placeLetter\" function call (incorrect state) for player: " + this._name);
+        }
+
+        Cell changedCell = _field.changedCell();
+        if (changedCell == null) {
+            throw new IllegalArgumentException("Wrong \"placeLetter\" function call (changedCell is null for some reason) for player: " + this._name);
+        }
+
+        changedCell.setLetter(letter);
+        firePlacedLetter(_alphabet.selectedLetter(), changedCell);
+
+        _state = PlayerState.FORMS_WORD;
+        fireChangedState();
+    }
+
     private void finishTurn() {
         if (_state == PlayerState.WAITING_TURN || _state == PlayerState.SKIPPED_TURN) {
             throw new IllegalArgumentException("Wrong \"finishTurn\" function call (incorrect state) for player: " + this._name);
@@ -192,10 +192,6 @@ public class Player {
 
         _state = PlayerState.WAITING_TURN;
         fireFinishedTurn();
-    }
-
-    public boolean isSkippedTurn() {
-        return _state == PlayerState.SKIPPED_TURN;
     }
 
     // Listeners
@@ -243,7 +239,7 @@ public class Player {
         }
     }
 
-    private void fireChoseLetter(@NotNull Character letter) {
+    private void fireSelectedLetter(@NotNull Character letter) {
         for (Object listener : _playerListeners) {
             PlayerActionEvent event = new PlayerActionEvent(this);
             event.setPlayer(this);
@@ -253,7 +249,7 @@ public class Player {
         }
     }
 
-    private void fireChoseCell(@NotNull Cell cell) {
+    private void fireSelectedCell(@NotNull Cell cell) {
         for (Object listener : _playerListeners) {
             PlayerActionEvent event = new PlayerActionEvent(this);
             event.setPlayer(this);
@@ -273,7 +269,7 @@ public class Player {
         }
     }
 
-    private void fireSubmittedWordDoesNotContainChangeableCell(Cell changeableCell) {
+    private void fireSubmittedWordDoesNotContainChangeableCell(@NotNull Cell changeableCell) {
         for (Object listener : _playerListeners) {
             PlayerActionEvent event = new PlayerActionEvent(this);
             event.setPlayer(this);
