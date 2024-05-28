@@ -10,11 +10,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class GameWidgetUtils {
-    private final static String RESOURCES_FOLDER = "Resources/";
-
-    public final static int MIN_SPINNER_VALUE_FOR_FIELD_SIZE = 2;
-    public final static int MAX_SPINNER_VALUE_FOR_FIELD_SIZE = 14;
-
     public final static int OPTION_PANE_FONT_SIZE = 16;
 
     public static void placeContainerInCenter(@NotNull Container container) {
@@ -54,7 +49,7 @@ public class GameWidgetUtils {
 
         // Uploading font
         try {
-            File fontFile = new File(RESOURCES_FOLDER + "SrirachaCyrillic.ttf");
+            File fontFile = new File(Paths.RESOURCES_FOLDER + "SrirachaCyrillic.ttf");
             font = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(fontFile)).deriveFont(Font.PLAIN, fontSize);
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
         }
