@@ -12,7 +12,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class AIPlayer extends AbstractPlayer {
-    private final int DELAY_STEP = 10;
 
     private AbstractWordsSearchStrategy _wordsSearchStrategy;
     private AbstractWordSelectionStrategy _wordSelectionStrategy;
@@ -45,7 +44,8 @@ public class AIPlayer extends AbstractPlayer {
 
     private void playWord(@NotNull PlayableWord word) {
         Timer timer = new Timer();
-        int delay = DELAY_STEP;
+        int delayStep = 500;
+        int delayBetweenActions = delayStep;
 
         timer.schedule(new TimerTask() {
             @Override
@@ -54,8 +54,8 @@ public class AIPlayer extends AbstractPlayer {
                     selectLetter(word.letter());
                 });
             }
-        }, delay);
-        delay += DELAY_STEP;
+        }, delayBetweenActions);
+        delayBetweenActions += delayStep;
 
         timer.schedule(new TimerTask() {
             @Override
@@ -64,8 +64,8 @@ public class AIPlayer extends AbstractPlayer {
                     selectCell(word.cellForLetter());
                 });
             }
-        }, delay);
-        delay += DELAY_STEP;
+        }, delayBetweenActions);
+        delayBetweenActions += delayStep;
 
         for(Cell cell: word.cellsToSelect()) {
             timer.schedule(new TimerTask() {
@@ -75,8 +75,8 @@ public class AIPlayer extends AbstractPlayer {
                         selectCell(cell);
                     });
                 }
-            }, delay);
-            delay += DELAY_STEP;
+            }, delayBetweenActions);
+            delayBetweenActions += delayStep;
         }
 
         timer.schedule(new TimerTask() {
@@ -86,6 +86,6 @@ public class AIPlayer extends AbstractPlayer {
                     submitWord();
                 });
             }
-        }, delay);
+        }, delayBetweenActions);
     }
 }
