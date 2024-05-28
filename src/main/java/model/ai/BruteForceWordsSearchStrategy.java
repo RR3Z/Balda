@@ -1,5 +1,6 @@
 package model.ai;
 
+import model.Alphabet;
 import model.Cell;
 import model.GameField;
 import model.WordsDB;
@@ -11,17 +12,20 @@ import java.util.List;
 
 public class BruteForceWordsSearchStrategy extends AbstractWordsSearchStrategy {
     private HashSet<PlayableWord> _availablePlayableWords;
+    private HashSet<List<Cell>> _playablePaths;
     private HashSet<List<Cell>> _unplayablePaths;
 
     private final int MAX_PATH_LENGTH;
 
-    public BruteForceWordsSearchStrategy(@NotNull GameField gameField, @NotNull WordsDB wordsDB) {
+    public BruteForceWordsSearchStrategy(@NotNull GameField gameField, @NotNull WordsDB wordsDB, @NotNull Alphabet alphabet) {
         _gameField = gameField;
         _wordsDB = wordsDB;
+        _alphabet = alphabet;
+        MAX_PATH_LENGTH = _wordsDB.maximumDictionaryWordLength();
 
         _availablePlayableWords = new HashSet<>();
+        _playablePaths = new HashSet<>();
         _unplayablePaths = new HashSet<>();
-        MAX_PATH_LENGTH = _wordsDB.dictionaryLongestWordLength();
     }
 
     @Override
@@ -29,12 +33,17 @@ public class BruteForceWordsSearchStrategy extends AbstractWordsSearchStrategy {
         long startTime = System.currentTimeMillis();
 
         _availablePlayableWords.clear();
+        _playablePaths.clear();
 
         for(int i = 0; i < _gameField.height(); i++) {
             for(int j = 0; j < _gameField.width(); j++) {
                 Cell cell = _gameField.cell(new Point(j, i));
-                findAvailablePlayableWordsForCell(cell, new ArrayList<>()); // TODO: попробовать распаралелить это
+                findPlayablePathsForCell(cell, new ArrayList<>());
             }
+        }
+
+        for(List<Cell> path: _playablePaths) {
+            formWordForPath(path);
         }
 
         long endTime = System.currentTimeMillis();
@@ -43,70 +52,88 @@ public class BruteForceWordsSearchStrategy extends AbstractWordsSearchStrategy {
         return _availablePlayableWords;
     }
 
-    private void findAvailablePlayableWordsForCell(@NotNull Cell cell, @NotNull List<Cell> path) {
-        // Путь по длине превышает максимально возможную длину слова из словаря
+    private void findPlayablePathsForCell(@NotNull Cell checkableCell, @NotNull List<Cell> path) {
+        if(_unplayablePaths.contains(path) || path.contains(checkableCell)) {
+            return;
+        }
+
         if(path.size() > MAX_PATH_LENGTH) {
+            _unplayablePaths.add(path);
             return;
         }
 
-        // Заданная ячейка уже содержится в пути (т.е. она уже проверялась)
-        if(path.contains(cell)) {
-           return;
-        }
-
-        // Текущая ячейка без буквы и какая-то ячейка без буквы уже содержится в пути
-        if(isContainCellWithoutLetter(path) && cell.letter() == null) {
+        if(checkableCell.letter() == null && isPathContainCellWithoutLetter(path)) {
             return;
         }
 
-        path.add(cell);
+        path.add(checkableCell);
 
-        // Текущий путь уже проверялся и из него нельзя составить слово
-        if(_unplayablePaths.contains(path)) {
+        if(!isPathPlayable(path)) {
+            _unplayablePaths.add(path);
             return;
         }
 
-        formAvailablePlayableWordsFromCells(path);
+        if(path.size() > 1) {
+            _playablePaths.add(path);
+        }
 
-        for(Cell adjacentCell: cell.adjacentCells()) {// TODO: попробовать распаралелить это
-            findAvailablePlayableWordsForCell(adjacentCell, new ArrayList<>(path));
+        for(Cell adjacentCell: checkableCell.adjacentCells()) {
+            findPlayablePathsForCell(adjacentCell, new ArrayList<>(path));
         }
     }
 
-    private void formAvailablePlayableWordsFromCells(@NotNull List<Cell> cells) {
-        if(cells.isEmpty()) {
-            throw new IllegalArgumentException("BruteForceWordsSearchStrategy: formAvailablePlayableWordsFromCells -> cells is empty");
+    private boolean isPathPlayable(@NotNull List<Cell> path) {
+        if(!isPathContainCellWithoutLetter(path)) {
+            return false;
         }
 
-        // Формирую маску
-        StringBuilder mask = new StringBuilder();
-        for (Cell cell : cells) {
-            mask.append(cell.letter() != null ? cell.letter() : "*");
-        }
-
-        // Формирую доступные для розыгрыша слова на основе маски
-        if(_wordsDB.isMaskExist(mask.toString())) {
-            for(String word: _wordsDB.wordsByMask(mask.toString())) {
-                int letterToPlaceIndex = mask.indexOf("*");
-
-                PlayableWord newPlayableWord = new PlayableWord(word.charAt(letterToPlaceIndex), cells.get(letterToPlaceIndex), cells);
-
-                if(!_wordsDB.containsInUsedWords(newPlayableWord.toString()) && _wordsDB.containsInDictionary(newPlayableWord.toString())) {
-                    _availablePlayableWords.add(newPlayableWord);
+        for(Character letter: _alphabet.availableLetters()) {
+            // Составляю префикс
+            StringBuilder prefix = new StringBuilder();
+            for (Cell cell : path)
+            {
+                if(cell.letter() != null) {
+                    prefix.append(cell.letter());
+                } else {
+                    prefix.append(letter);
                 }
             }
-        } else if(cells.size() > 1) {
-            _unplayablePaths.add(cells);
-        }
-    }
 
-    private boolean isContainCellWithoutLetter(@NotNull List<Cell> cells) {
-        for(Cell cell: cells) {
-            if(cell.letter() == null) {
+            if (_wordsDB.isPrefixMakesSense(prefix.toString())) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    private boolean isPathContainCellWithoutLetter(@NotNull List<Cell> path) {
+        for(Cell cell: path) {
+            if(cell.letter() == null){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void formWordForPath(@NotNull List<Cell> path) {
+        for(Character letter: _alphabet.availableLetters()) {
+            Cell cellWithoutLetter = null;
+            StringBuilder possibleWord = new StringBuilder();
+            for (Cell cell : path)
+            {
+                if(cell.letter() != null) {
+                    possibleWord.append(cell.letter());
+                } else {
+                    cellWithoutLetter = cell;
+                    possibleWord.append(letter);
+                }
+            }
+
+            if (_wordsDB.containsInDictionary(possibleWord.toString()) && !_wordsDB.containsInUsedWords(possibleWord.toString())) {
+                _availablePlayableWords.add(new PlayableWord(letter, cellWithoutLetter, path));
+            }
+        }
     }
 }

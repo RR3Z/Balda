@@ -27,7 +27,7 @@ public class GameModel {
         _wordsDB = new WordsDB(DataFilePaths.DICTIONARY_FILE_PATH);
         _wordsDB.addWordsDBListener(new WordsDBObserve());
 
-        BruteForceWordsSearchStrategy wordsSearchStrategy = new BruteForceWordsSearchStrategy(_field, _wordsDB);
+        BruteForceWordsSearchStrategy wordsSearchStrategy = new BruteForceWordsSearchStrategy(_field, _wordsDB, _alphabet);
         LongestWordSelectionStrategy wordSelectionStrategy = new LongestWordSelectionStrategy(_wordsDB);
 //        UserPlayer firstPlayer = new UserPlayer("Игрок 1", _field, _wordsDB, _alphabet);
         AIPlayer firstPlayer = new AIPlayer("Бот 1",_field, _wordsDB, _alphabet, wordSelectionStrategy, wordsSearchStrategy);
