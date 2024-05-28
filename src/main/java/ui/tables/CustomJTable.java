@@ -2,7 +2,7 @@ package ui.tables;
 
 import ui.enums.ColorType;
 import ui.utils.GameWidgetUtils;
-import ui.utils.TableUtils;
+import ui.utils.configs.TableConfig;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -39,13 +39,13 @@ public class CustomJTable extends JTable {
         this.setRowHeight(tableRowHeight);
 
         JTableHeader header = this.getTableHeader();
-        header.setDefaultRenderer(TableUtils.DEFAULT_TABLE_HEADER_RENDERER);
+        header.setDefaultRenderer(TableConfig.DEFAULT_TABLE_HEADER_RENDERER);
         header.setOpaque(false);
         header.setBackground(GameWidgetUtils.color(ColorType.TRANSPARENT));
         header.setReorderingAllowed(false);
         header.setResizingAllowed(false);
 
-        this.setDefaultRenderer(Object.class, TableUtils.DEFAULT_CELL_RENDERER);
+        this.setDefaultRenderer(Object.class, TableConfig.DEFAULT_CELL_RENDERER);
         this.setOpaque(false);
         this.setBackground(GameWidgetUtils.color(ColorType.TRANSPARENT));
         this.setIntercellSpacing(new Dimension(0, 0));

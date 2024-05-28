@@ -1,12 +1,13 @@
-package ui.utils;
+package ui.utils.configs;
 
 import ui.enums.ColorType;
+import ui.utils.GameWidgetUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 
-public class TableUtils {
+public class TableConfig {
 
     public static DefaultTableCellRenderer DEFAULT_TABLE_HEADER_RENDERER = new DefaultTableCellRenderer() {
         @Override
