@@ -156,7 +156,7 @@ public abstract class AbstractPlayer {
 
         Cell changedCell = _field.changedCell();
         if (!_word.containCell(changedCell)) {
-            fireSubmittedWordDoesNotContainChangeableCell(changedCell); // TODO: вот это сообщать должно само слово
+            fireSubmittedWordDoesNotContainChangeableCell(changedCell);
             return;
         }
 
