@@ -1,6 +1,7 @@
 package ui.panels;
 
 import ui.utils.GameWidgetUtils;
+import ui.utils.configs.SpinnerConfig;
 
 import javax.swing.*;
 
@@ -14,8 +15,8 @@ public class GameSettingsPanel extends JPanel {
 
         JLabel fieldSizesLabel = new JLabel("Выберите размеры поля:");
 
-        _widthSpinner = new JSpinner(new SpinnerNumberModel(5, GameWidgetUtils.MIN_SPINNER_VALUE_FOR_FIELD_SIZE, GameWidgetUtils.MAX_SPINNER_VALUE_FOR_FIELD_SIZE, 1));
-        _heightSpinner = new JSpinner(new SpinnerNumberModel(5, GameWidgetUtils.MIN_SPINNER_VALUE_FOR_FIELD_SIZE, GameWidgetUtils.MAX_SPINNER_VALUE_FOR_FIELD_SIZE, 1));
+        _widthSpinner = new JSpinner(new SpinnerNumberModel(5, SpinnerConfig.MIN_SPINNER_VALUE_FOR_FIELD_SIZE, SpinnerConfig.MAX_SPINNER_VALUE_FOR_FIELD_SIZE, 1));
+        _heightSpinner = new JSpinner(new SpinnerNumberModel(5, SpinnerConfig.MIN_SPINNER_VALUE_FOR_FIELD_SIZE, SpinnerConfig.MAX_SPINNER_VALUE_FOR_FIELD_SIZE, 1));
 
         fieldSizesPanel.add(fieldSizesLabel);
         fieldSizesPanel.add(_widthSpinner);
