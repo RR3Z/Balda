@@ -1,8 +1,8 @@
-package ui.utils;
+package ui.utils.configs;
 
 import javax.swing.*;
 
-public class ButtonUtils {
+public class ButtonConfig {
     public static class FixedStateButtonModel extends DefaultButtonModel {
         @Override
         public boolean isPressed() {

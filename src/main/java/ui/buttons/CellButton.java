@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import ui.enums.BorderType;
 import ui.enums.CellButtonVisualState;
 import ui.enums.ColorType;
-import ui.utils.ButtonUtils;
+import ui.utils.configs.ButtonConfig;
 import ui.utils.GameWidgetUtils;
 
 import javax.swing.*;
@@ -26,7 +26,7 @@ public class CellButton extends JButton {
 
         this.addMouseListener(new CellButtonMouseListener(gameModel, cell));
 
-        this.setModel(new ButtonUtils.FixedStateButtonModel());
+        this.setModel(new ButtonConfig.FixedStateButtonModel());
 
         this.setEnabled(false);
         this.setFocusable(false);

@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import ui.enums.BorderType;
 import ui.enums.ColorType;
 import ui.enums.LetterButtonVisualState;
-import ui.utils.ButtonUtils;
+import ui.utils.configs.ButtonConfig;
 import ui.utils.GameWidgetUtils;
 
 import javax.swing.*;
@@ -25,7 +25,7 @@ public class LetterButton extends JButton {
 
         this.addMouseListener(new LetterButtonMouseListener(gameModel));
 
-        this.setModel(new ButtonUtils.FixedStateButtonModel());
+        this.setModel(new ButtonConfig.FixedStateButtonModel());
 
         this.setEnabled(true);
         this.setFocusable(false);
