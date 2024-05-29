@@ -5,6 +5,7 @@ import model.events.AlphabetEvent;
 import model.events.AlphabetListener;
 import model.events.GameFieldEvent;
 import model.events.GameFieldListener;
+import model.players.UserPlayer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,7 +40,7 @@ public class GameFieldTests {
     public void testSetup() {
         _events = new ArrayList<>();
 
-        _gameModel = new GameModel(5, 5);
+        _gameModel = new GameModel(5, 5, false);
         _gameModel.startGame();
 
         _gameField = _gameModel.gameField();
@@ -51,7 +52,7 @@ public class GameFieldTests {
         int width = -5;
         int height = 3;
 
-        assertThrows(IllegalArgumentException.class, () -> _gameField = new GameField(_gameModel, width, height));
+        assertThrows(IllegalArgumentException.class, () -> _gameField = new GameField(width, height));
         assertTrue(_events.isEmpty());
     }
 
@@ -60,7 +61,7 @@ public class GameFieldTests {
         int width = 5;
         int height = -3;
 
-        assertThrows(IllegalArgumentException.class, () -> _gameField = new GameField(_gameModel, width, height));
+        assertThrows(IllegalArgumentException.class, () -> _gameField = new GameField(width, height));
         assertTrue(_events.isEmpty());
     }
 
@@ -69,7 +70,7 @@ public class GameFieldTests {
         int width = 0;
         int height = 3;
 
-        assertThrows(IllegalArgumentException.class, () -> _gameField = new GameField(_gameModel, width, height));
+        assertThrows(IllegalArgumentException.class, () -> _gameField = new GameField(width, height));
         assertTrue(_events.isEmpty());
     }
 
@@ -78,7 +79,7 @@ public class GameFieldTests {
         int width = 5;
         int height = 0;
 
-        assertThrows(IllegalArgumentException.class, () -> _gameField = new GameField(_gameModel, width, height));
+        assertThrows(IllegalArgumentException.class, () -> _gameField = new GameField(width, height));
         assertTrue(_events.isEmpty());
     }
 
@@ -88,7 +89,7 @@ public class GameFieldTests {
 
         int width = 3;
         int height = 3;
-        _gameField = new GameField(_gameModel, width, height);
+        _gameField = new GameField(width, height);
         _gameField.addGameFieldListener(new EventsListener());
 
         assertNull(_gameField.changedCell());
@@ -101,7 +102,7 @@ public class GameFieldTests {
 
         int width = 3;
         int height = 3;
-        _gameField = new GameField(_gameModel, width, height);
+        _gameField = new GameField(width, height);
         _gameField.addGameFieldListener(new EventsListener());
 
         /*
@@ -165,7 +166,7 @@ public class GameFieldTests {
 
         int width = 3;
         int height = 3;
-        _gameField = new GameField(_gameModel, width, height);
+        _gameField = new GameField(width, height);
         _gameField.addGameFieldListener(new EventsListener());
 
         /*
@@ -229,7 +230,7 @@ public class GameFieldTests {
 
         int width = 3;
         int height = 3;
-        _gameField = new GameField(_gameModel, width, height);
+        _gameField = new GameField(width, height);
         _gameField.addGameFieldListener(new EventsListener());
 
         /*
@@ -293,7 +294,7 @@ public class GameFieldTests {
 
         int width = 3;
         int height = 3;
-        _gameField = new GameField(_gameModel, width, height);
+        _gameField = new GameField(width, height);
         _gameField.addGameFieldListener(new EventsListener());
 
         /*
@@ -357,7 +358,7 @@ public class GameFieldTests {
 
         int width = 3;
         int height = 3;
-        _gameField = new GameField(_gameModel, width, height);
+        _gameField = new GameField(width, height);
         _gameField.addGameFieldListener(new EventsListener());
 
         /*
@@ -421,7 +422,7 @@ public class GameFieldTests {
 
         int width = 3;
         int height = 3;
-        _gameField = new GameField(_gameModel, width, height);
+        _gameField = new GameField(width, height);
         _gameField.addGameFieldListener(new EventsListener());
 
         /*
@@ -485,7 +486,7 @@ public class GameFieldTests {
 
         int width = 3;
         int height = 3;
-        _gameField = new GameField(_gameModel, width, height);
+        _gameField = new GameField(width, height);
         _gameField.addGameFieldListener(new EventsListener());
 
         /*
@@ -549,7 +550,7 @@ public class GameFieldTests {
 
         int width = 3;
         int height = 3;
-        _gameField = new GameField(_gameModel, width, height);
+        _gameField = new GameField(width, height);
         _gameField.addGameFieldListener(new EventsListener());
 
         /*
@@ -613,7 +614,7 @@ public class GameFieldTests {
 
         int width = 3;
         int height = 3;
-        _gameField = new GameField(_gameModel, width, height);
+        _gameField = new GameField(width, height);
         _gameField.addGameFieldListener(new EventsListener());
 
         /*
@@ -724,7 +725,7 @@ public class GameFieldTests {
     public void centralRowIndex_VerticalRow_OddNumberOfColumns_UpDirection() {
         _events.clear();
 
-        _gameField = new GameField(_gameModel, 3, 7);
+        _gameField = new GameField(3, 7);
         _gameField.addGameFieldListener(new EventsListener());
 
         int expectedResult = 1;
@@ -737,7 +738,7 @@ public class GameFieldTests {
     public void centralRowIndex_VerticalRow_OddNumberOfColumns_DownDirection() {
         _events.clear();
 
-        _gameField = new GameField(_gameModel, 3, 7);
+        _gameField = new GameField(3, 7);
         _gameField.addGameFieldListener(new EventsListener());
 
         int expectedResult = 1;
@@ -750,7 +751,7 @@ public class GameFieldTests {
     public void centralRowIndex_VerticalRow_EvenNumberOfColumns_UpDirection() {
         _events.clear();
 
-        _gameField = new GameField(_gameModel, 6, 7);
+        _gameField = new GameField(6, 7);
         _gameField.addGameFieldListener(new EventsListener());
 
         int expectedResult = 2;
@@ -763,7 +764,7 @@ public class GameFieldTests {
     public void centralRowIndex_VerticalRow_EvenNumberOfColumns_DownDirection() {
         _events.clear();
 
-        _gameField = new GameField(_gameModel, 6, 7);
+        _gameField = new GameField(6, 7);
         _gameField.addGameFieldListener(new EventsListener());
 
         int expectedResult = 2;
@@ -776,7 +777,7 @@ public class GameFieldTests {
     public void centralRowIndex_HorizontalRow_OddNumberOfLines_LeftDirection() {
         _events.clear();
 
-        _gameField = new GameField(_gameModel, 7, 3);
+        _gameField = new GameField(7, 3);
         _gameField.addGameFieldListener(new EventsListener());
 
         int expectedResult = 1;
@@ -789,7 +790,7 @@ public class GameFieldTests {
     public void centralRowIndex_HorizontalRow_OddNumberOfLines_RightDirection() {
         _events.clear();
 
-        _gameField = new GameField(_gameModel, 7, 3);
+        _gameField = new GameField(7, 3);
         _gameField.addGameFieldListener(new EventsListener());
 
         int expectedResult = 1;
@@ -802,7 +803,7 @@ public class GameFieldTests {
     public void centralRowIndex_HorizontalRow_EvenNumberOfLines_LeftDirection() {
         _events.clear();
 
-        _gameField = new GameField(_gameModel, 7, 8);
+        _gameField = new GameField(7, 8);
         _gameField.addGameFieldListener(new EventsListener());
 
         int expectedResult = 3;
@@ -815,7 +816,7 @@ public class GameFieldTests {
     public void centralRowIndex_HorizontalRow_EvenNumberOfLines_RightDirection() {
         _events.clear();
 
-        _gameField = new GameField(_gameModel, 7, 8);
+        _gameField = new GameField(7, 8);
         _gameField.addGameFieldListener(new EventsListener());
 
         int expectedResult = 3;
@@ -836,7 +837,7 @@ public class GameFieldTests {
     public void cellsCountWithoutLetter_FieldIsEmpty() {
         _events.clear();
 
-        _gameField = new GameField(_gameModel, 5, 5);
+        _gameField = new GameField(5, 5);
         _gameField.addGameFieldListener(new EventsListener());
 
         int expectedResult = 25;
@@ -849,7 +850,7 @@ public class GameFieldTests {
     public void placeWord_VerticalLine_UpToDown() {
         _events.clear();
 
-        _gameField = new GameField(_gameModel, 5, 5);
+        _gameField = new GameField(5, 5);
         _gameField.addGameFieldListener(new EventsListener());
 
         String word = "балда";
@@ -871,7 +872,7 @@ public class GameFieldTests {
     public void placeWord_VerticalLine_DownToUp() {
         _events.clear();
 
-        _gameField = new GameField(_gameModel, 5, 5);
+        _gameField = new GameField(5, 5);
         _gameField.addGameFieldListener(new EventsListener());
 
         String word = "балда";
@@ -894,7 +895,7 @@ public class GameFieldTests {
     public void placeWord_HorizontalLine_LeftToRight() {
         _events.clear();
 
-        _gameField = new GameField(_gameModel, 5, 5);
+        _gameField = new GameField(5, 5);
         _gameField.addGameFieldListener(new EventsListener());
 
         String word = "балда";
@@ -917,7 +918,7 @@ public class GameFieldTests {
     public void placeWord_HorizontalLine_RightToLeft() {
         _events.clear();
 
-        _gameField = new GameField(_gameModel, 5, 5);
+        _gameField = new GameField(5, 5);
         _gameField.addGameFieldListener(new EventsListener());
 
         String word = "балда";
@@ -939,7 +940,7 @@ public class GameFieldTests {
     public void placeWord_HorizontalLine_WordLengthIsLessThanWidth() {
         _events.clear();
 
-        _gameField = new GameField(_gameModel, 5, 5);
+        _gameField = new GameField(5, 5);
         _gameField.addGameFieldListener(new EventsListener());
 
         String word = "суп";
@@ -961,7 +962,7 @@ public class GameFieldTests {
     public void placeWord_HorizontalLine_WordLengthIsGreaterThanWidth() {
         _events.clear();
 
-        _gameField = new GameField(_gameModel, 5, 5);
+        _gameField = new GameField(5, 5);
         _gameField.addGameFieldListener(new EventsListener());
 
         String word = "неуязвимый";
@@ -983,7 +984,7 @@ public class GameFieldTests {
     public void placeWord_VerticalLine_WordLengthIsLessThanHeight() {
         _events.clear();
 
-        _gameField = new GameField(_gameModel, 5, 5);
+        _gameField = new GameField(5, 5);
         _gameField.addGameFieldListener(new EventsListener());
 
         String word = "суп";
@@ -1005,7 +1006,7 @@ public class GameFieldTests {
     public void placeWord_VerticalLine_WordLengthIsGreaterThanHeight() {
         _events.clear();
 
-        _gameField = new GameField(_gameModel, 5, 5);
+        _gameField = new GameField(5, 5);
         _gameField.addGameFieldListener(new EventsListener());
 
         String word = "неуязвимый";
@@ -1106,16 +1107,16 @@ public class GameFieldTests {
     public void forgetChangedCell_WhenPlayerExchanged() {
         assertNull(_gameField.changedCell());
 
-        _gameModel.activePlayer().chooseLetter('б');
-        _gameModel.activePlayer().chooseCell(_gameField.cell(new Point(0, 1)));
-        _gameModel.activePlayer().chooseCell(_gameField.cell(new Point(0, 1)));
-        _gameModel.activePlayer().chooseCell(_gameField.cell(new Point(0, 2)));
-        _gameModel.activePlayer().chooseCell(_gameField.cell(new Point(1, 2)));
-        _gameModel.activePlayer().addNewWordToDictionary();
+        ((UserPlayer)_gameModel.activePlayer()).selectLetter('б');
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(_gameField.cell(new Point(0, 1)));
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(_gameField.cell(new Point(0, 1)));
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(_gameField.cell(new Point(0, 2)));
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(_gameField.cell(new Point(1, 2)));
+        ((UserPlayer)_gameModel.activePlayer()).addNewWordToDictionary();
 
         assertNotNull(_gameField.changedCell());
 
-        _gameModel.activePlayer().submitWord();
+        ((UserPlayer)_gameModel.activePlayer()).submitWord();
 
         assertNull(_gameField.changedCell());
         assertTrue(_events.isEmpty());
@@ -1125,7 +1126,7 @@ public class GameFieldTests {
     public void undoChangesOfChangedCell_ChangedCellIsNullObject() {
         _events.clear();
 
-        _gameField = new GameField(_gameModel, 5, 5);
+        _gameField = new GameField(5, 5);
         _gameField.addGameFieldListener(new EventsListener());
 
         Cell cell = _gameField.changedCell();
@@ -1138,7 +1139,8 @@ public class GameFieldTests {
 
     @Test
     public void undoChangesOfChangedCell_ChangedCellIsNotNullObject() {
-        _gameField.setChangedCell(_gameField.cell(new Point(0, 0)));
+        Cell cell = _gameField.cell(new Point(0, 0));
+        _gameField.setChangedCell(cell);
 
         assertNotNull(_gameField.changedCell());
 
@@ -1147,14 +1149,16 @@ public class GameFieldTests {
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.UNDO_CHANGES_OF_CHANGED_CELL);
 
-        assertNull(_gameField.changedCell());
+        assertEquals(cell, _gameField.changedCell());
         assertEquals(expectedEvents, _events);
     }
 
     @Test
     public void undoChangesOfChangedCell_LetterIsSpecifiedInChangedCell() {
         Cell changedCell = _gameField.cell(new Point(0, 0));
-        changedCell.setLetter('а');
+        Character letter = 'а';
+        changedCell.setLetter(letter);
+
         _gameField.setChangedCell(_gameField.cell(new Point(0, 0)));
 
         assertNotNull(_gameField.changedCell());
@@ -1166,15 +1170,17 @@ public class GameFieldTests {
         expectedEvents.add(EVENT.UNDO_CHANGES_OF_CHANGED_CELL);
 
         assertNull(changedCell.letter());
-        assertNull(_gameField.changedCell());
+        assertEquals(changedCell, _gameField.changedCell());
         assertEquals(expectedEvents, _events);
     }
 
     @Test
     public void undoChangesOfChangedCell_LetterIsNotSpecifiedInChangedCell() {
-        _gameField.setChangedCell(_gameField.cell(new Point(0, 0)));
+        Cell cell = _gameField.cell(new Point(0, 0));
 
-        assertNotNull(_gameField.changedCell());
+        _gameField.setChangedCell(cell);
+
+        assertEquals(cell, _gameField.changedCell());
         assertNull(_gameField.changedCell().letter());
 
         _gameField.undoChangesOfChangedCell();
@@ -1182,7 +1188,7 @@ public class GameFieldTests {
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.UNDO_CHANGES_OF_CHANGED_CELL);
 
-        assertNull(_gameField.changedCell());
+        assertEquals(cell, _gameField.changedCell());
         assertEquals(expectedEvents, _events);
     }
 }

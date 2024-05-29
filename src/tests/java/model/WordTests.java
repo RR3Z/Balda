@@ -12,7 +12,7 @@ public class WordTests {
 
     @BeforeEach
     public void testSetup() {
-        _gameModel = new GameModel(5 ,5);
+        _gameModel = new GameModel(5 ,5, false);
         _word = new Word();
         _field = _gameModel.gameField();
 

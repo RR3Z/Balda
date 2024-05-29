@@ -4,6 +4,7 @@ import model.enums.GameState;
 import model.enums.PlayerState;
 import model.events.GameModelEvent;
 import model.events.GameModelListener;
+import model.players.UserPlayer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -44,7 +45,7 @@ public class GameModelTests {
     public void testSetup() {
         _events.clear();
 
-        _gameModel = new GameModel(5, 5);
+        _gameModel = new GameModel(5, 5, false);
         _gameModel.addGameModelListener(new GameListener());
     }
 
@@ -58,7 +59,7 @@ public class GameModelTests {
 
         assertEquals(GameState.IN_PROCESS, _gameModel.state());
         assertNotNull(_gameModel.activePlayer());
-        assertEquals(PlayerState.SELECTING_LETTER, _gameModel.activePlayer().state());
+        assertEquals(PlayerState.SELECTING_LETTER, ((UserPlayer)_gameModel.activePlayer()).state());
         assertEquals(expectedEvents, _events);
     }
 
@@ -73,7 +74,7 @@ public class GameModelTests {
         assertThrows(IllegalArgumentException.class, () -> _gameModel.startGame());
         assertEquals(GameState.IN_PROCESS, _gameModel.state());
         assertNotNull(_gameModel.activePlayer());
-        assertEquals(PlayerState.SELECTING_LETTER, _gameModel.activePlayer().state());
+        assertEquals(PlayerState.SELECTING_LETTER, ((UserPlayer)_gameModel.activePlayer()).state());
         assertEquals(expectedEvents, _events);
     }
 
@@ -82,11 +83,11 @@ public class GameModelTests {
         _gameModel.startGame();
 
         Character letter = 'ъ';
-        _gameModel.activePlayer().chooseLetter(letter);
+        ((UserPlayer)_gameModel.activePlayer()).selectLetter(letter);
         assertEquals(letter, _gameModel.alphabet().selectedLetter());
 
         Cell changedCell = _gameModel.gameField().cell(new Point(0, 2));
-        _gameModel.activePlayer().chooseCell(changedCell);
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(changedCell);
         assertNull(_gameModel.gameField().changedCell());
 
         List<EVENT> expectedEvents = new ArrayList<>();
@@ -94,7 +95,7 @@ public class GameModelTests {
         expectedEvents.add(EVENT.PLAYER_EXCHANGED);
 
         assertEquals(GameState.IN_PROCESS, _gameModel.state());
-        assertEquals(PlayerState.PLACES_LETTER, _gameModel.activePlayer().state());
+        assertEquals(PlayerState.PLACES_LETTER, ((UserPlayer)_gameModel.activePlayer()).state());
         assertEquals(expectedEvents, _events);
     }
 
@@ -103,11 +104,11 @@ public class GameModelTests {
         _gameModel.startGame();
 
         Character letter = 'ъ';
-        _gameModel.activePlayer().chooseLetter(letter);
+        ((UserPlayer)_gameModel.activePlayer()).selectLetter(letter);
         assertEquals(letter, _gameModel.alphabet().selectedLetter());
 
         Cell changedCell = _gameModel.gameField().cell(new Point(0, 1));
-        _gameModel.activePlayer().chooseCell(changedCell);
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(changedCell);
         assertEquals(changedCell, _gameModel.gameField().changedCell());
 
         List<EVENT> expectedEvents = new ArrayList<>();
@@ -115,7 +116,7 @@ public class GameModelTests {
         expectedEvents.add(EVENT.PLAYER_EXCHANGED);
 
         assertEquals(GameState.IN_PROCESS, _gameModel.state());
-        assertEquals(PlayerState.FORMS_WORD, _gameModel.activePlayer().state());
+        assertEquals(PlayerState.FORMS_WORD, ((UserPlayer)_gameModel.activePlayer()).state());
         assertEquals(expectedEvents, _events);
     }
 
@@ -124,23 +125,23 @@ public class GameModelTests {
         _gameModel.startGame();
 
         Character letter = 'ъ';
-        _gameModel.activePlayer().chooseLetter(letter);
+        ((UserPlayer)_gameModel.activePlayer()).selectLetter(letter);
         assertEquals(letter, _gameModel.alphabet().selectedLetter());
 
         Cell changedCell = _gameModel.gameField().cell(new Point(0, 1));
-        _gameModel.activePlayer().chooseCell(changedCell);
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(changedCell);
         assertEquals(changedCell, _gameModel.gameField().changedCell());
 
-        _gameModel.activePlayer().cancelActionOnField();
+        ((UserPlayer)_gameModel.activePlayer()).cancelActionOnField();
         assertEquals(letter, _gameModel.alphabet().selectedLetter());
-        assertNull(_gameModel.gameField().changedCell());
+        assertNotNull(_gameModel.gameField().changedCell());
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.PLACED_START_WORD);
         expectedEvents.add(EVENT.PLAYER_EXCHANGED);
 
         assertEquals(GameState.IN_PROCESS, _gameModel.state());
-        assertEquals(PlayerState.PLACES_LETTER, _gameModel.activePlayer().state());
+        assertEquals(PlayerState.PLACES_LETTER, ((UserPlayer)_gameModel.activePlayer()).state());
         assertEquals(expectedEvents, _events);
     }
 
@@ -149,24 +150,24 @@ public class GameModelTests {
         _gameModel.startGame();
 
         Character letter = 'ъ';
-        _gameModel.activePlayer().chooseLetter(letter);
+        ((UserPlayer)_gameModel.activePlayer()).selectLetter(letter);
         assertEquals(letter, _gameModel.alphabet().selectedLetter());
 
         Cell changedCell = _gameModel.gameField().cell(new Point(0, 1));
-        _gameModel.activePlayer().chooseCell(changedCell);
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(changedCell);
         assertEquals(changedCell, _gameModel.gameField().changedCell());
 
         Cell cell = _gameModel.gameField().cell(new Point(0,2));
-        _gameModel.activePlayer().chooseCell(cell);
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(cell);
 
-        _gameModel.activePlayer().cancelActionOnField();
+        ((UserPlayer)_gameModel.activePlayer()).cancelActionOnField();
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.PLACED_START_WORD);
         expectedEvents.add(EVENT.PLAYER_EXCHANGED);
 
         assertEquals(GameState.IN_PROCESS, _gameModel.state());
-        assertEquals(PlayerState.FORMS_WORD, _gameModel.activePlayer().state());
+        assertEquals(PlayerState.FORMS_WORD, ((UserPlayer)_gameModel.activePlayer()).state());
         assertEquals(expectedEvents, _events);
     }
 
@@ -175,24 +176,24 @@ public class GameModelTests {
         _gameModel.startGame();
 
         Character letter = 'ъ';
-        _gameModel.activePlayer().chooseLetter(letter);
+        ((UserPlayer)_gameModel.activePlayer()).selectLetter(letter);
         assertEquals(letter, _gameModel.alphabet().selectedLetter());
 
         Cell changedCell = _gameModel.gameField().cell(new Point(0, 1));
-        _gameModel.activePlayer().chooseCell(changedCell);
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(changedCell);
         assertEquals(changedCell, _gameModel.gameField().changedCell());
 
         Cell cell = _gameModel.gameField().cell(new Point(0,1));
-        _gameModel.activePlayer().chooseCell(cell);
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(cell);
 
         cell = _gameModel.gameField().cell(new Point(0,2));
-        _gameModel.activePlayer().chooseCell(cell);
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(cell);
 
         cell = _gameModel.gameField().cell(new Point(1,2));
-        _gameModel.activePlayer().chooseCell(cell);
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(cell);
 
-        _gameModel.activePlayer().addNewWordToDictionary();
-        _gameModel.activePlayer().submitWord();
+        ((UserPlayer)_gameModel.activePlayer()).addNewWordToDictionary();
+        ((UserPlayer)_gameModel.activePlayer()).submitWord();
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.PLACED_START_WORD);
@@ -200,11 +201,11 @@ public class GameModelTests {
         expectedEvents.add(EVENT.PLAYER_EXCHANGED);
 
         assertEquals(GameState.IN_PROCESS, _gameModel.state());
-        assertEquals(PlayerState.SELECTING_LETTER, _gameModel.activePlayer().state());
+        assertEquals(PlayerState.SELECTING_LETTER, ((UserPlayer)_gameModel.activePlayer()).state());
         assertEquals(expectedEvents, _events);
 
-        _gameModel.activePlayer().skipTurn();
-        assertEquals(3, _gameModel.activePlayer().scoreCounter().score());
+        ((UserPlayer)_gameModel.activePlayer()).skipTurn();
+        assertEquals(3, ((UserPlayer)_gameModel.activePlayer()).scoreCounter().score());
     }
 
     @Test
@@ -212,29 +213,29 @@ public class GameModelTests {
         _gameModel.startGame();
 
         Character letter = 'ъ';
-        _gameModel.activePlayer().chooseLetter(letter);
+        ((UserPlayer)_gameModel.activePlayer()).selectLetter(letter);
         assertEquals(letter, _gameModel.alphabet().selectedLetter());
 
         Cell changedCell = _gameModel.gameField().cell(new Point(0, 1));
-        _gameModel.activePlayer().chooseCell(changedCell);
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(changedCell);
         assertEquals(changedCell, _gameModel.gameField().changedCell());
 
         Cell cell = _gameModel.gameField().cell(new Point(0,2));
-        _gameModel.activePlayer().chooseCell(cell);
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(cell);
 
         cell = _gameModel.gameField().cell(new Point(0,3));
-        _gameModel.activePlayer().chooseCell(cell);
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(cell);
 
-        _gameModel.activePlayer().submitWord();
+        ((UserPlayer)_gameModel.activePlayer()).submitWord();
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.PLACED_START_WORD);
         expectedEvents.add(EVENT.PLAYER_EXCHANGED);
 
         assertEquals(GameState.IN_PROCESS, _gameModel.state());
-        assertEquals(PlayerState.FORMS_WORD, _gameModel.activePlayer().state());
+        assertEquals(PlayerState.FORMS_WORD, ((UserPlayer)_gameModel.activePlayer()).state());
         assertEquals(expectedEvents, _events);
-        assertEquals(0, _gameModel.activePlayer().scoreCounter().score());
+        assertEquals(0, ((UserPlayer)_gameModel.activePlayer()).scoreCounter().score());
     }
 
     @Test
@@ -242,40 +243,40 @@ public class GameModelTests {
         _gameModel.startGame();
 
         Character letter = 'ъ';
-        _gameModel.activePlayer().chooseLetter(letter);
+        ((UserPlayer)_gameModel.activePlayer()).selectLetter(letter);
         assertEquals(letter, _gameModel.alphabet().selectedLetter());
 
         Cell changedCell = _gameModel.gameField().cell(new Point(0, 1));
-        _gameModel.activePlayer().chooseCell(changedCell);
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(changedCell);
         assertEquals(changedCell, _gameModel.gameField().changedCell());
 
         Cell cell = _gameModel.gameField().cell(new Point(0,1));
-        _gameModel.activePlayer().chooseCell(cell);
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(cell);
 
         cell = _gameModel.gameField().cell(new Point(0,2));
-        _gameModel.activePlayer().chooseCell(cell);
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(cell);
 
         cell = _gameModel.gameField().cell(new Point(0,3));
-        _gameModel.activePlayer().chooseCell(cell);
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(cell);
 
-        _gameModel.activePlayer().submitWord();
+        ((UserPlayer)_gameModel.activePlayer()).submitWord();
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.PLACED_START_WORD);
         expectedEvents.add(EVENT.PLAYER_EXCHANGED);
 
         assertEquals(GameState.IN_PROCESS, _gameModel.state());
-        assertEquals(PlayerState.FORMS_WORD, _gameModel.activePlayer().state());
+        assertEquals(PlayerState.FORMS_WORD, ((UserPlayer)_gameModel.activePlayer()).state());
         assertEquals(expectedEvents, _events);
-        assertEquals(0, _gameModel.activePlayer().scoreCounter().score());
+        assertEquals(0, ((UserPlayer)_gameModel.activePlayer()).scoreCounter().score());
     }
 
     @Test
     public void gameIsFinished_becauseOfSkipTurns() {
         _gameModel.startGame();
 
-        _gameModel.activePlayer().skipTurn();
-        _gameModel.activePlayer().skipTurn();
+        ((UserPlayer)_gameModel.activePlayer()).skipTurn();
+        ((UserPlayer)_gameModel.activePlayer()).skipTurn();
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.PLACED_START_WORD);
@@ -284,7 +285,7 @@ public class GameModelTests {
         expectedEvents.add(EVENT.GAME_IS_FINISHED);
 
         assertEquals(GameState.FINISHED, _gameModel.state());
-        assertEquals(PlayerState.SKIPPED_TURN, _gameModel.activePlayer().state());
+        assertEquals(PlayerState.SKIPPED_TURN, ((UserPlayer)_gameModel.activePlayer()).state());
         assertEquals(expectedEvents, _events);
     }
 
@@ -293,24 +294,24 @@ public class GameModelTests {
         _gameModel.startGame();
 
         Character letter = 'ъ';
-        _gameModel.activePlayer().chooseLetter(letter);
+        ((UserPlayer)_gameModel.activePlayer()).selectLetter(letter);
         assertEquals(letter, _gameModel.alphabet().selectedLetter());
 
         Cell changedCell = _gameModel.gameField().cell(new Point(0, 1));
-        _gameModel.activePlayer().chooseCell(changedCell);
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(changedCell);
         assertEquals(changedCell, _gameModel.gameField().changedCell());
 
         Cell cell = _gameModel.gameField().cell(new Point(0,1));
-        _gameModel.activePlayer().chooseCell(cell);
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(cell);
 
         cell = _gameModel.gameField().cell(new Point(0,2));
-        _gameModel.activePlayer().chooseCell(cell);
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(cell);
 
         cell = _gameModel.gameField().cell(new Point(1,2));
-        _gameModel.activePlayer().chooseCell(cell);
+        ((UserPlayer)_gameModel.activePlayer()).selectCell(cell);
 
-        _gameModel.activePlayer().addNewWordToDictionary();
-        _gameModel.activePlayer().submitWord();
+        ((UserPlayer)_gameModel.activePlayer()).addNewWordToDictionary();
+        ((UserPlayer)_gameModel.activePlayer()).submitWord();
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.PLACED_START_WORD);
@@ -318,11 +319,11 @@ public class GameModelTests {
         expectedEvents.add(EVENT.PLAYER_EXCHANGED);
 
         assertEquals(GameState.IN_PROCESS, _gameModel.state());
-        assertEquals(PlayerState.SELECTING_LETTER, _gameModel.activePlayer().state());
+        assertEquals(PlayerState.SELECTING_LETTER, ((UserPlayer)_gameModel.activePlayer()).state());
         assertEquals(expectedEvents, _events);
 
-        _gameModel.activePlayer().skipTurn();
-        assertEquals(3, _gameModel.activePlayer().scoreCounter().score());
+        ((UserPlayer)_gameModel.activePlayer()).skipTurn();
+        assertEquals(3, ((UserPlayer)_gameModel.activePlayer()).scoreCounter().score());
     }
 
 }

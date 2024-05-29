@@ -4,6 +4,8 @@ import model.enums.Direction;
 import model.enums.PlayerState;
 import model.events.PlayerActionEvent;
 import model.events.PlayerActionListener;
+import model.players.AbstractPlayer;
+import model.players.UserPlayer;
 import model.utils.DataFilePaths;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTests {
     private GameModel _gameModel;
-    private Player _player;
+    private AbstractPlayer _player;
     private Alphabet _alphabet;
     private WordsDB _wordsDB;
     private GameField _field;
@@ -79,7 +81,7 @@ public class PlayerTests {
     public void testSetup() {
         _events.clear();
 
-        _gameModel = new GameModel(5, 5);
+        _gameModel = new GameModel(5, 5, false);
         _gameModel.startGame();
 
         _alphabet = _gameModel.alphabet();
@@ -95,7 +97,7 @@ public class PlayerTests {
     public void startTurn_CanStartTurn() {
         _events.clear();
 
-        _player = new Player("PLAYER", _alphabet, _wordsDB, _field);
+        _player = new UserPlayer("PLAYER", _field, _wordsDB, _alphabet);
         _player.addPlayerActionListener(new EventsListener());
 
         _player.startTurn();
@@ -113,7 +115,7 @@ public class PlayerTests {
     public void startTurn_CanNotStartTurn_AlreadyStartedTurn() {
         _events.clear();
 
-        _player = new Player("PLAYER", _alphabet, _wordsDB, _field);
+        _player = new UserPlayer("PLAYER", _field, _wordsDB, _alphabet);
         _player.addPlayerActionListener(new EventsListener());
 
         _player.startTurn();
@@ -132,11 +134,11 @@ public class PlayerTests {
     public void startTurn_CanStartTurn_StartTurnAfterSkipTurn() {
         _events.clear();
 
-        _player = new Player("PLAYER", _alphabet, _wordsDB, _field);
+        _player = new UserPlayer("PLAYER", _field, _wordsDB, _alphabet);
         _player.addPlayerActionListener(new EventsListener());
 
         _player.startTurn();
-        _player.skipTurn();
+        ((UserPlayer)_player).skipTurn();
         _player.startTurn();
 
         List<EVENT> expectedEvents = new ArrayList<>();
@@ -152,7 +154,7 @@ public class PlayerTests {
 
     @Test
     public void skipTurn_CanSkipTurn_AfterStartTurn() {
-        _player.skipTurn();
+        ((UserPlayer)_player).skipTurn();
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.SKIPPED_TURN);
@@ -167,10 +169,10 @@ public class PlayerTests {
     public void skipTurn_CanNotSkipTurn_DoesNotStartTurn() {
         _events.clear();
 
-        _player = new Player("PLAYER", _alphabet, _wordsDB, _field);
+        _player = new UserPlayer("PLAYER", _field, _wordsDB, _alphabet);
         _player.addPlayerActionListener(new EventsListener());
 
-        assertThrows(IllegalArgumentException.class, () -> _player.skipTurn());
+        assertThrows(IllegalArgumentException.class, () -> ((UserPlayer)_player).skipTurn());
         assertNull(_field.changedCell());
         assertNull(_alphabet.selectedLetter());
         assertEquals(PlayerState.WAITING_TURN, _player.state());
@@ -179,12 +181,12 @@ public class PlayerTests {
 
     @Test
     public void skipTurn_CanNotSkipTurn_AlreadySkippedTurn() {
-        _player.skipTurn();
+        ((UserPlayer)_player).skipTurn();
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.SKIPPED_TURN);
 
-        assertThrows(IllegalArgumentException.class, () -> _player.skipTurn());
+        assertThrows(IllegalArgumentException.class, () -> ((UserPlayer)_player).skipTurn());
         assertNull(_field.changedCell());
         assertNull(_alphabet.selectedLetter());
         assertEquals(PlayerState.SKIPPED_TURN, _player.state());
@@ -193,8 +195,8 @@ public class PlayerTests {
 
     @Test
     public void skipTurn_CanSkipTurn_AfterChooseLetter() {
-        _player.chooseLetter('а');
-        _player.skipTurn();
+        ((UserPlayer)_player).selectLetter('а');
+        ((UserPlayer)_player).skipTurn();
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.CHOSE_LETTER);
@@ -210,15 +212,15 @@ public class PlayerTests {
     @Test
     public void skipTurn_CanSkipTurn_AfterPlaceLetter() {
         Character letter = 'а';
-        _player.chooseLetter(letter);
+        ((UserPlayer)_player).selectLetter(letter);
         assertEquals(letter, _alphabet.selectedLetter());
 
         Cell cell = _field.cell(new Point(0,1));
-        _player.chooseCell(cell);
+        ((UserPlayer)_player).selectCell(cell);
         assertEquals(cell, _field.changedCell());
         assertEquals(letter, _field.changedCell().letter());
 
-        _player.skipTurn();
+        ((UserPlayer)_player).skipTurn();
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.CHOSE_LETTER);
@@ -236,19 +238,19 @@ public class PlayerTests {
     @Test
     public void skipTurn_CanSkipTurn_WhenFormWord() {
         Character letter = 'а';
-        _player.chooseLetter(letter);
+        ((UserPlayer)_player).selectLetter(letter);
         assertEquals(letter, _alphabet.selectedLetter());
 
         Cell cell = _field.cell(new Point(0,1));
-        _player.chooseCell(cell);
+        ((UserPlayer)_player).selectCell(cell);
         assertEquals(cell, _field.changedCell());
         assertEquals(letter, _field.changedCell().letter());
 
-        _player.chooseCell(_field.cell(new Point(0,1)));
-        _player.chooseCell(_field.cell(new Point(0,2)));
-        _player.chooseCell(_field.cell(new Point(1,2)));
+        ((UserPlayer)_player).selectCell(_field.cell(new Point(0,1)));
+        ((UserPlayer)_player).selectCell(_field.cell(new Point(0,2)));
+        ((UserPlayer)_player).selectCell(_field.cell(new Point(1,2)));
 
-        _player.skipTurn();
+        ((UserPlayer)_player).skipTurn();
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.CHOSE_LETTER);
@@ -269,7 +271,7 @@ public class PlayerTests {
     @Test
     public void chooseLetter_InCorrectState() {
         Character letter = 'а';
-        _player.chooseLetter(letter);
+        ((UserPlayer)_player).selectLetter(letter);
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.CHOSE_LETTER);
@@ -284,12 +286,12 @@ public class PlayerTests {
     public void chooseLetter_DoesNotStartTurn() {
         _events.clear();
 
-        _player = new Player("PLAYER", _alphabet, _wordsDB, _field);
+        _player = new UserPlayer("PLAYER", _field, _wordsDB, _alphabet);
         _player.addPlayerActionListener(new EventsListener());
 
         Character letter = 'а';
 
-        assertThrows(IllegalArgumentException.class, () -> _player.chooseLetter(letter));
+        assertThrows(IllegalArgumentException.class, () -> ((UserPlayer)_player).selectLetter(letter));
         assertEquals(PlayerState.WAITING_TURN, _player.state());
         assertTrue(_events.isEmpty());
     }
@@ -297,13 +299,13 @@ public class PlayerTests {
     @Test
     public void chooseLetter_ChooseLetterAfterChoseItAlready() {
         Character letter = 'а';
-        _player.chooseLetter(letter);
+        ((UserPlayer)_player).selectLetter(letter);
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.CHOSE_LETTER);
         expectedEvents.add(EVENT.CHANGED_STATE);
 
-        assertThrows(IllegalArgumentException.class, () -> _player.chooseLetter('ф'));
+        assertThrows(IllegalArgumentException.class, () -> ((UserPlayer)_player).selectLetter('ф'));
         assertEquals(letter, _alphabet.selectedLetter());
         assertEquals(PlayerState.PLACES_LETTER, _player.state());
         assertEquals(expectedEvents, _events);
@@ -312,10 +314,10 @@ public class PlayerTests {
     @Test
     public void placeLetter_InCorrectState() {
         Character letter = 'а';
-        _player.chooseLetter(letter);
+        ((UserPlayer)_player).selectLetter(letter);
 
         Cell changedCell = _field.cell(new Point(0,1));
-        _player.chooseCell(changedCell);
+        ((UserPlayer)_player).selectCell(changedCell);
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.CHOSE_LETTER);
@@ -333,7 +335,7 @@ public class PlayerTests {
     public void placeLetter_DoesNotChooseLetter() {
         Cell changedCell = _field.cell(new Point(0,0));
 
-        assertThrows(IllegalArgumentException.class, () -> _player.chooseCell(changedCell));
+        assertThrows(IllegalArgumentException.class, () -> ((UserPlayer)_player).selectCell(changedCell));
         assertNull(_alphabet.selectedLetter());
         assertNull(_field.changedCell());
         assertEquals(PlayerState.SELECTING_LETTER, _player.state());
@@ -343,7 +345,7 @@ public class PlayerTests {
     @Test
     public void placeLetter_LetterIsNotAvailableInAlphabet() {
         Character letter = 'b';
-        _player.chooseLetter(letter);
+        ((UserPlayer)_player).selectLetter(letter);
 
         assertNull(_alphabet.selectedLetter());
         assertNull(_field.changedCell());
@@ -355,10 +357,10 @@ public class PlayerTests {
     public void chooseCell_DoesNotStartTurn() {
         _events.clear();
 
-        _player = new Player("PLAYER", _alphabet, _wordsDB, _field);
+        _player = new UserPlayer("PLAYER", _field, _wordsDB, _alphabet);
         _player.addPlayerActionListener(new EventsListener());
 
-        assertThrows(IllegalArgumentException.class, () -> _player.chooseCell(_field.cell(new Point(0,0))));
+        assertThrows(IllegalArgumentException.class, () -> ((UserPlayer)_player).selectCell(_field.cell(new Point(0,0))));
         assertNull(_alphabet.selectedLetter());
         assertNull(_field.changedCell());
         assertEquals(PlayerState.WAITING_TURN, _player.state());
@@ -367,7 +369,7 @@ public class PlayerTests {
 
     @Test
     public void chooseCell_DoesNotSelectLetter() {
-        assertThrows(IllegalArgumentException.class, () -> _player.chooseCell(_field.cell(new Point(0,1))));
+        assertThrows(IllegalArgumentException.class, () -> ((UserPlayer)_player).selectCell(_field.cell(new Point(0,1))));
         assertNull(_alphabet.selectedLetter());
         assertNull(_field.changedCell());
         assertEquals(PlayerState.SELECTING_LETTER, _player.state());
@@ -377,11 +379,11 @@ public class PlayerTests {
     @Test
     public void chooseCell_PlaceLetterInCell() {
         Character letter = 'ф';
-        _player.chooseLetter(letter);
+        ((UserPlayer)_player).selectLetter(letter);
         assertEquals(letter, _alphabet.selectedLetter());
 
         Cell changedCell = _field.cell(new Point(0, 1));
-        _player.chooseCell(changedCell);
+        ((UserPlayer)_player).selectCell(changedCell);
         assertEquals(changedCell, _field.changedCell());
         assertEquals(letter, _field.changedCell().letter());
 
@@ -398,10 +400,10 @@ public class PlayerTests {
     @Test
     public void chooseCell_PlaceLetterInCell_CellHasNoNeighborsWithLetter() {
         Character letter = 'ф';
-        _player.chooseLetter(letter);
+        ((UserPlayer)_player).selectLetter(letter);
 
         Cell cellWithoutNegihborsWithLetter = _field.cell(new Point(0, 0));
-        _player.chooseCell(cellWithoutNegihborsWithLetter);
+        ((UserPlayer)_player).selectCell(cellWithoutNegihborsWithLetter);
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.CHOSE_LETTER);
@@ -417,11 +419,11 @@ public class PlayerTests {
     @Test
     public void chooseCell_PlaceLetterInCell_CellHasLetter() {
         Character letter = 'ф';
-        _player.chooseLetter(letter);
+        ((UserPlayer)_player).selectLetter(letter);
 
         Cell cellWithLetter = _field.cell(new Point(0, 2));
         assertNotNull(cellWithLetter.letter());
-        _player.chooseCell(cellWithLetter);
+        ((UserPlayer)_player).selectCell(cellWithLetter);
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.CHOSE_LETTER);
@@ -436,13 +438,13 @@ public class PlayerTests {
     @Test
     public void chooseCell_FormsWord_ChoseSameCellTwice() {
         Character letter = 'ф';
-        _player.chooseLetter(letter);
+        ((UserPlayer)_player).selectLetter(letter);
 
         Cell changedCell = _field.cell(new Point(0, 1));
-        _player.chooseCell(changedCell);
+        ((UserPlayer)_player).selectCell(changedCell);
 
-        _player.chooseCell(changedCell);
-        _player.chooseCell(changedCell);
+        ((UserPlayer)_player).selectCell(changedCell);
+        ((UserPlayer)_player).selectCell(changedCell);
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.CHOSE_LETTER);
@@ -461,12 +463,12 @@ public class PlayerTests {
     @Test
     public void chooseCell_FormsWord_ChoseCorrectCell() {
         Character letter = 'ф';
-        _player.chooseLetter(letter);
+        ((UserPlayer)_player).selectLetter(letter);
 
         Cell changedCell = _field.cell(new Point(0, 1));
-        _player.chooseCell(changedCell);
+        ((UserPlayer)_player).selectCell(changedCell);
 
-        _player.chooseCell(changedCell);
+        ((UserPlayer)_player).selectCell(changedCell);
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.CHOSE_LETTER);
@@ -485,14 +487,14 @@ public class PlayerTests {
     @Test
     public void chooseCell_FormsWord_ChoseCellWithoutLetter() {
         Character letter = 'ф';
-        _player.chooseLetter(letter);
+        ((UserPlayer)_player).selectLetter(letter);
 
         Cell changedCell = _field.cell(new Point(0, 1));
-        _player.chooseCell(changedCell);
+        ((UserPlayer)_player).selectCell(changedCell);
 
         Cell cellWithoutLetter = _field.cell(new Point(1,1));
         assertNull(cellWithoutLetter.letter());
-        _player.chooseCell(cellWithoutLetter);
+        ((UserPlayer)_player).selectCell(cellWithoutLetter);
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.CHOSE_LETTER);
@@ -509,7 +511,7 @@ public class PlayerTests {
 
     @Test
     public void submitWord_InIncorrectState() {
-        assertThrows(IllegalArgumentException.class, () -> _player.submitWord());
+        assertThrows(IllegalArgumentException.class, () -> ((UserPlayer)_player).submitWord());
         assertEquals(PlayerState.SELECTING_LETTER, _player.state());
         assertTrue(_events.isEmpty());
         assertNull(_alphabet.selectedLetter());
@@ -520,15 +522,15 @@ public class PlayerTests {
     @Test
     public void submitWord_WordDoesNotContainChangeableCell() {
         Character letter = 'ф';
-        _player.chooseLetter(letter);
+        ((UserPlayer)_player).selectLetter(letter);
 
         Cell changedCell = _field.cell(new Point(0, 1));
-        _player.chooseCell(changedCell);
+        ((UserPlayer)_player).selectCell(changedCell);
 
         Cell cell = _field.cell(new Point(0,2));
-        _player.chooseCell(cell);
+        ((UserPlayer)_player).selectCell(cell);
 
-        _player.submitWord();
+        ((UserPlayer)_player).submitWord();
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.CHOSE_LETTER);
@@ -548,34 +550,34 @@ public class PlayerTests {
     @Test
     public void submitWord_WordWasUsedAlready() {
         Character letter = 'ф';
-        _player.chooseLetter(letter);
+        ((UserPlayer)_player).selectLetter(letter);
 
         Cell changedCell = _field.cell(new Point(0, 1));
-        _player.chooseCell(changedCell);
+        ((UserPlayer)_player).selectCell(changedCell);
 
         Cell cell = _field.cell(new Point(0,1));
-        _player.chooseCell(cell);
+        ((UserPlayer)_player).selectCell(cell);
         cell = _field.cell(new Point(0,2));
-        _player.chooseCell(cell);
+        ((UserPlayer)_player).selectCell(cell);
 
-        _player.addNewWordToDictionary();
-        _player.submitWord();
+        ((UserPlayer)_player).addNewWordToDictionary();
+        ((UserPlayer)_player).submitWord();
         assertEquals(2, _player.scoreCounter().score());
 
         _player.startTurn();
 
         letter = 'ф';
-        _player.chooseLetter(letter);
+        ((UserPlayer)_player).selectLetter(letter);
 
         changedCell = _field.cell(new Point(0, 3));
-        _player.chooseCell(changedCell);
+        ((UserPlayer)_player).selectCell(changedCell);
 
         cell = _field.cell(new Point(0,3));
-        _player.chooseCell(cell);
+        ((UserPlayer)_player).selectCell(cell);
         cell = _field.cell(new Point(0,2));
-        _player.chooseCell(cell);
+        ((UserPlayer)_player).selectCell(cell);
 
-        _player.submitWord();
+        ((UserPlayer)_player).submitWord();
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.CHOSE_LETTER);
@@ -602,20 +604,20 @@ public class PlayerTests {
     @Test
     public void submitWord_UnknownWord() {
         Character letter = 'ф';
-        _player.chooseLetter(letter);
+        ((UserPlayer)_player).selectLetter(letter);
         assertEquals(letter, _alphabet.selectedLetter());
 
         Cell changedCell = _field.cell(new Point(0, 1));
-        _player.chooseCell(changedCell);
+        ((UserPlayer)_player).selectCell(changedCell);
         assertEquals(changedCell, _field.changedCell());
 
         Cell cell = _field.cell(new Point(0,2));
-        _player.chooseCell(cell);
+        ((UserPlayer)_player).selectCell(cell);
         cell = _field.cell(new Point(0,1));
-        _player.chooseCell(cell);
+        ((UserPlayer)_player).selectCell(cell);
 
-        _player.addNewWordToDictionary();
-        _player.submitWord();
+        ((UserPlayer)_player).addNewWordToDictionary();
+        ((UserPlayer)_player).submitWord();
         assertEquals(2, _player.scoreCounter().score());
 
         List<EVENT> expectedEvents = new ArrayList<>();
@@ -636,19 +638,19 @@ public class PlayerTests {
     @Test
     public void addNewWordToDictionary_InCorrectState() {
         Character letter = 'ф';
-        _player.chooseLetter(letter);
+        ((UserPlayer)_player).selectLetter(letter);
         assertEquals(letter, _alphabet.selectedLetter());
 
         Cell changedCell = _field.cell(new Point(0, 1));
-        _player.chooseCell(changedCell);
+        ((UserPlayer)_player).selectCell(changedCell);
         assertEquals(changedCell, _field.changedCell());
 
         Cell cell = _field.cell(new Point(0,2));
-        _player.chooseCell(cell);
+        ((UserPlayer)_player).selectCell(cell);
         cell = _field.cell(new Point(0,1));
-        _player.chooseCell(cell);
+        ((UserPlayer)_player).selectCell(cell);
 
-        _player.addNewWordToDictionary();
+        ((UserPlayer)_player).addNewWordToDictionary();
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.CHOSE_LETTER);
@@ -666,7 +668,7 @@ public class PlayerTests {
 
     @Test
     public void addNewWordToDictionary_InIncorrectState() {
-        assertThrows(IllegalArgumentException.class, () -> _player.addNewWordToDictionary());
+        assertThrows(IllegalArgumentException.class, () -> ((UserPlayer)_player).addNewWordToDictionary());
         assertEquals(PlayerState.SELECTING_LETTER, _player.state());
         assertTrue(_events.isEmpty());
     }
@@ -674,20 +676,20 @@ public class PlayerTests {
     @Test
     public void addNewWordToDictionary_AlreadyAddedWord() {
         Character letter = 'ф';
-        _player.chooseLetter(letter);
+        ((UserPlayer)_player).selectLetter(letter);
         assertEquals(letter, _alphabet.selectedLetter());
 
         Cell changedCell = _field.cell(new Point(0, 1));
-        _player.chooseCell(changedCell);
+        ((UserPlayer)_player).selectCell(changedCell);
         assertEquals(changedCell, _field.changedCell());
 
         Cell cell = _field.cell(new Point(0,2));
-        _player.chooseCell(cell);
+        ((UserPlayer)_player).selectCell(cell);
         cell = _field.cell(new Point(0,1));
-        _player.chooseCell(cell);
+        ((UserPlayer)_player).selectCell(cell);
 
-        _player.addNewWordToDictionary();
-        _player.addNewWordToDictionary();
+        ((UserPlayer)_player).addNewWordToDictionary();
+        ((UserPlayer)_player).addNewWordToDictionary();
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.CHOSE_LETTER);
@@ -705,17 +707,17 @@ public class PlayerTests {
     public void cancelActionOnField_InIncorrectState() {
         _events.clear();
 
-        _player = new Player("PLAYER", _alphabet, _wordsDB, _field);
+        _player = new UserPlayer("PLAYER", _field, _wordsDB, _alphabet);
         _player.addPlayerActionListener(new EventsListener());
 
-        assertThrows(IllegalArgumentException.class, () -> _player.cancelActionOnField());
+        assertThrows(IllegalArgumentException.class, () -> ((UserPlayer)_player).cancelActionOnField());
         assertEquals(PlayerState.WAITING_TURN, _player.state());
         assertTrue(_events.isEmpty());
     }
 
     @Test
     public void cancelActionOnField_PlaceLetter_ForgetAboutNothing() {
-        _player.cancelActionOnField();
+        ((UserPlayer)_player).cancelActionOnField();
 
         assertEquals(PlayerState.SELECTING_LETTER, _player.state());
         assertTrue(_events.isEmpty());
@@ -724,10 +726,10 @@ public class PlayerTests {
     @Test
     public void cancelActionOnField_PlaceLetter_ForgetAboutSelectedLetter() {
         Character letter = 'ф';
-        _player.chooseLetter(letter);
+        ((UserPlayer)_player).selectLetter(letter);
         assertEquals(letter, _alphabet.selectedLetter());
 
-        _player.cancelActionOnField();
+        ((UserPlayer)_player).cancelActionOnField();
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.CHOSE_LETTER);
@@ -744,14 +746,14 @@ public class PlayerTests {
     @Test
     public void cancelActionOnField_PlaceLetter_ForgetAboutPlacedLetter() {
         Character letter = 'ф';
-        _player.chooseLetter(letter);
+        ((UserPlayer)_player).selectLetter(letter);
         assertEquals(letter, _alphabet.selectedLetter());
 
         Cell changedCell = _field.cell(new Point(0, 1));
-        _player.chooseCell(changedCell);
+        ((UserPlayer)_player).selectCell(changedCell);
         assertEquals(changedCell, _field.changedCell());
 
-        _player.cancelActionOnField();
+        ((UserPlayer)_player).cancelActionOnField();
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.CHOSE_LETTER);
@@ -762,7 +764,7 @@ public class PlayerTests {
         expectedEvents.add(EVENT.CHANGED_STATE);
 
         assertEquals(letter, _alphabet.selectedLetter());
-        assertNull(_field.changedCell());
+        assertEquals(changedCell, _field.changedCell());
         assertEquals(PlayerState.PLACES_LETTER, _player.state());
         assertEquals(expectedEvents, _events);
     }
@@ -770,19 +772,19 @@ public class PlayerTests {
     @Test
     public void cancelActionOnField_FormsWord_ForgetAboutCellsInWord() {
         Character letter = 'ф';
-        _player.chooseLetter(letter);
+        ((UserPlayer)_player).selectLetter(letter);
         assertEquals(letter, _alphabet.selectedLetter());
 
         Cell changedCell = _field.cell(new Point(0, 1));
-        _player.chooseCell(changedCell);
+        ((UserPlayer)_player).selectCell(changedCell);
         assertEquals(changedCell, _field.changedCell());
 
         Cell cell = _field.cell(new Point(0, 1));
-        _player.chooseCell(cell);
+        ((UserPlayer)_player).selectCell(cell);
         cell = _field.cell(new Point(0, 2));
-        _player.chooseCell(cell);
+        ((UserPlayer)_player).selectCell(cell);
 
-        _player.cancelActionOnField();
+        ((UserPlayer)_player).cancelActionOnField();
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.CHOSE_LETTER);

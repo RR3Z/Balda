@@ -4,6 +4,7 @@ import model.events.AlphabetEvent;
 import model.events.AlphabetListener;
 import model.events.PlayerActionEvent;
 import model.events.PlayerActionListener;
+import model.players.UserPlayer;
 import model.utils.DataFilePaths;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +40,7 @@ public class AlphabetTests {
     public void testSetup() {
         _events = new ArrayList<>();
 
-        _gameModel = new GameModel(5, 5);
+        _gameModel = new GameModel(5, 5, false);
         _gameModel.startGame();
 
         _alphabet = _gameModel.alphabet();
@@ -125,7 +126,7 @@ public class AlphabetTests {
         expectedEvents.add(EVENT.FORGOT_SELECTED_LETTER);
 
         assertTrue(_alphabet.selectLetter(letter));
-        _gameModel.activePlayer().skipTurn();
+        ((UserPlayer)_gameModel.activePlayer()).skipTurn();
 
         assertNull(_alphabet.selectedLetter());
         assertEquals(expectedEvents, _events);

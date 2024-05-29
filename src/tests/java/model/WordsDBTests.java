@@ -2,6 +2,7 @@ package model;
 
 import model.events.WordsDBEvent;
 import model.events.WordsDBListener;
+import model.players.UserPlayer;
 import model.utils.DataFilePaths;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,7 +50,7 @@ public class WordsDBTests {
     public void testSetup() {
         _events = new ArrayList<>();
 
-        _gameModel = new GameModel(5, 5);
+        _gameModel = new GameModel(5, 5, false);
 
         _wordsDB = _gameModel.wordsDB();
         _wordsDB.addWordsDBListener(new EventsListener());
@@ -257,7 +258,7 @@ public class WordsDBTests {
         assertTrue(_wordsDB.addToUsedWords(word, _gameModel.activePlayer()));
         assertTrue(_wordsDB.containsInUsedWords(word));
 
-        _gameModel.activePlayer().skipTurn();
+        ((UserPlayer)_gameModel.activePlayer()).skipTurn();
         assertFalse(_wordsDB.addToUsedWords(word, _gameModel.activePlayer()));
         assertTrue(_wordsDB.containsInUsedWords(word));
 
