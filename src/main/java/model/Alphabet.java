@@ -73,7 +73,7 @@ public class Alphabet {
         _alphabetListeners.add(listener);
     }
 
-    private void fireForgotSelectedLetter(Character letter) {
+    private void fireForgotSelectedLetter(@NotNull Character letter) {
         for (Object listener : _alphabetListeners) {
             AlphabetEvent event = new AlphabetEvent(this);
             event.setAlphabet(this);
@@ -83,7 +83,7 @@ public class Alphabet {
         }
     }
 
-    private void fireSelectedLetter(Character letter) {
+    private void fireSelectedLetter(@NotNull Character letter) {
         for (Object listener : _alphabetListeners) {
             AlphabetEvent event = new AlphabetEvent(this);
             event.setAlphabet(this);
