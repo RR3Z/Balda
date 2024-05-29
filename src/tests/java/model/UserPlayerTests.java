@@ -1,12 +1,10 @@
 package model;
 
-import model.enums.Direction;
 import model.enums.PlayerState;
 import model.events.PlayerActionEvent;
 import model.events.PlayerActionListener;
 import model.players.AbstractPlayer;
 import model.players.UserPlayer;
-import model.utils.DataFilePaths;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PlayerTests {
+public class UserPlayerTests {
     private GameModel _gameModel;
     private AbstractPlayer _player;
     private Alphabet _alphabet;
