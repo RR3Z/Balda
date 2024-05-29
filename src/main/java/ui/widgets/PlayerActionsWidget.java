@@ -4,7 +4,9 @@ import model.GameModel;
 import model.enums.PlayerState;
 import model.events.PlayerActionEvent;
 import model.events.PlayerActionListener;
+import model.players.AIPlayer;
 import model.players.AbstractPlayer;
+import model.players.UserPlayer;
 import org.jetbrains.annotations.NotNull;
 import ui.buttons.CancelActionButton;
 import ui.buttons.SkipTurnButton;
@@ -43,7 +45,7 @@ public class PlayerActionsWidget extends JPanel {
     private class PlayerController implements PlayerActionListener {
         @Override
         public void changedState(@NotNull PlayerActionEvent event) {
-            if(PlayerActionsWidget.this.isEnabled()) {
+            if(event.player() instanceof UserPlayer) {
                 if(event.player().state() == PlayerState.SELECTING_LETTER) {
                     _cancelActionButton.setEnabled(false);
                     _submitWordButton.setEnabled(false);
@@ -61,6 +63,12 @@ public class PlayerActionsWidget extends JPanel {
                     _submitWordButton.setEnabled(true);
                     _skipTurnButton.setEnabled(true);
                 }
+            }
+
+            if(event.player() instanceof AIPlayer) {
+                _cancelActionButton.setEnabled(false);
+                _submitWordButton.setEnabled(false);
+                _skipTurnButton.setEnabled(false);
             }
         }
 

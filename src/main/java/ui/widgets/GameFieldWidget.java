@@ -6,6 +6,7 @@ import model.GameModel;
 import model.enums.PlayerState;
 import model.events.*;
 import model.players.AbstractPlayer;
+import model.players.UserPlayer;
 import org.jetbrains.annotations.NotNull;
 import ui.buttons.CellButton;
 import ui.enums.CellButtonVisualState;
@@ -61,8 +62,6 @@ public class GameFieldWidget extends JPanel {
     }
 
     private void changeActivity(boolean widgetActivity) {
-        GameFieldWidget.this.setEnabled(widgetActivity);
-
         for(CellButton cellButton: _cells.values()) {
             cellButton.setEnabled(widgetActivity);
         }
@@ -77,7 +76,7 @@ public class GameFieldWidget extends JPanel {
     private class PlayerController implements PlayerActionListener {
         @Override
         public void changedState(@NotNull PlayerActionEvent event) {
-            changeActivity(event.player().state() == PlayerState.PLACES_LETTER || event.player().state() == PlayerState.FORMS_WORD);
+            changeActivity(event.player() instanceof UserPlayer && (event.player().state() == PlayerState.PLACES_LETTER || event.player().state() == PlayerState.FORMS_WORD));
         }
 
         @Override
@@ -89,7 +88,7 @@ public class GameFieldWidget extends JPanel {
 
         @Override
         public void placedLetter(@NotNull PlayerActionEvent event) {
-            if(GameFieldWidget.this.isEnabled() && event.player().state() == PlayerState.PLACES_LETTER) {
+            if(event.player().state() == PlayerState.PLACES_LETTER) {
                 Cell changedCell = event.cell();
                 CellButton button = _cells.get(changedCell);
 
@@ -100,7 +99,7 @@ public class GameFieldWidget extends JPanel {
 
         @Override
         public void choseCell(@NotNull PlayerActionEvent event) {
-            if(GameFieldWidget.this.isEnabled()  && (event.player().state() == PlayerState.PLACES_LETTER || event.player().state() == PlayerState.FORMS_WORD)) {
+            if(event.player().state() == PlayerState.PLACES_LETTER || event.player().state() == PlayerState.FORMS_WORD) {
                 CellButton selectedCell = _cells.get(event.cell());
                 selectedCell.changeVisualState(CellButtonVisualState.IN_WORD);
             }

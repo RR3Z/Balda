@@ -5,6 +5,7 @@ import model.GameModel;
 import model.enums.PlayerState;
 import model.events.*;
 import model.players.AbstractPlayer;
+import model.players.UserPlayer;
 import org.jetbrains.annotations.NotNull;
 import ui.buttons.LetterButton;
 import ui.enums.LetterButtonVisualState;
@@ -59,8 +60,6 @@ public class AlphabetWidget extends JPanel {
     }
 
     private void changeActivity(boolean widgetActivity) {
-        AlphabetWidget.this.setEnabled(widgetActivity);
-
         for(LetterButton letterButton: _letters.values()) {
             letterButton.setEnabled(widgetActivity);
         }
@@ -75,7 +74,7 @@ public class AlphabetWidget extends JPanel {
     private class PlayerController implements PlayerActionListener {
         @Override
         public void changedState(@NotNull PlayerActionEvent event) {
-            AlphabetWidget.this.changeActivity(event.player().state() == PlayerState.SELECTING_LETTER);
+            AlphabetWidget.this.changeActivity(event.player() instanceof UserPlayer && event.player().state() == PlayerState.SELECTING_LETTER);
         }
 
         @Override
