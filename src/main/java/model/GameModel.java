@@ -32,17 +32,14 @@ public class GameModel {
         AbstractPlayer secondPlayer;
         if(isAIPlayer) {
             firstPlayer = new UserPlayer("Игрок", _field, _wordsDB, _alphabet);
-
-            BruteForceWordsSearchStrategy wordsSearchStrategy = new BruteForceWordsSearchStrategy(_field, _wordsDB, _alphabet);
-            LongestWordSelectionStrategy wordSelectionStrategy = new LongestWordSelectionStrategy(_wordsDB);
-            secondPlayer = new AIPlayer("Бот",_field, _wordsDB, _alphabet, wordSelectionStrategy, wordsSearchStrategy);
+            secondPlayer = new AIPlayer("Бот",_field, _wordsDB, _alphabet);
         } else {
             firstPlayer = new UserPlayer("Игрок 1", _field, _wordsDB, _alphabet);
             secondPlayer = new UserPlayer("Игрок 2", _field, _wordsDB, _alphabet);
         }
         firstPlayer.addPlayerActionListener(new PlayerObserve());
-        _players.add(firstPlayer);
         secondPlayer.addPlayerActionListener(new PlayerObserve());
+        _players.add(firstPlayer);
         _players.add(secondPlayer);
 
         _state = GameState.WAITING_START;

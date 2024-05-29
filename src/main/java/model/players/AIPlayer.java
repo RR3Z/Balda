@@ -1,9 +1,7 @@
 package model.players;
 
 import model.*;
-import model.ai.AbstractWordsSearchStrategy;
-import model.ai.AbstractWordSelectionStrategy;
-import model.ai.PlayableWord;
+import model.ai.*;
 import model.enums.PlayerState;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +14,7 @@ public class AIPlayer extends AbstractPlayer {
     private AbstractWordsSearchStrategy _wordsSearchStrategy;
     private AbstractWordSelectionStrategy _wordSelectionStrategy;
 
-    public AIPlayer(@NotNull String name, @NotNull GameField field, @NotNull WordsDB wordsDB, @NotNull Alphabet alphabet, @NotNull AbstractWordSelectionStrategy wordSelectionStrategy, @NotNull AbstractWordsSearchStrategy wordsSearchStrategy) {
+    public AIPlayer(@NotNull String name, @NotNull GameField field, @NotNull WordsDB wordsDB, @NotNull Alphabet alphabet) {
         _wordsDB = wordsDB;
         _alphabet = alphabet;
         _field = field;
@@ -24,8 +22,8 @@ public class AIPlayer extends AbstractPlayer {
         _name = name;
         _scoreCounter = new ScoreCounter();
 
-        _wordSelectionStrategy = wordSelectionStrategy;
-        _wordsSearchStrategy = wordsSearchStrategy;
+        _wordsSearchStrategy = new BruteForceWordsSearchStrategy(field, wordsDB, alphabet);
+        _wordSelectionStrategy = new LongestWordSelectionStrategy(wordsDB);
 
         _state = PlayerState.WAITING_TURN;
     }
