@@ -7,6 +7,7 @@ import model.enums.GameState;
 import model.events.*;
 import model.players.AIPlayer;
 import model.players.AbstractPlayer;
+import model.players.UserPlayer;
 import model.utils.DataFilePaths;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,22 +21,27 @@ public class GameModel {
     private AbstractPlayer _activePlayer;
     private GameState _state;
 
-    public GameModel(int width, int height) {
+    public GameModel(int width, int height, boolean isAIPlayer) {
         _field = new GameField(width, height);
         _alphabet = new Alphabet(DataFilePaths.ALPHABET_FILE_PATH);
 
         _wordsDB = new WordsDB(DataFilePaths.DICTIONARY_FILE_PATH);
         _wordsDB.addWordsDBListener(new WordsDBObserve());
 
-        BruteForceWordsSearchStrategy wordsSearchStrategy = new BruteForceWordsSearchStrategy(_field, _wordsDB, _alphabet);
-        LongestWordSelectionStrategy wordSelectionStrategy = new LongestWordSelectionStrategy(_wordsDB);
-//        UserPlayer firstPlayer = new UserPlayer("Игрок 1", _field, _wordsDB, _alphabet);
-        AIPlayer firstPlayer = new AIPlayer("Бот 1",_field, _wordsDB, _alphabet, wordSelectionStrategy, wordsSearchStrategy);
+        AbstractPlayer firstPlayer;
+        AbstractPlayer secondPlayer;
+        if(isAIPlayer) {
+            firstPlayer = new UserPlayer("Игрок", _field, _wordsDB, _alphabet);
+
+            BruteForceWordsSearchStrategy wordsSearchStrategy = new BruteForceWordsSearchStrategy(_field, _wordsDB, _alphabet);
+            LongestWordSelectionStrategy wordSelectionStrategy = new LongestWordSelectionStrategy(_wordsDB);
+            secondPlayer = new AIPlayer("Бот",_field, _wordsDB, _alphabet, wordSelectionStrategy, wordsSearchStrategy);
+        } else {
+            firstPlayer = new UserPlayer("Игрок 1", _field, _wordsDB, _alphabet);
+            secondPlayer = new UserPlayer("Игрок 2", _field, _wordsDB, _alphabet);
+        }
         firstPlayer.addPlayerActionListener(new PlayerObserve());
         _players.add(firstPlayer);
-
-//        UserPlayer secondPlayer = new UserPlayer("Игрок 2", _field, _wordsDB, _alphabet);
-        AIPlayer secondPlayer = new AIPlayer("Бот 2", _field, _wordsDB, _alphabet, wordSelectionStrategy, wordsSearchStrategy);
         secondPlayer.addPlayerActionListener(new PlayerObserve());
         _players.add(secondPlayer);
 

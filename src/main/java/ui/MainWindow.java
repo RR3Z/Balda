@@ -42,8 +42,8 @@ public class MainWindow extends JFrame {
         GameWidgetUtils.placeContainerInCenter(this);
     }
 
-    public void startNewGame(int width, int height) {
-        _gameModel = new GameModel(width, height);
+    public void startNewGame(int width, int height, boolean isAiPlayer) {
+        _gameModel = new GameModel(width, height, isAiPlayer);
         _gameModel.addGameModelListener(new GameModelController());
 
         _gameModel.wordsDB().addWordsDBListener(new WordsDBController());

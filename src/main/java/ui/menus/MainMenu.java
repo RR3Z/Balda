@@ -46,7 +46,7 @@ public class MainMenu extends JMenu {
 
             int result = JOptionPane.showConfirmDialog(null, _gameSettings, "Настройки игры", JOptionPane.OK_CANCEL_OPTION);
             if(result == JOptionPane.OK_OPTION) {
-                _parent.startNewGame(_gameSettings.widthSpinnerValue(), _gameSettings.heightSpinnerValue());
+                _parent.startNewGame(_gameSettings.widthSpinnerValue(), _gameSettings.heightSpinnerValue(), _gameSettings.isAIPlayer());
             }
         }
     }
