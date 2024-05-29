@@ -89,7 +89,7 @@ public class Cell {
         return _adjacentCells.containsValue(cell);
     }
 
-    public boolean isAdjacent(Cell cell, Direction direction) {
+    public boolean isAdjacent(Cell cell, @NotNull Direction direction) {
         return _adjacentCells.get(direction) == cell;
     }
 

@@ -211,7 +211,7 @@ public class GameField {
         }
     }
 
-    private void firePlacedWord(String word) {
+    private void firePlacedWord(@NotNull String word) {
         for (Object listener : _gameFieldListeners) {
             GameFieldEvent event = new GameFieldEvent(this);
             event.setGameField(this);

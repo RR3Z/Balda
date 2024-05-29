@@ -50,7 +50,7 @@ public class Word {
         return _cells.contains(cell);
     }
 
-    private boolean isNeighborOfLastCell(Cell cell) {
+    private boolean isNeighborOfLastCell(@NotNull Cell cell) {
         if(_cells.isEmpty()) {
             return true;
         }
