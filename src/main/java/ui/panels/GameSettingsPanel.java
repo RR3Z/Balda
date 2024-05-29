@@ -9,9 +9,10 @@ import java.awt.*;
 public class GameSettingsPanel extends JPanel {
     private JSpinner _widthSpinner;
     private JSpinner _heightSpinner;
+    private JCheckBox _aiPlayerActivity;
 
     public GameSettingsPanel() {
-        this.setLayout(new GridLayout(2, 0));
+        this.setLayout(new GridLayout(3, 0));
 
         // --------- Panel with information ---------
         JPanel informationPanel = new JPanel();
@@ -40,11 +41,20 @@ public class GameSettingsPanel extends JPanel {
         // ------------------------------------------
 
         // -------- Panel with Bot settings ---------
-        // TODO
+        JPanel playerSettingsPanel = new JPanel();
+
+        JLabel aiPlayerLabel = new JLabel("Играть против бота: ");
+        _aiPlayerActivity = new JCheckBox();
+
+        playerSettingsPanel.add(aiPlayerLabel);
+        playerSettingsPanel.add(_aiPlayerActivity);
+
+        aiPlayerLabel.setFont(GameWidgetUtils.font(GameWidgetUtils.OPTION_PANE_FONT_SIZE));
         // ------------------------------------------
 
         this.add(informationPanel);
         this.add(fieldSizesPanel);
+        this.add(playerSettingsPanel);
     }
 
     public int widthSpinnerValue() {
@@ -53,5 +63,9 @@ public class GameSettingsPanel extends JPanel {
 
     public int heightSpinnerValue() {
         return (int) _heightSpinner.getValue();
+    }
+
+    public boolean isAIPlayer() {
+        return _aiPlayerActivity.isSelected();
     }
 }
