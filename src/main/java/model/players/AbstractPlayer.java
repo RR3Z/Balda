@@ -173,6 +173,10 @@ public abstract class AbstractPlayer {
             throw new IllegalArgumentException("Wrong \"placeLetter\" function call (incorrect state) for player: " + this._name);
         }
 
+        if(!_alphabet.isLetterAvailable(letter)) {
+            return;
+        }
+
         Cell changedCell = _field.changedCell();
         if (changedCell == null) {
             throw new IllegalArgumentException("Wrong \"placeLetter\" function call (changedCell is null for some reason) for player: " + this._name);
