@@ -124,7 +124,7 @@ public abstract class AbstractPlayer {
                 return;
             }
 
-            fireSelectedCell(selectedCell);
+            fireAddedCellToWord(selectedCell);
         }
 
         if (_state == PlayerState.PLACES_LETTER) {
@@ -249,13 +249,13 @@ public abstract class AbstractPlayer {
         }
     }
 
-    private void fireSelectedCell(@NotNull Cell cell) {
+    private void fireAddedCellToWord(@NotNull Cell cell) {
         for (Object listener : _playerListeners) {
             PlayerActionEvent event = new PlayerActionEvent(this);
             event.setPlayer(this);
             event.setCell(cell);
 
-            ((PlayerActionListener) listener).choseCell(event);
+            ((PlayerActionListener) listener).addedCellToWord(event);
         }
     }
 

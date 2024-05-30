@@ -192,7 +192,7 @@ public class GameModel {
         }
 
         @Override
-        public void choseCell(@NotNull PlayerActionEvent event) {
+        public void addedCellToWord(@NotNull PlayerActionEvent event) {
             // DON'T NEED IT HERE
         }
 

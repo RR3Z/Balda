@@ -98,7 +98,7 @@ public class GameFieldWidget extends JPanel {
         }
 
         @Override
-        public void choseCell(@NotNull PlayerActionEvent event) {
+        public void addedCellToWord(@NotNull PlayerActionEvent event) {
             if(event.player().state() == PlayerState.PLACES_LETTER || event.player().state() == PlayerState.FORMS_WORD) {
                 CellButton selectedCell = _cells.get(event.cell());
                 selectedCell.changeVisualState(CellButtonVisualState.IN_WORD);

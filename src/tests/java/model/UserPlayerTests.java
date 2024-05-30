@@ -59,7 +59,7 @@ public class UserPlayerTests {
         }
 
         @Override
-        public void choseCell(@NotNull PlayerActionEvent event) {
+        public void addedCellToWord(@NotNull PlayerActionEvent event) {
             _events.add(EVENT.CHOSE_CELL);
         }
 

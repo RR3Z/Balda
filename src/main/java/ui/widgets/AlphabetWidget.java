@@ -99,7 +99,7 @@ public class AlphabetWidget extends JPanel {
         }
 
         @Override
-        public void choseCell(@NotNull PlayerActionEvent event) {
+        public void addedCellToWord(@NotNull PlayerActionEvent event) {
             // DON'T NEED IT HERE
         }
 
