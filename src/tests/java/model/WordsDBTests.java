@@ -175,11 +175,11 @@ public class WordsDBTests {
     @Test
     public void addToDictionary_NewWord() {
         String newWord = "волнистая";
+        _wordsDB.addToDictionary(newWord, _gameModel.activePlayer());
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.ADDED_NEW_WORD_TO_DICTIONARY);
 
-        assertTrue(_wordsDB.addToDictionary(newWord, _gameModel.activePlayer()));
         assertTrue(_wordsDB.containsInDictionary(newWord));
         assertEquals(expectedEvents, _events);
     }
@@ -187,9 +187,9 @@ public class WordsDBTests {
     @Test
     public void addToDictionary_KnownWord() {
         String newWord = "привет";
+        _wordsDB.addToDictionary(newWord, _gameModel.activePlayer());
 
         assertTrue(_wordsDB.containsInDictionary(newWord));
-        assertFalse(_wordsDB.addToDictionary(newWord, _gameModel.activePlayer()));
         assertTrue(_events.isEmpty());
     }
 

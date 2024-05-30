@@ -23,14 +23,13 @@ public class WordsDB {
         readFromFile(filePath);
     }
 
-    public boolean addToDictionary(@NotNull String word, AbstractPlayer player) {
+    public void addToDictionary(@NotNull String word, AbstractPlayer player) {
         if (_dictionary.contains(word)) {
-            return false;
+            return;
         }
 
         _dictionary.add(word);
         fireAddedNewWordToDictionary(player, word);
-        return true;
     }
 
     public boolean addToUsedWords(@NotNull String word, AbstractPlayer player) {
