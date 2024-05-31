@@ -79,7 +79,7 @@ public class GameModelTests {
     }
 
     @Test
-    public void PlacesLetter_activePlayerPlaceLetterIntoCellWithLetter() {
+    public void placesLetter_activePlayerPlaceLetterIntoCellWithLetter() {
         _gameModel.startGame();
 
         Character letter = 'ъ';
@@ -100,7 +100,7 @@ public class GameModelTests {
     }
 
     @Test
-    public void PlacesLetter_activePlayerPlaceLetter() {
+    public void placesLetter_activePlayerPlaceLetter() {
         _gameModel.startGame();
 
         Character letter = 'ъ';
@@ -121,7 +121,7 @@ public class GameModelTests {
     }
 
     @Test
-    public void PlacesLetter_activePlayerCanceledPlacedLetter() {
+    public void placesLetter_activePlayerCanceledPlacedLetter() {
         _gameModel.startGame();
 
         Character letter = 'ъ';
@@ -146,7 +146,7 @@ public class GameModelTests {
     }
 
     @Test
-    public void FormsWord_activePlayerCanceledSelectedCell() {
+    public void formsWord_activePlayerCanceledSelectedCell() {
         _gameModel.startGame();
 
         Character letter = 'ъ';
@@ -172,7 +172,7 @@ public class GameModelTests {
     }
 
     @Test
-    public void FormsWord_activePlayerAddedWordToDictionary() {
+    public void formsWord_activePlayerAddedWordToDictionary() {
         _gameModel.startGame();
 
         Character letter = 'ъ';
@@ -209,7 +209,7 @@ public class GameModelTests {
     }
 
     @Test
-    public void FormsWord_activePlayerSubmittedWordWithoutChangeableCell() {
+    public void formsWord_activePlayerSubmittedWordWithoutChangeableCell() {
         _gameModel.startGame();
 
         Character letter = 'ъ';
@@ -239,7 +239,7 @@ public class GameModelTests {
     }
 
     @Test
-    public void FormsWord_activePlayerFailedToSubmitWord() {
+    public void formsWord_activePlayerFailedToSubmitWord() {
         _gameModel.startGame();
 
         Character letter = 'ъ';
@@ -326,4 +326,83 @@ public class GameModelTests {
         assertEquals(3, ((UserPlayer)_gameModel.activePlayer()).scoreCounter().score());
     }
 
+    @Test
+    public void gameFinished_playerTryToSkipTurn() {
+        _gameModel.startGame();
+
+        ((UserPlayer)_gameModel.activePlayer()).skipTurn();
+        ((UserPlayer)_gameModel.activePlayer()).skipTurn();
+
+        List<EVENT> expectedEvents = new ArrayList<>();
+        expectedEvents.add(EVENT.PLACED_START_WORD);
+        expectedEvents.add(EVENT.PLAYER_EXCHANGED);
+        expectedEvents.add(EVENT.PLAYER_EXCHANGED);
+        expectedEvents.add(EVENT.GAME_IS_FINISHED);
+
+        assertThrows(IllegalArgumentException.class, () -> ((UserPlayer)_gameModel.activePlayer()).skipTurn());
+        assertNull(_gameModel.gameField().changedCell());
+        assertNull(_gameModel.alphabet().selectedLetter());
+        assertEquals(GameState.FINISHED, _gameModel.state());
+        assertEquals(expectedEvents, _events);
+    }
+
+    @Test
+    public void gameFinished_playerTryToSelectLetter() {
+        _gameModel.startGame();
+
+        ((UserPlayer)_gameModel.activePlayer()).skipTurn();
+        ((UserPlayer)_gameModel.activePlayer()).skipTurn();
+
+        List<EVENT> expectedEvents = new ArrayList<>();
+        expectedEvents.add(EVENT.PLACED_START_WORD);
+        expectedEvents.add(EVENT.PLAYER_EXCHANGED);
+        expectedEvents.add(EVENT.PLAYER_EXCHANGED);
+        expectedEvents.add(EVENT.GAME_IS_FINISHED);
+
+        assertThrows(IllegalArgumentException.class, () -> ((UserPlayer)_gameModel.activePlayer()).selectLetter('а'));
+        assertNull(_gameModel.gameField().changedCell());
+        assertNull(_gameModel.alphabet().selectedLetter());
+        assertEquals(GameState.FINISHED, _gameModel.state());
+        assertEquals(expectedEvents, _events);
+    }
+
+    @Test
+    public void gameFinished_playerTryToSelectCell() {
+        _gameModel.startGame();
+
+        ((UserPlayer)_gameModel.activePlayer()).skipTurn();
+        ((UserPlayer)_gameModel.activePlayer()).skipTurn();
+
+        List<EVENT> expectedEvents = new ArrayList<>();
+        expectedEvents.add(EVENT.PLACED_START_WORD);
+        expectedEvents.add(EVENT.PLAYER_EXCHANGED);
+        expectedEvents.add(EVENT.PLAYER_EXCHANGED);
+        expectedEvents.add(EVENT.GAME_IS_FINISHED);
+
+        assertThrows(IllegalArgumentException.class, () -> ((UserPlayer)_gameModel.activePlayer()).selectCell(_gameModel.gameField().cell(new Point(0, 0))));
+        assertNull(_gameModel.gameField().changedCell());
+        assertNull(_gameModel.alphabet().selectedLetter());
+        assertEquals(GameState.FINISHED, _gameModel.state());
+        assertEquals(expectedEvents, _events);
+    }
+
+    @Test
+    public void gameFinished_playerTryToCancelAction() {
+        _gameModel.startGame();
+
+        ((UserPlayer)_gameModel.activePlayer()).skipTurn();
+        ((UserPlayer)_gameModel.activePlayer()).skipTurn();
+
+        List<EVENT> expectedEvents = new ArrayList<>();
+        expectedEvents.add(EVENT.PLACED_START_WORD);
+        expectedEvents.add(EVENT.PLAYER_EXCHANGED);
+        expectedEvents.add(EVENT.PLAYER_EXCHANGED);
+        expectedEvents.add(EVENT.GAME_IS_FINISHED);
+
+        assertThrows(IllegalArgumentException.class, () -> ((UserPlayer)_gameModel.activePlayer()).cancelActionOnField());
+        assertNull(_gameModel.gameField().changedCell());
+        assertNull(_gameModel.alphabet().selectedLetter());
+        assertEquals(GameState.FINISHED, _gameModel.state());
+        assertEquals(expectedEvents, _events);
+    }
 }
