@@ -111,7 +111,7 @@ public class GameFieldWidget extends JPanel {
                 GameFieldWidget.this.clearAllHighlights();
 
                 CellButton selectedCell = _cells.get(event.cell());
-                if(selectedCell != null) {
+                if(selectedCell != null && event.cell().letter() != null) {
                     selectedCell.setText(String.valueOf(event.cell().letter()));
                     selectedCell.changeVisualState(CellButtonVisualState.CHANGED);
                 }
