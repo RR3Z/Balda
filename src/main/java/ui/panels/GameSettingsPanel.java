@@ -16,12 +16,18 @@ public class GameSettingsPanel extends JPanel {
 
         // --------- Panel with information ---------
         JPanel informationPanel = new JPanel();
+        informationPanel.setLayout(new BoxLayout(informationPanel, BoxLayout.Y_AXIS));
 
-        JLabel messageLabel = new JLabel("Максимальная ширина/высота = " + SpinnerConfig.MAX_SPINNER_VALUE_FOR_FIELD_SIZE);
+        JLabel minFieldSizeLabel = new JLabel("Минимальная ширина/высота = " + SpinnerConfig.MIN_SPINNER_VALUE_FOR_FIELD_SIZE);
+        minFieldSizeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JLabel maxFieldSizeLabel = new JLabel("Максимальная ширина/высота = " + SpinnerConfig.MAX_SPINNER_VALUE_FOR_FIELD_SIZE);
+        maxFieldSizeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        informationPanel.add(messageLabel);
+        informationPanel.add(minFieldSizeLabel);
+        informationPanel.add(maxFieldSizeLabel);
 
-        messageLabel.setFont(GameWidgetUtils.font(GameWidgetUtils.OPTION_PANE_FONT_SIZE));
+        minFieldSizeLabel.setFont(GameWidgetUtils.font(GameWidgetUtils.OPTION_PANE_FONT_SIZE));
+        maxFieldSizeLabel.setFont(GameWidgetUtils.font(GameWidgetUtils.OPTION_PANE_FONT_SIZE));
         // ------------------------------------------
 
         // --------- Panel with field sizes ---------
