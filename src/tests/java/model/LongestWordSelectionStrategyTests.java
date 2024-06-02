@@ -95,9 +95,9 @@ public class LongestWordSelectionStrategyTests {
 
         PlayableWord longestWord = _wordSelectionStrategy.selectPlayableWord(words);
 
-        assertEquals(secondWord.letter(), longestWord.letter());
-        assertEquals(secondWord.cellForLetter(), longestWord.cellForLetter());
-        assertEquals(secondWord.cellsToSelect(), longestWord.cellsToSelect());
-        assertEquals("ку", longestWord.toString());
+        assertEquals(firstWord.letter(), longestWord.letter());
+        assertEquals(firstWord.cellForLetter(), longestWord.cellForLetter());
+        assertEquals(firstWord.cellsToSelect(), longestWord.cellsToSelect());
+        assertEquals(firstWord.toString(), longestWord.toString());
     }
 }
