@@ -3,10 +3,8 @@ package model.ai;
 import model.Cell;
 
 import javafx.util.Pair;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+
+import java.util.*;
 
 public class PlayableWord {
     private Pair<Cell, Character> _letterToPlace;
@@ -33,7 +31,20 @@ public class PlayableWord {
                 word.append(letter());
             }
         }
-
         return word.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PlayableWord that = (PlayableWord) o;
+        return Objects.equals(_letterToPlace, that._letterToPlace) &&
+                Objects.equals(_cellsToSelect, that._cellsToSelect);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(_letterToPlace, _cellsToSelect);
     }
 }
