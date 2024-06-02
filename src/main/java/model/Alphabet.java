@@ -12,11 +12,17 @@ import java.util.EventListener;
 import java.util.List;
 
 public class Alphabet {
-    private List<Character> _availableLetters = new ArrayList<>();
+    private List<Character> _availableLetters;
 
     private Character _selectedLetter;
 
+    public Alphabet() {
+        _availableLetters = new ArrayList<>();
+    }
+
     public Alphabet(@NotNull String filePath) {
+        _availableLetters = new ArrayList<>();
+
         readFromFile(filePath);
     }
 

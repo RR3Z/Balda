@@ -15,6 +15,12 @@ public class WordsDB {
     private HashMap<String, AbstractPlayer> _usedWords;
     private HashSet<String> _wordsPrefixes;
 
+    public WordsDB() {
+        _dictionary = new HashSet<>();
+        _usedWords = new HashMap<>();
+        _wordsPrefixes = new HashSet<>();
+    }
+
     public WordsDB(@NotNull String filePath) {
         _dictionary = new HashSet<>();
         _usedWords = new HashMap<>();
