@@ -48,9 +48,7 @@ public class AIPlayer extends AbstractPlayer {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                SwingUtilities.invokeLater(() -> {
-                    selectLetter(word.letter());
-                });
+                selectLetter(word.letter());
             }
         }, delayBetweenActions);
         delayBetweenActions += delayStep;
@@ -58,9 +56,7 @@ public class AIPlayer extends AbstractPlayer {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                SwingUtilities.invokeLater(() -> {
-                    selectCell(word.cellForLetter());
-                });
+                selectCell(word.cellForLetter());
             }
         }, delayBetweenActions);
         delayBetweenActions += delayStep;
@@ -69,9 +65,7 @@ public class AIPlayer extends AbstractPlayer {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    SwingUtilities.invokeLater(() -> {
-                        selectCell(cell);
-                    });
+                    selectCell(cell);
                 }
             }, delayBetweenActions);
             delayBetweenActions += delayStep;
@@ -80,9 +74,7 @@ public class AIPlayer extends AbstractPlayer {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                SwingUtilities.invokeLater(() -> {
-                    submitWord();
-                });
+                submitWord();
             }
         }, delayBetweenActions);
     }
