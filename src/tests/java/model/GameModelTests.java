@@ -134,7 +134,7 @@ public class GameModelTests {
 
         ((UserPlayer)_gameModel.activePlayer()).cancelActionOnField();
         assertEquals(letter, _gameModel.alphabet().selectedLetter());
-        assertNotNull(_gameModel.gameField().changedCell());
+        assertNull(_gameModel.gameField().changedCell());
 
         List<EVENT> expectedEvents = new ArrayList<>();
         expectedEvents.add(EVENT.PLACED_START_WORD);

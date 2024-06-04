@@ -762,7 +762,7 @@ public class UserPlayerTests {
         expectedEvents.add(EVENT.CHANGED_STATE);
 
         assertEquals(letter, _alphabet.selectedLetter());
-        assertEquals(changedCell, _field.changedCell());
+        assertNull(_field.changedCell());
         assertEquals(PlayerState.PLACES_LETTER, _player.state());
         assertEquals(expectedEvents, _events);
     }

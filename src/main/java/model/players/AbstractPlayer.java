@@ -103,6 +103,7 @@ public abstract class AbstractPlayer {
 
             if (_word.length() == 0) {
                 _field.undoChangesOfChangedCell();
+                _field.forgetChangedCell();
 
                 _state = PlayerState.PLACES_LETTER;
                 fireChangedState();
