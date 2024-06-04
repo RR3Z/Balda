@@ -9,18 +9,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class CustomJTable extends JTable {
     private final int FONT_SIZE = 20;
-
-    public CustomJTable() {
-        super();
-
-        setupTableView();
-
-        DefaultTableModel tableModel = new DefaultTableModel();
-        this.setModel(tableModel);
-    }
 
     public CustomJTable(Object[] headers) {
         super();
@@ -30,6 +23,12 @@ public class CustomJTable extends JTable {
         DefaultTableModel tableModel = new DefaultTableModel();
         tableModel.setColumnIdentifiers(headers);
         this.setModel(tableModel);
+
+        this.addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                changeSelection(getRowCount() - 1, 0,false,false);
+            }
+        });
     }
 
     private void setupTableView() {
@@ -100,7 +99,7 @@ public class CustomJTable extends JTable {
     }
 
     public void scrollToRow(int rowIndex) {
-        this.changeSelection(rowIndex, 0, false, false);
+        changeSelection(rowIndex, 0, false, false);
     }
 
     @Override

@@ -22,7 +22,6 @@ public class UsedWordsTableWidget extends CustomJTable {
         public void addedToUsedWords(WordsDBEvent event) {
             if(event.player() != null) {
                 UsedWordsTableWidget.this.add(event.player().name(), event.word());
-                UsedWordsTableWidget.this.scrollToRow(UsedWordsTableWidget.this.getRowCount() - 1);
             } else {
                 UsedWordsTableWidget.this.add("-", event.word());
             }
