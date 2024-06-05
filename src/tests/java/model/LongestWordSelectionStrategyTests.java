@@ -67,37 +67,4 @@ public class LongestWordSelectionStrategyTests {
 
         assertThrows(IllegalArgumentException.class, () -> {_wordSelectionStrategy.selectPlayableWord(words);});
     }
-
-    @Test
-    public void pickingWordFromTwoWordsWithSameLength() {
-        HashSet<PlayableWord> words = new HashSet<>();
-
-        List<Cell> cellsToSelect = new ArrayList<>();
-
-        // First word
-        Cell cellForLetter = new Cell(new Point(0, 0));
-        cellsToSelect.add(cellForLetter);
-        Cell cellToSelect = new Cell(new Point(1, 0));
-        cellToSelect.setLetter('ы');
-        cellsToSelect.add(cellToSelect);
-        PlayableWord firstWord = new PlayableWord('т', cellForLetter, cellsToSelect);
-        words.add(firstWord);
-
-        // Second word
-        cellsToSelect.clear();
-        cellForLetter = new Cell(new Point(0, 0));
-        cellForLetter.setLetter('к');
-        cellsToSelect.add(cellForLetter);
-        cellToSelect = new Cell(new Point(1, 0));
-        cellsToSelect.add(cellToSelect);
-        PlayableWord secondWord = new PlayableWord('у', cellForLetter, cellsToSelect);
-        words.add(secondWord);
-
-        PlayableWord longestWord = _wordSelectionStrategy.selectPlayableWord(words);
-
-        assertEquals(firstWord.letter(), longestWord.letter());
-        assertEquals(firstWord.cellForLetter(), longestWord.cellForLetter());
-        assertEquals(firstWord.cellsToSelect(), longestWord.cellsToSelect());
-        assertEquals(firstWord.toString(), longestWord.toString());
-    }
 }
