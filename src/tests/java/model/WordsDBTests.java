@@ -287,4 +287,15 @@ public class WordsDBTests {
 
         assertEquals(expectedEvents, _events);
     }
+
+    @Test
+    public void randomWord_noSuchWordOfSpecifiedLength() {
+        int specifiedLength = 100;
+        String word = _wordsDB.randomWord(specifiedLength);
+
+        String expectedWord = "высокопревосходительство";
+
+        assertEquals(expectedWord, word);
+        assertTrue(word.length() != specifiedLength);
+    }
 }

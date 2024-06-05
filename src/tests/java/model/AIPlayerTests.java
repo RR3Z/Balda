@@ -76,8 +76,8 @@ public class AIPlayerTests {
     }
     private final List<EVENT> _events = new ArrayList<>();
 
-    @BeforeEach
-    public void testSetup() {
+    @Test
+    public void startTurn_playedWord() {
         _events.clear();
 
         _alphabet = new Alphabet(DataFilePaths.ALPHABET_FILE_PATH);
@@ -89,10 +89,7 @@ public class AIPlayerTests {
 
         _player = new AIPlayer("BOT", _field, _wordsDB, _alphabet);
         _player.addPlayerActionListener(new EventsListener());
-    }
 
-    @Test
-    public void startTurn_playedWord() {
         _player.startTurn();
         try {
             Thread.sleep(5000);
@@ -115,5 +112,32 @@ public class AIPlayerTests {
 
         assertEquals(expectedEvents, _events);
         assertEquals(PlayerState.WAITING_TURN, _player.state());
+    }
+
+    @Test
+    public void startTurn_noAvailableWords() {
+        _events.clear();
+
+        _alphabet = new Alphabet(DataFilePaths.ALPHABET_FILE_PATH);
+        _wordsDB = new WordsDB(DataFilePaths.DICTIONARY_FILE_PATH);
+        _field = new GameField(5, 5);
+
+        _player = new AIPlayer("BOT", _field, _wordsDB, _alphabet);
+        _player.addPlayerActionListener(new EventsListener());
+
+        _player.startTurn();
+
+        List<EVENT> expectedEvents = new ArrayList<>();
+        expectedEvents.add(EVENT.CHANGED_STATE);
+        expectedEvents.add(EVENT.SKIPPED_TURN);
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        assertEquals(expectedEvents, _events);
+        assertEquals(PlayerState.SKIPPED_TURN, _player.state());
     }
 }

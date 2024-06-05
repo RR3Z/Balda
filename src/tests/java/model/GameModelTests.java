@@ -4,12 +4,15 @@ import model.enums.GameState;
 import model.enums.PlayerState;
 import model.events.GameModelEvent;
 import model.events.GameModelListener;
+import model.players.AIPlayer;
+import model.players.AbstractPlayer;
 import model.players.UserPlayer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -403,6 +406,35 @@ public class GameModelTests {
         assertNull(_gameModel.gameField().changedCell());
         assertNull(_gameModel.alphabet().selectedLetter());
         assertEquals(GameState.FINISHED, _gameModel.state());
+        assertEquals(expectedEvents, _events);
+    }
+
+    @Test
+    public void startGame_againstAIPlayer() {
+        _gameModel = new GameModel(5, 5, true);
+        _gameModel.addGameModelListener(new GameListener());
+
+        _events.clear();
+
+        _gameModel.startGame();
+
+        ((UserPlayer)_gameModel.activePlayer()).skipTurn();
+        AbstractPlayer currentPlayer = _gameModel.activePlayer();
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        List<EVENT> expectedEvents = new ArrayList<>();
+        expectedEvents.add(EVENT.PLACED_START_WORD);
+        expectedEvents.add(EVENT.PLAYER_EXCHANGED); // UserPlayer turn (start game)
+        expectedEvents.add(EVENT.PLAYER_EXCHANGED); // AIPlayer turn (bcs UserPlayer skipped turn)
+        expectedEvents.add(EVENT.PLAYER_EXCHANGED); // UserPlayer turn (after AIPlayer turn)
+
+        assertInstanceOf(AIPlayer.class, currentPlayer);
+        assertEquals(GameState.IN_PROCESS, _gameModel.state());
         assertEquals(expectedEvents, _events);
     }
 }
