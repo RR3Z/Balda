@@ -102,14 +102,4 @@ public class Cell {
 
         return false;
     }
-
-    public boolean isNeighborWithoutLetter() {
-        for (Cell cell: _adjacentCells.values()){
-            if(cell.letter() == null) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }
