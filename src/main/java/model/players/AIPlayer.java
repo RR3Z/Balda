@@ -23,7 +23,7 @@ public class AIPlayer extends AbstractPlayer {
         _scoreCounter = new ScoreCounter();
 
         _wordsSearchStrategy = new BruteForceWordsSearchStrategy(field, wordsDB, alphabet);
-        _wordSelectionStrategy = new LongestWordSelectionStrategy(wordsDB);
+        _wordSelectionStrategy = new WordWithMostConsonantLettersSelectionStrategy(wordsDB);
 
         _state = PlayerState.WAITING_TURN;
     }
